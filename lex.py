@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import os
-
+import re
 
 class Lexico:
     def __init__(self, arquivo_fonte):
@@ -44,9 +44,11 @@ class Lexico:
 
     def __q0(self):
         self.__caracter = self.__getCaracter()
-        if self.__caracter.isdigit() or self.__caracter.islower() :  # primeira condição do identificador
+        print(self.__caracter)
+        if self.__caracter.isdigit() or self.__caracter.islower():
             self.__q1()
         elif self.__finalLinha == self.__caracter:
+            print(self.__caracter)
             pass
         elif self.__caracter.isspace():
             self.__lexema = ''
@@ -58,9 +60,11 @@ class Lexico:
             exit()
 
     def __q1(self):
-        # reconhecer o identificador
-        self.__caracter = self.__getCaracter()  # depois conferir se não poderia retirar isso daqui
+        print(self.__caracter)
+        self.__caracter = self.__getCaracter() 
+        print(self.__caracter)
         while self.__caracter.isdigit() or self.__caracter.islower():
+            #print(self.__caracter)
             self.__caracter = self.__getCaracter()
         if self.__finalLinha == self.__caracter:  # final da linha
             self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "IDE-", self.__lexema])
