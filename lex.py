@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import os
 
 class analisaLex:
@@ -9,7 +10,7 @@ class analisaLex:
         self.__lexema = ''
         self.__finalLinha = '\n'
         if os.path.exists(arquivo_fonte):
-            self.__arquivo_fonte = open(arquivo_fonte, "r")
+            self.__arquivo_fonte = open(arquivo_fonte, 'r')
         else:
             print("Erro: Arquivo não existe.")
             exit()
@@ -32,6 +33,7 @@ class analisaLex:
             self.__q0()
             self.__atualiza_nLinhas ()
             self.__cabeca = 0
+        self.__arquivo_fonte.close()
         return self.__tabelaSimbolos
     
     def __q0(self):
@@ -54,18 +56,22 @@ class analisaLex:
             self.__caracter = self.__getCaracter()
             
         if self.__finalLinha == self.__caracter: #final da linha
-            self.__tabelaSimbolos.append(self.__nlinhas, self.__cabeca, "IDE - ", self.__lexema)
-            self.__lexema = '' #recebe espaço novamente para voltar ao q0
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "IDE - ", self.__lexema])
+            self.__lexema = '' 
+        elif self.__caracter.isspace():
+            self.__lexema = self.__lexema[:len(self.__lexema) - 1]
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "IDE - ", self.__lexema])
             self.__q0()
         else:
              print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca, self.__caracter))
              
 def main():
-        __arquivo = "entrada1.txt"
-        __automato = analisaLex(arquivo_fonte=__arquivo)
-        __tabelasimbolos = __automato.getTabelaSimbolos()
-        for i in range(len(__tabelasimbolos)):
-            print(__tabelasimbolos[i])
+    __arquivo = "entrada1.txt"
+    __automato = analisaLex(arquivo_fonte=__arquivo)
+    __tabelasimbolos = __automato.getTabelaSimbolos()
+    print("aqui chegou")
+    for i in range(len(__tabelasimbolos)):
+        print(__tabelasimbolos[i])
         
         
 if __name__ == '__main':
