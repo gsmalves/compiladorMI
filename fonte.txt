@@ -1,0 +1,3 @@
+leia a1
+
+escreva t45 &% 
