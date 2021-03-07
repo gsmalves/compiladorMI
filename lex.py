@@ -46,11 +46,12 @@ class Lexico:
 
     def __q0(self):
         self.__caracter = self.__getCaracter()
-        
-        if  self.__caracter.islower():
+        if self.__caracter.isdigit():
+            self.__q03()
+        elif  self.__caracter.islower():
             self.__q1()
         elif self.__finalLinha == self.__caracter:
-            print(self.__caracter)
+            #print(self.__caracter)
             pass
         elif self.__caracter.isspace():
             self.__lexema = ''
@@ -66,7 +67,6 @@ class Lexico:
         self.__caracter = self.__getCaracter() 
         
         while self.__caracter.isdigit() or self.__caracter.islower() or self.__caracter == '_':
-            
             self.__caracter = self.__getCaracter()
         if self.__finalLinha == self.__caracter:  # final da linha
             self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "IDE -", self.__lexema])
@@ -80,6 +80,25 @@ class Lexico:
             print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
                                                                            self.__caracter))
             pass
+    def __q03(self):## verifica se é numeral
+        self.__caracter = self.__getCaracter()
+        print("é numero")
+        ponto =0
+        while self.__caracter.isdigit() or (self.__caracter == '.' and ponto ==0):
+            self.__caracter = self.__getCaracter()
+            if self.__caracter == '.':
+                ponto = 1
+        if self.__finalLinha == self.__caracter:  # final da linha
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NUM -", self.__lexema])
+            self.__lexema = ''
+        elif self.__caracter.isspace():
+            self.__lexema = self.__lexema[:len(self.__lexema) - 1]
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NUM -", self.__lexema])
+            self.__lexema = ''
+            self.__q0()
+        else:
+            print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
+                                                                        self.__caracter))     
 
 def main():
     __arquivo = "fonte.txt"
