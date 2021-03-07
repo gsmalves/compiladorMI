@@ -95,11 +95,11 @@ class Lexico:
         while self.__caracter.isdigit():
             self.__caracter = self.__getCaracter()
         if self.__finalLinha == self.__caracter:  # final da linha
-            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NUM -", self.__lexema])
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NRO -", self.__lexema])
             self.__lexema = ''
         elif self.__caracter.isspace():
             self.__lexema = self.__lexema[:len(self.__lexema) - 1]
-            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NUM -", self.__lexema])
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NRO -", self.__lexema])
             self.__lexema = ''
             self.__q0()
         elif self.__caracter == ".":
@@ -115,11 +115,11 @@ class Lexico:
             self.__caracter = self.__getCaracter()
         
         if self.__finalLinha == self.__caracter:  # final da linha
-            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NUM -", self.__lexema])
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NRO -", self.__lexema])
             self.__lexema = ''
         elif self.__caracter.isspace():
             self.__lexema = self.__lexema[:len(self.__lexema) - 1]
-            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NUM -", self.__lexema])
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NRO -", self.__lexema])
             self.__lexema = ''
             self.__q0()
         else:
