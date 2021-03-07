@@ -31,7 +31,9 @@ class Lexico:
             self.__avancaCabeca()
             if self.__letra != self.__finalLinha or not self.__letra.isspace():
                 self.__lexema += self.__letra
-        return self.__letra
+            return self.__letra
+        else:
+            return '\n'
 
     def getTabelaSimbolos(self):
         for self.__linha in self.__arquivo_fonte:
@@ -44,8 +46,8 @@ class Lexico:
 
     def __q0(self):
         self.__caracter = self.__getCaracter()
-        print(self.__caracter)
-        if self.__caracter.isdigit() or self.__caracter.islower():
+        
+        if  self.__caracter.islower():
             self.__q1()
         elif self.__finalLinha == self.__caracter:
             print(self.__caracter)
@@ -60,24 +62,24 @@ class Lexico:
             exit()
 
     def __q1(self):
-        print(self.__caracter)
+        
         self.__caracter = self.__getCaracter() 
-        print(self.__caracter)
-        while self.__caracter.isdigit() or self.__caracter.islower():
-            #print(self.__caracter)
+        
+        while self.__caracter.isdigit() or self.__caracter.islower() or self.__caracter == '_':
+            
             self.__caracter = self.__getCaracter()
         if self.__finalLinha == self.__caracter:  # final da linha
-            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "IDE-", self.__lexema])
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "IDE -", self.__lexema])
             self.__lexema = ''
         elif self.__caracter.isspace():
             self.__lexema = self.__lexema[:len(self.__lexema) - 1]
-            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "IDE-", self.__lexema])
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "IDE -", self.__lexema])
             self.__lexema = ''
             self.__q0()
         else:
             print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
                                                                            self.__caracter))
-
+            pass
 
 def main():
     __arquivo = "fonte.txt"
