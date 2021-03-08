@@ -3,6 +3,9 @@ ffff batata12
 //comentando 
 23.1
 //ignorante
-12
+var 12
 dkldv om2
-1
+/ a 12.2
+1 ++ 
+b -- 
+m * a 
