@@ -10,7 +10,7 @@ class Lexico:
         self.__tabelaSimbolos = []
         self.__lexema = ''
         self.__finalLinha = '\n'
-        self.__simbolos = ''' !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHJKLMNOPQRSTUVXWYZ[\]^_`abcdefghijklmnopqrstuvxwyz{|}~'''
+        
         
         if os.path.exists(arquivo_fonte):
             self.__arquivo_fonte = open(arquivo_fonte, 'r')
@@ -19,7 +19,8 @@ class Lexico:
             exit()
     ##Verifica se o simbolo está no escopo definido
     def __identificaSimbolo(self):
-    # Strings com os simbolos da tabela ASCII (32 a 126, exceto 34)
+    # Strings com os simbolos da tabela ASCII (32 a 126)
+        self.__simbolos = ''' !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHJKLMNOPQRSTUVXWYZ[\]^_`abcdefghijklmnopqrstuvxwyz{|}~'''
         if self.__caracter in self.__simbolos:
             return True
         return False
@@ -265,7 +266,7 @@ class Lexico:
     def __q14(self):## verifica Comentario bloco
         self.__caracter = self.__getCaracter()
         # botar mais caracteres aqui pra o while, só não pode o "*"
-        while  self.__caracter != "*" :
+        while  self.__caracter != "*":
             self.__caracter = self.__getCaracter()
             
         if self.__caracter == "*":
