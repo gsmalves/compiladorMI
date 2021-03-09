@@ -10,6 +10,7 @@ class Lexico:
         self.__tabelaSimbolos = []
         self.__lexema = ''
         self.__finalLinha = '\n'
+        self.__simbolos = ''' !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHJKLMNOPQRSTUVXWYZ[]^_`abcdefghijklmnopqrstuvxwyz{|}~'''
         
         
         if os.path.exists(arquivo_fonte):
@@ -20,7 +21,7 @@ class Lexico:
     ##Verifica se o simbolo está no escopo definido
     def __identificaSimbolo(self):
     # Strings com os simbolos da tabela ASCII (32 a 126)
-        self.__simbolos = ''' !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHJKLMNOPQRSTUVXWYZ[\]^_`abcdefghijklmnopqrstuvxwyz{|}~'''
+        
         if self.__caracter in self.__simbolos:
             return True
         return False
@@ -75,6 +76,8 @@ class Lexico:
             self.__q07()    
         elif self.__caracter == '-':
             self.__q09()    
+        elif self.__caracter == '"':
+            self.__q30()    
         elif self.__finalLinha == self.__caracter:
             #print(self.__caracter)
             pass
@@ -268,7 +271,9 @@ class Lexico:
         # botar mais caracteres aqui pra o while, só não pode o "*"
         while  self.__caracter != "*":
             self.__caracter = self.__getCaracter()
-            
+            if self.__caracter < '0':
+                self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CoMF'])
+                
         if self.__caracter == "*":
             self.__q15()  
         
@@ -276,10 +281,10 @@ class Lexico:
     def __q15(self):## verifica comentário bloco
         self.__caracter = self.__getCaracter() 
         # botar mais caracteres aqui pra o while, só não pode o "/"
-        while  self.__caracter != "/":
-            self.__caracter = self.__getCaracter()
-    
-        if self.__caracter == "/":
+        if self.__caracter != "/":
+            self.__q14()
+            
+        else:
             self.__q16()  
         
              
@@ -289,4 +294,32 @@ class Lexico:
         self.__caracter = self.__finalLinha
         self.__q0
         
+    def __q30(self):# cadeia de caracter    
+        self.__caracter = self.__getCaracter()
+        
+        if self.__caracter == '"' :
+            self.__q34()
+        
+        elif self.__caracter.islower or self.__caracter.isspace():
+            self.__q32()
+        else:
+            print("erro aqui")
+            pass
+    def __q32(self):
+        
+        self.__caracter = self.__getCaracter() 
+
+        while self.__caracter.islower() or self.__caracter.isspace():
+            self.__caracter = self.__getCaracter()
+        if self.__caracter == '"':
+            self.__q34()
+        else:
+            print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
+                                                                           self.__caracter))
+            pass
+
+    def __q34(self):
+        self.__caracter = self.__getCaracter()
+        
+        self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CAD', self.__lexema])
         
