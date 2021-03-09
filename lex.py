@@ -10,6 +10,8 @@ class Lexico:
         self.__tabelaSimbolos = []
         self.__lexema = ''
         self.__finalLinha = '\n'
+        
+        
         if os.path.exists(arquivo_fonte):
             self.__arquivo_fonte = open(arquivo_fonte, 'r')
         else:
@@ -18,7 +20,7 @@ class Lexico:
     ##Verifica se o simbolo está no escopo definido
     def __identificaSimbolo(self):
     # Strings com os simbolos da tabela ASCII (32 a 126)
-        self.__simbolos = ''' !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHJKLMNOPQRSTUVXWYZ[\]^_`abcdefghijklmnopqrstuvxwyz{|}~'''
+        self.__simbolos = ''' !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHJKLMNOPQRSTUVXWYZ[\]^_`abcdefghijklmnopqrstuvxwyz{|}~'''
         if self.__caracter in self.__simbolos:
             return True
         return False
@@ -230,16 +232,15 @@ class Lexico:
             print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
                                                                  self.__caracter))
     
-  #Operadores relacionais
+  
 
 
-  
-  
-  
     def __q11(self):#Identifica se é o operador aritmetico "/" ou se é um indicador de comentario
         self.__caracter = self.__getCaracter()
         if self.__caracter == "/":
             self.__q12()
+        elif self.__caracter == "*":
+            self.__q14()  
         elif self.__finalLinha == self.__caracter:  # final da linha
             #self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'ART -', self.__lexema])
             self.__tabelaSimbolos.append("[{1}{2}{3}{4}]".format(self.__nlinhas, self.__cabeca, 'ART -', self.__lexema))
@@ -259,13 +260,33 @@ class Lexico:
        self.__lexema = ''
        self.__caracter = self.__finalLinha
        self.__q0
-            
-def main():
-    __arquivo = "fonte.txt"
-    __automato = Lexico(arquivo_fonte=__arquivo)
-    __tabelasimbolos = __automato.getTabelaSimbolos()
-    for i in range(len(__tabelasimbolos)):
-        print(__tabelasimbolos[i])
+    
+    
 
-if __name__ == '__main__':
-    main()
+    def __q14(self):## verifica Comentario bloco
+        self.__caracter = self.__getCaracter()
+        # botar mais caracteres aqui pra o while, só não pode o "*"
+        while  self.__caracter != "*":
+            self.__caracter = self.__getCaracter()
+            
+        if self.__caracter == "*":
+            self.__q15()  
+        
+    
+    def __q15(self):## verifica comentário bloco
+        self.__caracter = self.__getCaracter() 
+        # botar mais caracteres aqui pra o while, só não pode o "/"
+        while  self.__caracter != "/":
+            self.__caracter = self.__getCaracter()
+    
+        if self.__caracter == "/":
+            self.__q16()  
+        
+             
+    def __q16(self):#comentario de bloco
+        print("fechei bloco")
+        self.__lexema = ''
+        self.__caracter = self.__finalLinha
+        self.__q0
+        
+        
