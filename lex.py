@@ -262,18 +262,22 @@ class Lexico:
     
     
 
-    def __q14(self):## verifica CoMF
+    def __q14(self):## verifica Comentario bloco
         self.__caracter = self.__getCaracter()
+        # botar mais caracteres aqui pra o while, só não pode o "*"
         while  self.__caracter.isdigit() or self.__caracter.islower() or self.__caracter.isspace():
             self.__caracter = self.__getCaracter()
+            
         if self.__caracter == "*":
             self.__q15()  
         
     
-    def __q15(self):## verifica comentário
+    def __q15(self):## verifica comentário bloco
         self.__caracter = self.__getCaracter() 
+        # botar mais caracteres aqui pra o while, só não pode o "/"
         while  self.__caracter.isdigit() or self.__caracter.islower() or self.__caracter.isspace() or self.__caracter == "*" :
             self.__caracter = self.__getCaracter()
+    
         if self.__caracter == "/":
             self.__q16()  
         
