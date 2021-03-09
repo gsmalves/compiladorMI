@@ -271,8 +271,6 @@ class Lexico:
         # botar mais caracteres aqui pra o while, só não pode o "*"
         while  self.__caracter != "*":
             self.__caracter = self.__getCaracter()
-            if self.__caracter < '0':
-                self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CoMF'])
                 
         if self.__caracter == "*":
             self.__q15()  
@@ -319,7 +317,7 @@ class Lexico:
             pass
 
     def __q34(self):
-        self.__caracter = self.__getCaracter()
+        
         
         self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CAD', self.__lexema])
         
