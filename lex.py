@@ -10,7 +10,7 @@ class Lexico:
         self.__tabelaSimbolos = []
         self.__lexema = ''
         self.__finalLinha = '\n'
-        self.__simbolos = ''' !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHJKLMNOPQRSTUVXWYZ[]^_`abcdefghijklmnopqrstuvxwyz{|}~'''
+        self.__simbolos = ['!','#','$','%','&','(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','W','Y','Z','[',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','w','y','z','{','|','}','~']
         
         
         if os.path.exists(arquivo_fonte):
@@ -288,6 +288,7 @@ class Lexico:
              
     def __q16(self):#comentario de bloco
         print("fechei bloco")
+        self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'Coments', self.__lexema])
         self.__lexema = ''
         self.__caracter = self.__finalLinha
         self.__q0
@@ -298,7 +299,7 @@ class Lexico:
         if self.__caracter == '"' :
             self.__q34()
         
-        elif self.__caracter.islower or self.__caracter.isspace():
+        elif (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)):
             self.__q32()
         else:
             print("erro aqui")
@@ -307,7 +308,7 @@ class Lexico:
         
         self.__caracter = self.__getCaracter() 
 
-        while self.__caracter.islower() or self.__caracter.isspace():
+        while (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)):
             self.__caracter = self.__getCaracter()
         if self.__caracter == '"':
             self.__q34()
@@ -318,6 +319,5 @@ class Lexico:
 
     def __q34(self):
         
-        
         self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CAD', self.__lexema])
-        
+       
