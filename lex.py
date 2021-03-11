@@ -19,6 +19,13 @@ class Lexico:
             print("Erro: Arquivo não existe.")
             exit()
     ##Verifica se o simbolo está no escopo definido
+    #Gustavo
+    def __veriSimbol(self):
+        if (ord(self.__caracter) >= 32 and ord(self.__caracter) <= 126) and ord(self.__caracter) != 34 :
+            return True
+        return False
+  
+  
     def __identificaSimbolo(self):
     # Strings com os simbolos da tabela ASCII (32 a 126)
         
@@ -56,6 +63,7 @@ class Lexico:
     def getTabelaSimbolos(self):
         for self.__linha in self.__arquivo_fonte:
             self.__fita = list(self.__linha)
+            #print (self.__fita)
             self.__q0()
             self.__atualiza_nLinhas()
             self.__cabeca = 0
@@ -84,6 +92,14 @@ class Lexico:
         elif self.__caracter.isspace():
             self.__lexema = ''
             self.__q0()
+        elif self.__caracter == "&":
+            self.__q21()
+        elif self.__caracter == "|":
+            self.__q19()
+        elif self.__caracter == "!":
+            self.__q18()
+        elif self.__caracter == "=":
+            self.__q23()
         else:
             print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
                                                                            self.__caracter))
@@ -258,11 +274,96 @@ class Lexico:
             print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
                                                                            self.__caracter))
 
-   
+   #operadores logicos 
+    
+    
+    #Operador Lógico "e" // verifica se não existe um erro lexico
+    #caso não exista o erro lança pra o estado q22 que adiciona o lexena de && 
+    def __q21(self):
+        self.__caracter = self.__getCaracter()
+        if(self.__caracter == "&"):
+           self.__q22()
+        else:
+        #Corrigir a definição do erro || ou é erro lexico
+            print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
+                                                                        self.__caracter))
+
+
+    def __q22(self):#Lança o lexema de operador logico "e"
+        self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'LOG -', self.__lexema])
+        #self.__tabelaSimbolos.append("[{1}{2}{3}{4}]".format(self.__nlinhas, self.__cabeca, 'ART -', self.__lexema))
+        self.__lexema = ''
+        self.__q0()
+
+
+    #Operador Lógico "ou" // verifica se não existe um erro lexico
+    #caso não exista o erro lança pra o estado q20 que adiciona o lexena de || 
+    def __q19(self):
+        self.__caracter = self.__getCaracter()
+        if(self.__caracter == "|"):
+           self.__q20()     
+        else:
+        #Corrigir a definição do erro || ou é erro lexico
+            print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
+                                                                        self.__caracter))
+
+
+    def __q20(self):#Lança o lexema de operador logico "ou"
+        self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'LOG -', self.__lexema])
+        #self.__tabelaSimbolos.append("[{1}{2}{3}{4}]".format(self.__nlinhas, self.__cabeca, 'ART -', self.__lexema))
+        self.__lexema = ''
+        self.__q0()
+
+    #Operadores Relacionais
+
+    #Operador Relacionais "diferente de" // verifica se não existe um erro lexico
+    #caso não exista o erro lança pra o estado q25 que adiciona o lexena de || 
+    def __q18(self):
+        self.__caracter = self.__getCaracter()
+        if(self.__caracter == "="):
+           self.__q25()
+        else:
+        #Corrigir a definição do erro || ou é erro lexico
+            print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
+                                                                        self.__caracter))
+
+
+    def __q25(self):#Lança o lexema de operador relacional diferente de "!="
+        self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'LOG -', self.__lexema])
+        #self.__tabelaSimbolos.append("[{1}{2}{3}{4}]".format(self.__nlinhas, self.__cabeca, 'ART -', self.__lexema))
+        self.__lexema = ''
+        self.__q0()
+
+    #Operador Relacionais "atribuição" 
+    def __q23(self):
+        self.__caracter = self.__getCaracter()
+        if self.__caracter == "=":
+            self.__q24()
+        elif self.__finalLinha == self.__caracter:  # final da linha
+            #self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'ART -', self.__lexema])
+            self.__tabelaSimbolos.append("[{1}{2}{3}{4}]".format(self.__nlinhas, self.__cabeca, 'REL -', self.__lexema))
+            self.__lexema = ''
+        elif self.__caracter.isspace():
+            self.__lexema = self.__lexema[:len(self.__lexema) - 1]
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'REL -', self.__lexema])
+            self.__lexema = ''
+            self.__q0()
+
+
+    def __q24(self):
+        self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'REL -', self.__lexema])
+        #self.__tabelaSimbolos.append("[{1}{2}{3}{4}]".format(self.__nlinhas, self.__cabeca, 'ART -', self.__lexema))
+        self.__lexema = ''
+        self.__q0()
+
+
+
+
+
     def __q12(self):#comentario de linha
        self.__lexema = ''
        self.__caracter = self.__finalLinha
-       self.__q0
+       self.__q0()
     
     
 
@@ -318,6 +419,6 @@ class Lexico:
             pass
 
     def __q34(self):
-        
+
         self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CAD', self.__lexema])
        
