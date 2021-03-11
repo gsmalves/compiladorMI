@@ -6,6 +6,7 @@ class Lexico:
     def __init__(self, arquivo_fonte):
         self.__cabeca = 0
         self.__fita = []
+        self.__array = []
         self.__nlinhas = 0
         self.__tabelaSimbolos = []
         self.__lexema = ''
@@ -15,6 +16,7 @@ class Lexico:
         
         if os.path.exists(arquivo_fonte):
             self.__arquivo_fonte = open(arquivo_fonte, 'r')
+           
         else:
             print("Erro: Arquivo não existe.")
             exit()
@@ -51,7 +53,7 @@ class Lexico:
                 self.__lexema += self.__letra
             return self.__letra
         else:
-            return '\n'
+            return self.__finalLinha
 
     def getTabelaSimbolos(self):
         for self.__linha in self.__arquivo_fonte:
@@ -60,8 +62,9 @@ class Lexico:
             self.__atualiza_nLinhas()
             self.__cabeca = 0
         self.__arquivo_fonte.close()
+       
         return self.__tabelaSimbolos
-
+            
     def __q0(self):
         self.__caracter = self.__getCaracter()
         if self.__caracter.isdigit():
