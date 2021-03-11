@@ -1,0 +1,3 @@
+corrigir numeros pra entender operadores que estão colados
+erro de simbolo lançado no q0
+rever coisas que eu fiz com sono
