@@ -11,8 +11,9 @@ class Lexico:
         self.__tabelaSimbolos = []
         self.__lexema = ''
         self.__finalLinha = '\n'
-        self.__letra ='[a-zA-Z]'
+       
         self.__digito = '[0-9]'
+        self.__underline = '_'
         self.__simbolos = ['!','#','$','%','&','(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','W','Y','Z','[',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','w','y','z','{','|','}','~']
         
         
@@ -77,9 +78,9 @@ class Lexico:
             
     def __q0(self):
         self.__caracter = self.__getCaracter()
-        if self.__caracter.isdigit():
+        if (re.match(r"([0-9])" ,self.__caracter)):
             self.__q04()
-        elif  self.__caracter.islower():
+        elif (re.match (r"([A-Za-z])", self.__caracter)) :
             self.__q1()
         elif  self.__caracter == '/':
             self.__q11()
@@ -115,7 +116,7 @@ class Lexico:
         
         self.__caracter = self.__getCaracter() 
 
-        while self.__caracter.isdigit() or self.__caracter.islower() or self.__caracter == '_':
+        while  (re.match(r"([A-Za-z])|[0-9]|[_]", self.__caracter)):
             self.__caracter = self.__getCaracter()
         if self.__finalLinha == self.__caracter:  # final da linha
             #if self.__identificaPalavraReservada():
@@ -137,7 +138,7 @@ class Lexico:
    
     def __q04(self):## verifica se é numeral
         self.__caracter = self.__getCaracter()
-        while self.__caracter.isdigit():
+        while (re.match(r"([0-9])" ,self.__caracter)):
             self.__caracter = self.__getCaracter()
         if self.__finalLinha == self.__caracter:  # final da linha
             self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NRO -", self.__lexema])
