@@ -1,3 +1,12 @@
 corrigir numeros pra entender operadores que estão colados
 erro de simbolo lançado no q0
 rever coisas que eu fiz com sono
+
+
+
+
+rever cadeia de caracteres que as vezes tá pegando da linha de cima e/ou deixando de pegar proximos lexmeas na mesma linha
+lembrar de colocar que houve sucesso se não houver erro
+comentário de bloco mal formado, parar o laço com fim de arquivo
+pastas de saída e netrada de arquivos
+tratamentos de erros
