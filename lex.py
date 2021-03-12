@@ -82,6 +82,8 @@ class Lexico:
             self.__q04()
         elif (re.match (r"([A-Za-z])", self.__caracter)) :
             self.__q1()
+        elif(re.match(r"[;]|[,]|[.]|[(]|[)]|[{]|[}]|[[]|[]]",self.__caracter)):
+            self.__q3()
         elif  self.__caracter == '/':
             self.__q11()
         elif self.__caracter == '*':
@@ -116,7 +118,7 @@ class Lexico:
         
         self.__caracter = self.__getCaracter() 
 
-        while  (re.match(r"([A-Za-z])|[0-9]|[_]", self.__caracter)):
+        while  (re.match(r"[A-Za-z]|[0-9]|[_]", self.__caracter)):
             self.__caracter = self.__getCaracter()
         if self.__finalLinha == self.__caracter:  # final da linha
             #if self.__identificaPalavraReservada():
@@ -135,7 +137,23 @@ class Lexico:
                                                                            self.__caracter))
             pass
 
-   
+    def __q3(self):
+        
+        self.__caracter = self.__getCaracter() 
+
+        if self.__finalLinha == self.__caracter:  # final da linha
+              
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'DEL', self.__lexema])
+            self.__lexema = ''
+        elif self.__caracter.isspace():
+            self.__lexema = self.__lexema[:len(self.__lexema) - 1]
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'DEL', self.__lexema])
+            self.__lexema = ''
+            self.__q0()
+        else:
+            print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
+                                                                           self.__caracter))
+            pass        
     def __q04(self):## verifica se é numeral
         self.__caracter = self.__getCaracter()
         while (re.match(r"([0-9])" ,self.__caracter)):
