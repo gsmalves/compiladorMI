@@ -12,10 +12,6 @@ class Lexico:
         self.__tabelaSimbolos = []
         self.__lexema = ''
         self.__finalLinha = '\n'
-       
-       
-        
-        
         
         if os.path.exists(arquivo_fonte):
             self.__arquivo_fonte = open(arquivo_fonte, 'r')
