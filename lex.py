@@ -6,15 +6,15 @@ class Lexico:
     def __init__(self, arquivo_fonte):
         self.__cabeca = 0
         self.__fita = []
-       
+        self.__palavrasReservadas = {"var", "const", "typedef", "struct", "extends", "procedure" ,"function", "start", "return", "if", "else", "then", "while", "read","print",
+          "int",  "real",   "boolean",   "string",   "true",   "false", "global", "local"}
         self.__nlinhas = 0
         self.__tabelaSimbolos = []
         self.__lexema = ''
         self.__finalLinha = '\n'
        
-        self.__digito = '[0-9]'
-        self.__underline = '_'
-        self.__simbolos = ['!','#','$','%','&','(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','W','Y','Z','[',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','w','y','z','{','|','}','~']
+       
+        
         
         
         if os.path.exists(arquivo_fonte):
@@ -23,28 +23,11 @@ class Lexico:
         else:
             print("Erro: Arquivo não existe.")
             exit()
-    ##Verifica se o simbolo está no escopo definido
-    #Gustavo
-    def __veriSimbol(self):
-        if (ord(self.__caracter) >= 32 and ord(self.__caracter) <= 126) and ord(self.__caracter) != 34 :
-            return True
-        return False
+   
   
   
-    def __identificaSimbolo(self):
-    # Strings com os simbolos da tabela ASCII (32 a 126)
-        
-        if self.__caracter in self.__simbolos:
-            return True
-        return False
-    ##Verifica se um lexema está contido no conjunto de palavras reservadas
- #   def __identificaPalavraReservada(self):
- #     self.__palavrasReservadas = ["var", "const", "typedef", "struct", "extends", "procedure","function", "start", "return", "if", "else", "then", "while", "read","print",
- #          "int",   "real",   "boolean",   "string",   "true",   "false","global", "local"]
- #       for i in self.__palavrasReservadas:           
- #           if str(self.__fita) in str(self.__palavrasReservadas[i]):
- #               return True
- #          return False       
+   
+     
   
     def __avancaCabeca(self):
         self.__cabeca += 1
@@ -68,10 +51,10 @@ class Lexico:
     def getTabelaSimbolos(self):
         for self.__linha in self.__arquivo_fonte:
             self.__fita = list(self.__linha)
-            #print (self.__fita)
             self.__q0()
             self.__atualiza_nLinhas()
             self.__cabeca = 0
+            
         self.__arquivo_fonte.close()
        
         return self.__tabelaSimbolos
@@ -412,8 +395,7 @@ class Lexico:
         
              
     def __q16(self):#comentario de bloco
-        print("fechei bloco")
-        self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'Coments', self.__lexema])
+        
         self.__lexema = ''
         self.__q0()
         

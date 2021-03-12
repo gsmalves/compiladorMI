@@ -3,7 +3,7 @@
 ffff batata12
 //comentando 
 23.1
-gustav chegou_
+gustav chegou_ 
 //ignorante gg
 var 12
 dkldv om2
@@ -11,10 +11,12 @@ dkldv om2
 1 ++ 
 b -- 
 m * a 
+"
 m + 4
 " " "
 " eu to testando " 475655
 /* nzjkns fss */ 454656456465 ggf
 455
 " hg8 ghdGu GGGJA  000544a  ~*" jkjklj
-" fjdk \" "
+" fjdk \" hgjh "
+" gustavo testando" vrgs "
