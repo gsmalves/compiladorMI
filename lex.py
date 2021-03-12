@@ -6,15 +6,20 @@ class Lexico:
     def __init__(self, arquivo_fonte):
         self.__cabeca = 0
         self.__fita = []
+       
         self.__nlinhas = 0
         self.__tabelaSimbolos = []
         self.__lexema = ''
         self.__finalLinha = '\n'
+       
+        self.__digito = '[0-9]'
+        self.__underline = '_'
         self.__simbolos = ['!','#','$','%','&','(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','W','Y','Z','[',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','w','y','z','{','|','}','~']
         
         
         if os.path.exists(arquivo_fonte):
             self.__arquivo_fonte = open(arquivo_fonte, 'r')
+           
         else:
             print("Erro: Arquivo não existe.")
             exit()
@@ -58,7 +63,7 @@ class Lexico:
                 self.__lexema += self.__letra
             return self.__letra
         else:
-            return '\n'
+            return self.__finalLinha
 
     def getTabelaSimbolos(self):
         for self.__linha in self.__arquivo_fonte:
@@ -68,13 +73,14 @@ class Lexico:
             self.__atualiza_nLinhas()
             self.__cabeca = 0
         self.__arquivo_fonte.close()
+       
         return self.__tabelaSimbolos
-
+            
     def __q0(self):
         self.__caracter = self.__getCaracter()
-        if self.__caracter.isdigit():
+        if (re.match(r"([0-9])" ,self.__caracter)):
             self.__q04()
-        elif  self.__caracter.islower():
+        elif (re.match (r"([A-Za-z])", self.__caracter)) :
             self.__q1()
         elif  self.__caracter == '/':
             self.__q11()
@@ -110,7 +116,7 @@ class Lexico:
         
         self.__caracter = self.__getCaracter() 
 
-        while self.__caracter.isdigit() or self.__caracter.islower() or self.__caracter == '_':
+        while  (re.match(r"([A-Za-z])|[0-9]|[_]", self.__caracter)):
             self.__caracter = self.__getCaracter()
         if self.__finalLinha == self.__caracter:  # final da linha
             #if self.__identificaPalavraReservada():
@@ -132,7 +138,7 @@ class Lexico:
    
     def __q04(self):## verifica se é numeral
         self.__caracter = self.__getCaracter()
-        while self.__caracter.isdigit():
+        while (re.match(r"([0-9])" ,self.__caracter)):
             self.__caracter = self.__getCaracter()
         if self.__finalLinha == self.__caracter:  # final da linha
             self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, "NRO -", self.__lexema])
@@ -399,12 +405,25 @@ class Lexico:
         
         if self.__caracter == '"' :
             self.__q34()
-        
+        if self.__caracter == '\\' :
+            self.__q31()
         elif (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)):
             self.__q32()
         else:
-            print("erro aqui")
-            pass
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CMF', self.__lexema])
+        
+     
+        
+    def __q31(self):
+        
+        self.__caracter = self.__getCaracter() 
+        
+        if self.__caracter == '"' :
+            self.__q34()
+        elif (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)):
+            self.__q32()
+            
+        
     def __q32(self):
         
         self.__caracter = self.__getCaracter() 
@@ -413,12 +432,16 @@ class Lexico:
             self.__caracter = self.__getCaracter()
         if self.__caracter == '"':
             self.__q34()
+        elif self.__caracter == '\\' :
+            print(self.__caracter)
+            self.__q31()
         else:
-            print("Erro léxico ({0}, {1}): Caracter {2} inesperado".format(self.__nlinhas, self.__cabeca,
-                                                                           self.__caracter))
+            self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CMF', self.__lexema])
+        
             pass
 
     def __q34(self):
 
         self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CAD', self.__lexema])
-       
+        self.__lexema = ''
+        self.__q0()
