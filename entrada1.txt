@@ -1,4 +1,4 @@
-gus gJt2  hf7_  . ;
+   gus gJt2  hf7_  . ;
 { }
 ffff batata12
 //comentando 
@@ -13,9 +13,8 @@ b --
 m * a 
 m + 4
 " " "
-"eu to testando" 475655
-/* nzjkns fss */  fgg
+" eu to testando " 475655
+/* nzjkns fss */ 454656456465 ggf
 455
 " hg8 ghdGu GGGJA  000544a  ~*" jkjklj
 " fjdk \" "
-" smbolo"

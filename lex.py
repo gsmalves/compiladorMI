@@ -415,31 +415,28 @@ class Lexico:
         print("fechei bloco")
         self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'Coments', self.__lexema])
         self.__lexema = ''
-        self.__caracter = self.__finalLinha
-        self.__q0
+        self.__q0()
         
     def __q30(self):# cadeia de caracter    
         self.__caracter = self.__getCaracter()
         
         if self.__caracter == '"' :
             self.__q34()
-        if self.__caracter == '\\' :
-            self.__q31()
-        elif (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)):
+       
+        elif (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)) :
             self.__q32()
+        elif self.__finalLinha == self.__caracter:  # final da linha
+            self.__lexema = ''
+        elif self.__caracter.isspace():
+            self.__lexema = self.__lexema[:len(self.__lexema) - 1]
+            self.__lexema = ''
+            self.__q0()
         else:
             self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CMF', self.__lexema])
         
      
         
-    def __q31(self):
-        
-        self.__caracter = self.__getCaracter() 
-        
-        if self.__caracter == '"' :
-            self.__q34()
-        elif (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)):
-            self.__q32()
+
             
         
     def __q32(self):
@@ -448,11 +445,17 @@ class Lexico:
 
         while (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)):
             self.__caracter = self.__getCaracter()
+        
         if self.__caracter == '"':
             self.__q34()
-        elif self.__caracter == '\\' :
-            print(self.__caracter)
-            self.__q31()
+        
+        elif self.__finalLinha == self.__caracter:  # final da linha
+            self.__lexema = ''
+        elif self.__caracter.isspace():
+            self.__lexema = self.__lexema[:len(self.__lexema) - 1]
+            self.__lexema = ''
+            self.__q0()
+        
         else:
             self.__tabelaSimbolos.append([self.__nlinhas, self.__cabeca, 'CMF', self.__lexema])
         
