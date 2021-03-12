@@ -1,3 +1,34 @@
-corrigir numeros pra entender operadores que estão colados
-erro de simbolo lançado no q0
-rever coisas que eu fiz com sono
+corrigir numeros pra entender operadores que estão colados ok master
+erro de simbolo lançado no q0 
+
+colocar pastas de saída e entrada
+palavras reservadas
+
+lembrar de colocar que houve sucesso se não houver erro
+comentário de bloco mal formado, parar o laço com fim de arquivo
+pastas de saída e netrada de arquivos
+tratamentos de erros:
+
+" cadeia mal formada
+Números
+
+-3,5 = operador e número
+9.1.1 = (9.1)número , delimitador e número
+9.A = Número mal formado
+9A = número e identificador
+9@ = número e símbolo inválido
+____________________________
+Identificador
+
+St@rt = identificador, símbolo inválido e identificador
+a@@ no mesmo sentido
+_____________________________
+&= operador mal formado
+| = Operador mal formado
+|&= Operador mal formado
+___________________________
+Símbolo inválido toda vez que tiver símbolo como @#$ fora da " "
+________________________________
+"Heju hshn Cadeia mal formada
+_________________________________
+/* Hahaha  = comentário mal formado
