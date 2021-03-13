@@ -1,6 +1,3 @@
-array = ['\\','\n','\t']
-
-for i in array:
-
-
-    print(i)
+tab = "\t"
+if tab == '\t', ' ', '\n':
+    print("emmemememememeemem")
