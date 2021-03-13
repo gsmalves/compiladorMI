@@ -14,6 +14,8 @@ class Lexico:
       self.__lexema = ''
       self.__cod_lexema = ''
       self.__arquivo_fonte = self.__abre_arquivo(arquivo_fonte)
+      self.__palavrasReservadas = {"var", "const", "typedef", "struct", "extends", "procedure" ,"function", "start", "return", "if", "else", "then", "while", "read","print",
+          "int",  "real",   "boolean",   "string",   "true",   "false", "global", "local"}
 
   def __abre_arquivo(self, arquivo_fonte):
     if os.path.exists(arquivo_fonte):
@@ -26,7 +28,6 @@ class Lexico:
 
   def __avanca_cabeca(self):
       self.__cabeca += 1
-
 
   def __atualiza_n_linhas(self):
       self.__nlinhas += 1
@@ -73,8 +74,10 @@ class Lexico:
     elif self.__caracter == '|':
       self.__q19()  
     elif self.__caracter == '&':
-      self.__q21()    
-    elif self.__caracter == ' ' or self.__caracter == "\t" :
+      self.__q21() 
+    elif self.__caracter == '"':
+      self.__q30()     
+    elif self.__caracter == '' or self.__caracter == "\t" :
       self.__avanca_caracter() 
       self.__q0() 
   
@@ -84,8 +87,12 @@ class Lexico:
     while  (re.match(r"[A-Za-z]|[0-9]|[_]", str(self.__caracter))):
       self.__lexema += self.__caracter
       self.__avanca_caracter()
-    self.__cod_lexema = "IDE"
-    self.__adiciona_token()  
+    if self.__lexema in self.__palavrasReservadas:
+      self.__cod_lexema = "PRE"
+      self.__adiciona_token()
+    else:
+      self.__cod_lexema = "IDE"
+      self.__adiciona_token()  
     self.__q0()
 
   def __q3(self):
@@ -163,6 +170,7 @@ class Lexico:
     self.__avanca_caracter()
     self.__adiciona_token()
     self.__q0()
+
 
   def __q11(self):#Identifica se é o operador aritmetico "/" ou se é um indicador de comentario
     self.__lexema += self.__caracter
@@ -244,9 +252,62 @@ class Lexico:
     self.__cod_lexema = "LOG"
     self.__adiciona_token()
     self.__q0()
+    
+  def __q30(self):# cadeia de caracter    
+    self.__lexema += self.__caracter
+    self.__avanca_caracter()
+    if self.__caracter == '"' :
+      self.__q34()
+    elif self.__caracter == '\\':
+      self.__q32()
+    elif (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)) :
+      self.__q32()
+    else:
+      print("erro")
+
+  def __q31(self):
+    self.__lexema += self.__caracter
+    self.__avanca_caracter()
+    if self.__caracter == '"' : #após \
+      self.__q34()
+    elif (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)) :
+      self.__q32()
+        
+  def __q32(self):
+    self.__lexema += self.__caracter
+    self.__avanca_caracter()
+    while  (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)):
+      self.__lexema += self.__caracter
+      self.__avanca_caracter()
+    if self.__caracter == '\\':
+      self.__q32()
+    elif self.__caracter == '"' : 
+      self.__q34()
+    else:
+      print("erro") # fazer estado de erro para tratar todos possíveis
+  
+  def __q33(self):
+    self.__lexema += self.__caracter
+    self.__avanca_caracter()
+    if (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)):
+      self.__q32()
+    elif self.__caracter == '"' : 
+      self.__q34()
+    else:
+      print("erro") 
+  
+  def __q34(self):
+    self.__lexema += self.__caracter
+    self.__cod_lexema = "CAD"
+    self.__adiciona_token()
+    self.__lexema = ''
+    self.__caracter = self.__avanca_caracter
+    self.__q0()
+
+  
 
 if __name__ == "__main__":
     lex = Lexico("entrada2.txt") 
     __tabela_simbolos = lex.get_tabela_simbolos()    
     for simbolo  in __tabela_simbolos:
-      print(simbolo)
+      print (simbolo)
