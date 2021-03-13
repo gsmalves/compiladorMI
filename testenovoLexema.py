@@ -6,7 +6,7 @@ class Lexico:
   def __init__(self, arquivo_fonte):
       self.__cabeca = 0
       self.__fita = []
-      self.__caracter = ''
+      self.__caracter = ''  
       self.__comentario_aberto = False
       self.__nlinhas = 0
       self.__linha_comentario = 0
@@ -14,8 +14,8 @@ class Lexico:
       self.__lexema = ''
       self.__cod_lexema = ''
       self.__arquivo_fonte = self.__abre_arquivo(arquivo_fonte)
-      self.__palavrasReservadas = {"var", "const", "typedef", "struct", "extends", "procedure" ,"function", "start", "return", "if", "else", "then", "while", "read","print",
-          "int",  "real",   "boolean",   "string",   "true",   "false", "global", "local"}
+      self.__palavrasReservadas = ["var", "const", "typedef", "struct", "extends", "procedure" ,"function", "start", "return", "if", "else", "then", "while", "read","print",
+          "int",  "real",   "boolean",   "string",   "true",   "false", "global", "local"]
 
   def __abre_arquivo(self, arquivo_fonte):
     if os.path.exists(arquivo_fonte):
@@ -56,11 +56,11 @@ class Lexico:
   
   def __q0(self):
     if self.__comentario_aberto == True:
-      self.__q14() 
+      self.__q14()
+    elif (re.match (r"([A-Za-z])", str(self.__caracter))):
+        self.__q01() 
     elif(re.match(r"([0-9])" ,str(self.__caracter))):
       self.__q04()
-    elif (re.match (r"([A-Za-z])", str(self.__caracter))):
-      self.__q01()  
     elif(re.match(r"[;]|[,]|[.]|[(]|[)]|[{]|[}]|[[]|[]]",str(self.__caracter))):
       self.__q3()  
     elif self.__caracter == '+':
@@ -80,6 +80,15 @@ class Lexico:
     elif self.__caracter == '' or self.__caracter == "\t" :
       self.__avanca_caracter() 
       self.__q0() 
+    else: # default
+      if self.__caracter != '\n':
+        self.__lexema += self.__caracter
+        self.__cod_lexema = "SIB"
+        self.__adiciona_token()
+        self.__avanca_caracter()
+        self.__q0()
+
+        
   
   def __q01(self):
     self.__lexema += self.__caracter
@@ -93,6 +102,7 @@ class Lexico:
     else:
       self.__cod_lexema = "IDE"
       self.__adiciona_token()  
+    
     self.__q0()
 
   def __q3(self):
@@ -269,7 +279,7 @@ class Lexico:
     self.__lexema += self.__caracter
     self.__avanca_caracter()
     if self.__caracter == '"' : #após \
-      self.__q34()
+      self.__q33()
     elif (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)) :
       self.__q32()
         
@@ -280,7 +290,7 @@ class Lexico:
       self.__lexema += self.__caracter
       self.__avanca_caracter()
     if self.__caracter == '\\':
-      self.__q32()
+      self.__q31()
     elif self.__caracter == '"' : 
       self.__q34()
     else:
