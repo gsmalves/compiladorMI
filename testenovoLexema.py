@@ -11,9 +11,9 @@ class Lexico:
       self.__tabela_simbolos = []
       self.__lexema = ''
       self.__cod_lexema = ''
-      self.arquivo_lido = self.__abre_arquivo(arquivo_fonte)
+      self.__arquivo_fonte = self.__abre_arquivo(arquivo_fonte)
 
-  def __abre_arquivo(self, arquivo_fonte)-> list:
+  def __abre_arquivo(self, arquivo_fonte):
     if os.path.exists(arquivo_fonte):
         with open(arquivo_fonte, 'r') as file:  
           return file.readlines()
@@ -50,6 +50,8 @@ class Lexico:
   def __q0(self):
     if(re.match(r"([0-9])" ,str(self.__caracter))):
       self.__q04()
+    # elif re.match (r"([A-Za-z])", self.__caracter):
+    #   self.__q01()  
     elif self.__caracter == '+':
       self.__q07()
     elif self.__caracter == '*':
@@ -58,6 +60,14 @@ class Lexico:
       self.__avanca_caracter() 
       self.__q0() 
   
+  def __q01(self):
+    self.__lexema += self.__caracter
+    self.__avanca_caracter()
+    while  (re.match(r"[A-Za-z]|[0-9]|[_]", str(self.__caracter))):
+      self.__lexema += self.__caracter
+      self.__avanca_caracter()
+    self.__adiciona_token()  
+    self.__q0()
 
   def __q04(self):## verifica se é numeral // q04
     self.__lexema += self.__caracter
