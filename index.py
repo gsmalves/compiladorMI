@@ -9,5 +9,7 @@ for i in range(10):
     tabelasimbolos = automato.get_tabela_simbolos()
     saida = open("saida{}.txt".format(i),'w' )
     for simbolo in tabelasimbolos:
-        saida.write(str(simbolo)+"\n")
+      # print(type(simbolo))
+      # #print('Resultado ---> ', ''.join(str(simbolo))).replace("'", "")
+      saida.write(simbolo+"\n")
     

@@ -1,120 +1,61 @@
-[1, 4, 'PRE', 'int']
-[1, 9, 'IDE', 'scan']
-[1, 10, 'DEL', ';']
-[1, 11, 'SIB', '\r']
-[2, 8, 'IDE', 'usuario']
-[2, 10, 'REL', '=']
-[2, 19, 'CMF', '"Matheus"']
-[2, 21, 'CMF', '"\r\n']
-[3, 6, 'PRE', 'print']
-[3, 7, 'DEL', '(']
-[3, 13, 'CMF', '"Hey, "']
-[3, 27, 'CMF', '" + usuario + "']
-[3, 45, 'CMF', '"digite um n\xc3\xbamero"']
-[3, 49, 'CMF', '");\r\n']
-[4, 6, 'IDE', 'scanf']
-[4, 7, 'DEL', '(']
-[4, 10, 'CMF', '"%d"']
-[4, 21, 'CMF', '", &scan);\r\n']
-[5, 2, 'SIB', '/']
-[5, 2, 'ART', '*']
-[5, 9, 'IDE', 'Teste']
-[5, 12, 'IDE', 'de']
-[5, 23, 'IDE', 'operadores']
-[5, 35, 'IDE', 'relacionais']
-[5, 36, 'SIB', '\r']
-[6, 1, 'ART', '*']
-[6, 8, 'IDE', 'Teste']
-[6, 11, 'IDE', 'de']
-[6, 22, 'IDE', 'aperadores']
-[6, 24, 'IDE', 'l']
-[6, 25, 'SIB', '\xc3']
-[6, 26, 'SIB', '\xb3']
-[6, 31, 'IDE', 'gicos']
-[6, 36, 'IDE', 'tamb']
-[6, 37, 'SIB', '\xc3']
-[6, 38, 'SIB', '\xa9']
-[6, 39, 'IDE', 'm']
-[6, 41, 'SIB', '\r']
-[7, 1, 'ART', '*']
-[7, 6, 'IDE', 'Vai']
-[7, 12, 'IDE', 'pegar']
-[7, 15, 'IDE', 'um']
-[7, 20, 'IDE', 'erro']
-[7, 26, 'IDE', 'nessa']
-[7, 34, 'IDE', 'express']
-[7, 35, 'SIB', '\xc3']
-[7, 36, 'SIB', '\xa3']
-[7, 37, 'IDE', 'o']
-[7, 38, 'SIB', '\r']
-[8, 1, 'ART', '*']
-[8, 3, 'SIB', '/']
-[8, 4, 'SIB', '\r']
-[9, 3, 'PRE', 'if']
-[9, 5, 'DEL', '(']
-[9, 9, 'IDE', 'scan']
-[9, 11, 'REL', '>']
-[9, 13, 'NRO', '5']
-[9, 15, 'LOG', '&&']
-[9, 16, 'OpMF', '&']
-[9, 21, 'IDE', 'scan']
-[9, 24, 'REL', '<=']
-[9, 26, 'NRO', '7']
-[9, 28, 'OpMF', '|']
-[9, 33, 'IDE', 'scan']
-[9, 34, 'SIB', '/']
-[9, 35, 'NRO', '2']
-[9, 38, 'REl', '!=']
-[9, 40, 'NRO', '3']
-[9, 42, 'LOG', '&&']
-[9, 43, 'OpMF', '&']
-[9, 48, 'IDE', 'scan']
-[9, 48, 'ART', '*']
-[9, 50, 'NRO', '2']
-[9, 53, 'REL', '==']
-[9, 56, 'NRO', '14']
-[9, 57, 'DEL', ')']
-[9, 58, 'DEL', '{']
-[9, 59, 'SIB', '\r']
-[10, 2, 'SIB', '/']
-[10, 3, 'SIB', '/']
-[10, 9, 'IDE', 'teste']
-[10, 14, 'IDE', 'para']
-[10, 24, 'IDE', 'verificar']
-[10, 27, 'IDE', 'se']
-[10, 29, 'IDE', 'h']
-[10, 30, 'SIB', '\xc3']
-[10, 31, 'SIB', '\xa1']
-[10, 36, 'IDE', 'erro']
-[10, 39, 'IDE', 'em']
-[10, 46, 'IDE', 'coment']
-[10, 47, 'SIB', '\xc3']
-[10, 48, 'SIB', '\xa1']
-[10, 51, 'IDE', 'rio']
-[10, 54, 'IDE', 'de']
-[10, 60, 'IDE', 'linha']
-[10, 61, 'SIB', '\r']
-[11, 7, 'PRE', 'print']
-[11, 8, 'DEL', '(']
-[11, 23, 'CMF', '"Voce digitou 6"']
-[11, 27, 'CMF', '");\r\n']
-[12, 2, 'DEL', '}']
-[12, 3, 'SIB', '\r']
-[13, 5, 'IDE', 'scan']
-[13, 6, 'REL', '=']
-[13, 9, 'NRO', '15']
-[13, 10, 'SIB', '\r']
-[14, 5, 'IDE', 'scan']
-[14, 6, 'ART', '+']
-[14, 7, 'NRO', '1']
-[14, 9, 'REL', '=']
-[14, 11, 'NRO', '1']
-[14, 12, 'SIB', '\r']
-[15, 2, 'SIB', '/']
-[15, 2, 'ART', '*']
-[15, 4, 'SIB', '\r']
-[16, 2, 'SIB', '\r']
-[17, 9, 'IDE', 'Tentando']
-[17, 15, 'IDE', 'fazer']
-[17, 20, 'IDE', 'algo']
-[17, 24, 'IDE', 'aqui']
+1 PRE int
+1 IDE scan
+1 DEL ;
+2 IDE usuario
+2 REL =
+2 CAD "Matheus"
+3 PRE print
+3 DEL (
+3 CAD "Hey, "
+3 ART +
+3 IDE usuario
+3 ART +
+3 CMF "digite um número"
+3 DEL )
+3 DEL ;
+4 IDE scanf
+4 DEL (
+4 CAD "%d"
+4 DEL ,
+4 OpMF &
+4 IDE scan
+4 DEL )
+4 DEL ;
+9 PRE if
+9 DEL (
+9 IDE scan
+9 REL >
+9 NRO 5
+9 LOG &&
+9 IDE scan
+9 REL <=
+9 NRO 7
+9 OpMF |
+9 IDE scan
+9 ART /
+9 NRO 2
+9 REl !=
+9 NRO 3
+9 LOG &&
+9 IDE scan
+9 ART *
+9 NRO 2
+9 REL ==
+9 NRO 14
+9 DEL )
+9 DEL {
+11 IDE /print
+11 DEL (
+11 CAD "Voce digitou 6"
+11 DEL )
+11 DEL ;
+12 DEL }
+13 IDE scan
+13 REL =
+13 NRO 15
+14 IDE scan
+14 ART +
+14 NRO 1
+14 REL =
+14 NRO 1
+15 CoMF /*Tentando fazer algo aqui

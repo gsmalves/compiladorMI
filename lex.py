@@ -17,8 +17,8 @@ class Lexico:
     self.__lexema = ''
     self.__cod_lexema = ''
     self.__arquivo_fonte = self.__abre_arquivo(arquivo_fonte)
-    self.__palavrasReservadas = ["var", "const", "typedef", "struct", "extends", "procedure" ,"function", "start", "return", "if", "else", "then", "while", "read","print",
-        "int",  "real",   "boolean",   "string",   "true",   "false", "global", "local"]
+    self.__palavrasReservadas = {"var", "const", "typedef", "struct", "extends", "procedure" ,"function", "start", "return", "if", "else", "then", "while", "read","print",
+        "int",  "real",   "boolean",   "string",   "true",   "false", "global", "local"}
 
   def __abre_arquivo(self, arquivo_fonte):
     '''
@@ -32,8 +32,11 @@ class Lexico:
     '''
     Adiciona um token a tabela de simbolos
     '''
-    self.__tabela_simbolos.append([self.__nlinhas+1, self.__cabeca,self.__cod_lexema, self.__lexema])
+    # token = Token(self.__nlinhas, self.__cod_lexema, self.__lexema)
+    # self.__tabela_simbolos.append([token])
+    self.__tabela_simbolos.append(str("{} {} {}").format(self.__nlinhas+1, self.__cod_lexema, self.__lexema))
     self.__lexema = ''
+
 
   def __avanca_caracter(self):
     '''
@@ -81,7 +84,7 @@ class Lexico:
       self.__q06()
     elif self.__caracter == '-':
       self.__q09()  
-    elif self.__caracter == '/"':
+    elif self.__caracter == '/':
       self.__q11()
     elif self.__caracter == '|':
       self.__q19()  
@@ -91,7 +94,7 @@ class Lexico:
       self.__q32()     
     elif self.__caracter == '=' or self.__caracter == '<' or self.__caracter == '>' or self.__caracter == '!':
       self.__q23()
-    elif self.__caracter == '' or self.__caracter == "\t"  or self.__caracter == ' ':
+    elif self.__caracter == '' or self.__caracter == "\t"  or self.__caracter == ' ' or self.__caracter == '\r':
       self.__avanca_caracter() 
       self.__q0() 
     elif self.__caracter != '\n':
@@ -232,7 +235,7 @@ class Lexico:
     self.__lexema += self.__caracter
     self.__avanca_caracter()
     if self.__caracter == '/':
-      self.__q12()
+      self.__lexema == ' '
     elif self.__caracter == "*":
       self.__lexema += self.__caracter
       self.__avanca_caracter()
@@ -249,8 +252,6 @@ class Lexico:
     Ignora toda a linha
     '''
     self.__lexema = ''
-    self.__caracter = '\n'
-    self.__q0()
 
   def __q14(self):
     '''
@@ -260,16 +261,19 @@ class Lexico:
     while  self.__caracter != "*":
       if self.__caracter == '\n':
         self.__comentario_aberto = True
-        break              
+        break          
+      else: 
+        self.__lexema += self.__caracter  
+        self.__avanca_caracter()    
     if self.__caracter == "*":
-        self.__avanca_caracter()
         self.__avanca_caracter()
         if self.__caracter == '/':
           self.__lexema = ''
           self.__comentario_aberto = False
           self.__avanca_caracter()  
           self.__q0()
-        
+        else:
+          self.__q14()        
  #operadores logicos 
   #Operador Lógico "e" // verifica se não existe um erro lexico
   #caso não exista o erro lança pra o estado q22 que adiciona o lexena de && 
@@ -283,6 +287,7 @@ class Lexico:
     self.__avanca_caracter()
     if(self.__caracter == '&'):
       self.__lexema += self.__caracter
+      self.__avanca_caracter()
       self.__cod_lexema = "LOG"
     else:
       self.__cod_lexema = "OpMF"
@@ -300,6 +305,7 @@ class Lexico:
     self.__avanca_caracter()
     if(self.__caracter == "|"):
       self.__lexema += self.__caracter
+      self.__avanca_caracter()
       self.__cod_lexema = "LOG"
     else:
       self.__cod_lexema = "OpMF"
@@ -343,27 +349,36 @@ class Lexico:
     self.__lexema += self.__caracter
     self.__avanca_caracter()
     while self.__caracter != '\n' and self.__caracter != '\"':
-      if (re.match('[\x20-\x21]|[\x23-\x7e]',self.__caracter)!= True):
-        sib_invalido = True
-      if self.__caracter == '\\':
-        self.__q31()
+      if ord(self.__caracter)<32 or ord(self.__caracter)>126:
+        sib_invalido = True 
+      elif self.__caracter == '\\':
+        self.__lexema += self.__caracter
+        self.__avanca_caracter()
+        if self.__caracter == '"' : #após \
+          self.__lexema += '"'
+          self.__avanca_caracter()
       self.__lexema += self.__caracter  
       self.__avanca_caracter()  
-    if sib_invalido == False:     
-      if self.__caracter == '"' : 
-        self.__lexema += self.__caracter
+    if self.__caracter == '"' : 
+      self.__lexema += self.__caracter
+      if sib_invalido == False:
         self.__cod_lexema = "CAD"
-        self.__adiciona_token()
-        self.__avanca_caracter()
-        self.__q0()
+      else:
+        self.__cod_lexema = "CMF"
+      self.__adiciona_token()
+      self.__avanca_caracter()
     else:
-      self.__lexema += self.__caracter    
-    self.__q33()
+      if re.match('["]' ,self.__lexema):
+        self.__cod_lexema = "CMF"
+        self.__adiciona_token()
+      else:
+        self.__lexema = ''
+    self.__q0()  
 
-  '''
-  Identifica uma " dentro de uma cadeia de caractere quando não delimitando - a
-  '''  
   def __q31(self):
+    '''
+    Identifica uma " dentro de uma cadeia de caractere quando não delimitando - a
+    '''  
     self.__lexema += self.__caracter
     self.__avanca_caracter()
     if self.__caracter == '"' : #após \
@@ -372,16 +387,5 @@ class Lexico:
     else:
       self.__lexema += self.__caracter()
     self.__q32()
-        
-  
-  def __q33(self):
-    '''
-    Define uma cadeia de caracteres mal formada
-    '''
-    if re.match('["]' ,self.__lexema):
-      self.__cod_lexema = "CMF"
-      self.__adiciona_token()
-      self.__q0()
-    else:
-      self.__lexema = ''
-      self.__q0()  
+          
+
