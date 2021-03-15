@@ -19,14 +19,16 @@ class Lexico:
     Inicializa o analisador lexico e define o arquivo fonte, que recebe o conteudo do arquivo analisado
     '''
     self.__cabeca = 0
+    self.__incidencia_de_erro = 0
     self.__fita = []
     self.__caracter = ''  
     self.__comentario_aberto = False
-    self.__nlinhas = 0
+    self.__n_linhas = 0
     self.__linha_comentario = 0
     self.__tabela_simbolos = []
     self.__lexema = ''
     self.__cod_lexema = ''
+    self.nome_arquivo = arquivo_fonte
     self.__arquivo_fonte = self.__abre_arquivo(arquivo_fonte)
     self.__palavrasReservadas = {"var", "const", "typedef", "struct", "extends", "procedure" ,"function", "start", "return", "if", "else", "then", "while", "read","print",
         "int",  "real",   "boolean",   "string",   "true",   "false", "global", "local"}
@@ -43,9 +45,10 @@ class Lexico:
     '''
     Adiciona um token a tabela de simbolos
     '''
-    self.__tabela_simbolos.append(str("{} {} {}").format(self.__nlinhas+1, self.__cod_lexema, self.__lexema))
+    self.__tabela_simbolos.append(str("{} {} {}").format(self.__n_linhas+1, self.__cod_lexema, self.__lexema))
     self.__lexema = ''
 
+    
 
   def __avanca_caracter(self):
     '''
@@ -67,12 +70,19 @@ class Lexico:
         #print (self.__fita)
         self.__avanca_caracter()
         self.__q0()
-        self.__nlinhas += 1
+        self.__n_linhas += 1
         self.__cabeca = 0
     if self.__comentario_aberto == True:
-      self.__nlinhas = self.__linha_comentario
+      self.__n_linhas = self.__linha_comentario
       self.__cod_lexema = "CoMF"
+      self.__incidencia_de_erro +=1
       self.__adiciona_token()    
+    print("Arquivo analisado: {}".format(self.nome_arquivo))
+    if self.__incidencia_de_erro != 0:
+      print("O Arquivo Analisado contem {} erros\n".format(self.__incidencia_de_erro))
+    else:
+      print("O arquivo Analisado não contem erros\n")  
+
     return self.__tabela_simbolos
   
   def __q0(self):
@@ -115,6 +125,7 @@ class Lexico:
     '''
     Recebe um simbolo invalido e lança seu erro a tabela de simbolos
     '''
+    self.__incidencia_de_erro +=1
     self.__cod_lexema = "SIB"
     self.__adiciona_token()
     self.__q0()
@@ -178,10 +189,12 @@ class Lexico:
         self.__avanca_caracter()
       self.__cod_lexema = "NRO"
     else: 
+      self.__incidencia_de_erro +=1
       while  self.__caracter.isspace()!=True and self.__caracter != '\t' and self.__caracter != '\n':
         self.__lexema += self.__caracter
         self.__avanca_caracter()
       self.__cod_lexema = "NMF"
+      self.__incidencia_de_erro +=1
     self.__adiciona_token() 
     self.__q0()
 
@@ -248,7 +261,7 @@ class Lexico:
     elif self.__caracter == "*":
       self.__lexema += self.__caracter
       self.__avanca_caracter()
-      self.__linha_comentario = self.__nlinhas   
+      self.__linha_comentario = self.__n_linhas   
       self.__q14()  
     else:
       self.__cod_lexema = "ART"
@@ -300,6 +313,7 @@ class Lexico:
       self.__cod_lexema = "LOG"
     else:
       self.__cod_lexema = "OpMF"
+      self.__incidencia_de_erro +=1
     self.__adiciona_token()
     self.__q0()
       
@@ -318,6 +332,7 @@ class Lexico:
       self.__cod_lexema = "LOG"
     else:
       self.__cod_lexema = "OpMF"
+      self.__incidencia_de_erro +=1
     self.__adiciona_token()
     self.__q0()
       
@@ -374,11 +389,13 @@ class Lexico:
         self.__cod_lexema = "CAD"
       else:
         self.__cod_lexema = "CMF"
+        self.__incidencia_de_erro +=1
       self.__adiciona_token()
       self.__avanca_caracter()
     else:
       if re.match('["]' ,self.__lexema):
         self.__cod_lexema = "CMF"
+        self.__incidencia_de_erro +=1
         self.__adiciona_token()
       else:
         self.__lexema = ''
