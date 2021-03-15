@@ -24,9 +24,10 @@ class Lexico:
     '''
     Abre o arquivo e retorna o seu conteudo separado por linhas
     '''
-    if os.path.exists(arquivo_fonte):
-        with open(arquivo_fonte, 'r') as file:  
-          return file.readlines()
+    if os.path.exists("../input/"+arquivo_fonte):
+      print("achou")
+      with open("../input/"+arquivo_fonte, 'r') as file:  
+        return file.readlines()
     
   def __adiciona_token(self):
     '''
