@@ -7,7 +7,7 @@ from lex import Lexico
 
 if not os.path.exists(r"../output"):
   os.mkdir(r"../output")
-diretorio = listdir(r'../../input')
+diretorio = listdir(r"../input")
 for arquivo in diretorio:
   print(os.path.abspath(arquivo))
   # #automato = Lexico(arquivo_fonte=os.path.abspath(arquivo))

@@ -388,4 +388,3 @@ class Lexico:
       self.__lexema += self.__caracter()
     self.__q32()
           
-
