@@ -9,11 +9,11 @@ import re
 from lex import Lexico
 var = []
 #var+=walk(r"../input")[3]
-for (dirpath, dirnames, filenames) in walk(r"../input"):
+for (dirpath, dirnames, filenames) in walk("../input/"):
   var +=filenames
 if not os.path.exists(r"../output"):
   os.mkdir(r"../output")
-diretorio = listdir(r"../input")
+
 for arquivo in var:
   print(arquivo)
   regex = '(entrada)\d+\.tx$'
