@@ -8,22 +8,17 @@ import re
 
 from lex import Lexico
 var = []
-#var+=walk(r"../input")[3]
 for (dirpath, dirnames, filenames) in walk(r"../input"):
   var +=filenames
 if not os.path.exists(r"../output"):
   os.mkdir(r"../output")
 diretorio = listdir(r"../input")
 for arquivo in var:
-  print(arquivo)
-  regex = '(entrada)\d+\.tx$'
-  if (re.match(regex ,arquivo)):
-    print("o arquivo é "+ arquivo)
+  if (re.match(r'(entrada)([0-9])+(\.txt$)' ,str(arquivo))):
     automato = Lexico(arquivo_fonte=arquivo)
     tabelasimbolos = automato.get_tabela_simbolos()
-    saida = open("../output/"+arquivo,'w' )
+    num_arquivo = re.findall(r'\d+\.txt$', arquivo)
+    saida = open("../output/saida"+num_arquivo[0],'w' )
     for simbolo in tabelasimbolos:
-      # print(type(simbolo))
-      # #print('Resultado ---> ', ''.join(str(simbolo))).replace("'", "")
       saida.write(simbolo+"\n")
     

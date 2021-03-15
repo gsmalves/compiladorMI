@@ -25,7 +25,6 @@ class Lexico:
     Abre o arquivo e retorna o seu conteudo separado por linhas
     '''
     if os.path.exists("../input/"+arquivo_fonte):
-      print("achou")
       with open("../input/"+arquivo_fonte, 'r') as file:  
         return file.readlines()
     
@@ -33,8 +32,6 @@ class Lexico:
     '''
     Adiciona um token a tabela de simbolos
     '''
-    # token = Token(self.__nlinhas, self.__cod_lexema, self.__lexema)
-    # self.__tabela_simbolos.append([token])
     self.__tabela_simbolos.append(str("{} {} {}").format(self.__nlinhas+1, self.__cod_lexema, self.__lexema))
     self.__lexema = ''
 

@@ -1,0 +1,2 @@
+gustavo_nota = 10
+hiago_nota = 10
