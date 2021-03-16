@@ -76,10 +76,11 @@ class Lexico:
       self.__adiciona_token()    
     print("Arquivo analisado: {}".format(self.nome_arquivo))
     if self.__incidencia_de_erro != 0:
-      print("O Arquivo Analisado contem {} erros\n".format(self.__incidencia_de_erro))
+      print("O Arquivo analisado contem {} erros\n".format(self.__incidencia_de_erro))
       self.__tabela_simbolos.append(str("\n\n\nO arquivo analisado contem {} erros\n\n\n".format(self.__incidencia_de_erro)))
     else:
-      print("O arquivo Analisado não contem erros\n")  
+      print("Arquivo analisado com sucesso e sem erros.\n")  
+      self.__tabela_simbolos.append(str("\n\n\nArquivo analisado com sucesso e sem erros.\n\n\n"))
 
     return self.__tabela_simbolos
   
