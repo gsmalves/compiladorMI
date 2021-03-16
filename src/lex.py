@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 # Autores: Gustavo dos Santos Menezes Alves e Hiago Rangel de Almeida
 # Componente Curricular: MI - PROCESSADORES DE LINGUAGEM DE PROGRAMAÇÃO
 # Concluido em: 15/03/2021
@@ -6,10 +7,6 @@
 # apostilas, e páginas ou documentos eletrônicos da Internet. Qualquer trecho de código
 # de outra autoria que não a minha está destacado com uma citação para o autor e a fonte
 # do código, e estou ciente que estes trechos não serão considerados para fins de avaliação.
-
-
-
-# -*- coding: UTF-8 -*-
 import os
 import re
 
