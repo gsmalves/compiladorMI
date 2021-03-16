@@ -181,7 +181,7 @@ class Lexico:
         self.__avanca_caracter()
       self.__cod_lexema = "NRO"
     else: 
-      self.__incidencia_de_erro +=1
+      
       while  self.__caracter.isspace()!=True and self.__caracter != '\t' and self.__caracter != '\n':
         self.__lexema += self.__caracter
         self.__avanca_caracter()
@@ -392,7 +392,7 @@ class Lexico:
 
   def __q31(self):
     '''
-    Identifica uma " dentro de uma cadeia de carácter quando não delimitando - a
+    Identifica uma " dentro de uma cadeia de carácter , que não é um delimitador de cadeia de carácter.
     '''  
     self.__lexema += self.__caracter
     self.__avanca_caracter()
