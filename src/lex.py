@@ -93,8 +93,7 @@ class Lexico:
         self.__q01() 
     elif(re.match(r"([0-9])" ,str(self.__caracter))):
       self.__q04()
-    #elif(re.match(r"[;]|[,]|[.]|[(]|[)]|[{]|[}]|[[]|[]]",str(self.__caracter))):
-    elif str(self.__caracter) in ",;()[]." or  self.__caracter == '{' or self.__caracter == '}':
+    elif str(self.__caracter) in "{,;()[].}" :
       self.__q3()  
     elif self.__caracter == '+':
       self.__q07()
@@ -110,7 +109,7 @@ class Lexico:
       self.__q21() 
     elif self.__caracter == '"':
       self.__q32()     
-    elif self.__caracter == '=' or self.__caracter == '<' or self.__caracter == '>' or self.__caracter == '!':
+    elif self.__caracter in '=<>!' :
       self.__q23()
     elif self.__caracter == '' or self.__caracter == "\t"  or self.__caracter == ' ' or self.__caracter == '\r':
       self.__avanca_caracter() 
