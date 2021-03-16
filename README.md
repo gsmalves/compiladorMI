@@ -1,6 +1,8 @@
 
 # Analisador Léxico do Projeto MI Compiladores - UEFS
 
+# Estrutura Léxica da Linguagem
+
 ![tabela](https://user-images.githubusercontent.com/32742743/111238261-81f86500-85d5-11eb-9d14-6a7f528af8b5.PNG)
 
 Instruções para execução do projeto:
