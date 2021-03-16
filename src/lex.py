@@ -93,7 +93,8 @@ class Lexico:
         self.__q01() 
     elif(re.match(r"([0-9])" ,str(self.__caracter))):
       self.__q04()
-    elif(re.match(r"[;]|[,]|[.]|[(]|[)]|[{]|[}]|[[]|[]]",str(self.__caracter))):
+    #elif(re.match(r"[;]|[,]|[.]|[(]|[)]|[{]|[}]|[[]|[]]",str(self.__caracter))):
+    elif str(self.__caracter) in ",;()[]." or  self.__caracter == '{' or self.__caracter == '}':
       self.__q3()  
     elif self.__caracter == '+':
       self.__q07()
