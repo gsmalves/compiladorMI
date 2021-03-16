@@ -1,0 +1,18 @@
+// Erros de identificadores
+
+var
+{
+	int a@@;
+	int _x!;
+	real $s;
+	real b%x%;
+	boolean flag;
+
+}
+
+60a
+
+2.0.
+aaa0
++-
+string"
