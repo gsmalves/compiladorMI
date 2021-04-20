@@ -14,8 +14,11 @@ from os import listdir
 from os import walk
 import re
 
-
+#local imports 
 from lex import Lexico
+#from syntactic
+
+
 var = []
 for (dirpath, dirnames, filenames) in walk(r"../input"):
   var +=filenames
@@ -24,10 +27,13 @@ if not os.path.exists(r"../output"):
 
 for arquivo in var:
   if (re.match(r'(entrada)([0-9])+(\.txt$)' ,str(arquivo))):
-    automato = Lexico(arquivo_fonte=arquivo)
+    if os.path.exists("../input/"+arquivo):
+      with open("../input/"+arquivo, 'r') as file:  
+        arquivo_fonte = file.readlines()
+    automato = Lexico(arquivo_fonte, nome_arquivo=arquivo)
     tabelasimbolos = automato.get_tabela_simbolos()
     num_arquivo = re.findall(r'\d+\.txt$', arquivo)
-    saida = open("../output/saida"+num_arquivo[0],'w' )
+    saida = open("../output/saidalex"+num_arquivo[0],'w' )
     for simbolo in tabelasimbolos:
       saida.write(simbolo+"\n")
     

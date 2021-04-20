@@ -11,7 +11,7 @@ import os
 import re
 
 class Lexico:
-  def __init__(self, arquivo_fonte):
+  def __init__(self, arquivo_fonte, nome_arquivo):
     '''
     Inicializa o analisador lexico e define o arquivo fonte, que recebe o conteúdo do arquivo analisado
     '''
@@ -25,18 +25,12 @@ class Lexico:
     self.__tabela_simbolos = []
     self.__lexema = ''
     self.__cod_lexema = ''
-    self.nome_arquivo = arquivo_fonte
-    self.__arquivo_fonte = self.__abre_arquivo(arquivo_fonte)
+    self.nome_arquivo = nome_arquivo
+    self.__arquivo_fonte = arquivo_fonte
     self.__palavrasReservadas = {"var", "const", "typedef", "struct", "extends", "procedure" ,"function", "start", "return", "if", "else", "then", "while", "read","print",
         "int",  "real",   "boolean",   "string",   "true",   "false", "global", "local"}
 
-  def __abre_arquivo(self, arquivo_fonte):
-    '''
-    Abre o arquivo e retorna o seu conteudo separado por linhas
-    '''
-    if os.path.exists("../input/"+arquivo_fonte):
-      with open("../input/"+arquivo_fonte, 'r') as file:  
-        return file.readlines()
+
     
   def __adiciona_token(self):
     '''
