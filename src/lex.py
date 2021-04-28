@@ -9,7 +9,7 @@
 # do código, e estou ciente que estes trechos não serão considerados para fins de avaliação.
 import os
 import re
-
+from token_lex import Token
 class Lexico:
   def __init__(self, arquivo_fonte, nome_arquivo):
     '''
@@ -36,7 +36,8 @@ class Lexico:
     '''
     Adiciona um token a tabela de simbolos
     '''
-    self.__tabela_simbolos.append(str("{} {} {}").format(self.__n_linhas+1, self.__cod_lexema, self.__lexema))
+    self.__tabela_simbolos.append(Token(self.__n_linhas, self.__lexema, self.__cod_lexema))
+    #self.__tabela_simbolos.append(str("{} {} {}").format(self.__n_linhas+1, self.__cod_lexema, self.__lexema))
     self.__lexema = ''
 
     
@@ -69,14 +70,15 @@ class Lexico:
       self.__incidencia_de_erro +=1
       self.__adiciona_token()    
     print("Arquivo analisado: {}".format(self.nome_arquivo))
-    if self.__incidencia_de_erro != 0:
-      print("O Arquivo analisado contem {} erros\n".format(self.__incidencia_de_erro))
-      self.__tabela_simbolos.append(str("\n\n\nO arquivo analisado contem {} erros\n\n\n".format(self.__incidencia_de_erro)))
-    else:
-      print("Arquivo analisado com sucesso e sem erros.\n")  
-      self.__tabela_simbolos.append(str("\n\n\nArquivo analisado com sucesso e sem erros.\n\n\n"))
 
-    return self.__tabela_simbolos
+    if self.__incidencia_de_erro != 0:
+      #print("O Arquivo analisado contem {} erros\n".format(self.__incidencia_de_erro))
+      #self.__tabela_simbolos.append(str("\n\n\nO arquivo analisado contem {} erros\n\n\n".format(self.__incidencia_de_erro)))
+      return None
+    else:
+      #print("Arquivo analisado com sucesso e sem erros.\n")  
+      #self.__tabela_simbolos.append(str("\n\n\nArquivo analisado com sucesso e sem erros.\n\n\n"))
+      return self.__tabela_simbolos
   
   def __q0(self):
     '''

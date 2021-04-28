@@ -12,6 +12,7 @@ import os.path
 import os
 from os import listdir
 from os import walk
+from token_lex import Token
 import re
 
 #local imports 
@@ -32,8 +33,9 @@ for arquivo in var:
         arquivo_fonte = file.readlines()
     automato = Lexico(arquivo_fonte, nome_arquivo=arquivo)
     tabelasimbolos = automato.get_tabela_simbolos()
-    num_arquivo = re.findall(r'\d+\.txt$', arquivo)
-    saida = open("../output/saidalex"+num_arquivo[0],'w' )
-    for simbolo in tabelasimbolos:
-      saida.write(simbolo+"\n")
+    if tabelasimbolos != None:
+      num_arquivo = re.findall(r'\d+\.txt$', arquivo)
+      saida = open("../output/saidalex"+num_arquivo[0],'w' )
+      for simbolo in tabelasimbolos:
+        saida.write("{}\n".format(simbolo))
     
