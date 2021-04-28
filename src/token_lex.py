@@ -1,5 +1,5 @@
 class Token:
-  def __init__(self, linha, lexema, cod_lexema):
+  def __init__(self, linha,  cod_lexema, lexema):
     self.linha = linha
     self.lexema = lexema
     self.cod_lexema = cod_lexema
