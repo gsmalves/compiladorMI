@@ -1,6 +1,0 @@
-0 gustavo_nota IDE
-0 = REL
-0 10 NRO
-1 hiago_nota IDE
-1 = REL
-1 10 NRO

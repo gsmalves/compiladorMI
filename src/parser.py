@@ -11,6 +11,7 @@ class Parser:
         self.tokens = tokens
         self.iterator = 0
         self.token = {}
+        self.tipo = {'int', 'real', 'boolean'}
 
     def setnext_token(self):
         if self.iterator < len(self.tokens) - 1:
@@ -29,17 +30,23 @@ class Parser:
         else:
             return False
 
-    def init_language(self):
-        
+    def init_language(self):     
         self.var()
         self.start()
-        
+
+    def boolean_literal(self):
+        return self.tokens[self.iterator].lexema in {'true', 'false'}
+
+    def number(self):       
+        return self.tokens[self.iterator].lexema == 'NRO'
+    
+    def value(self):
+        return self.tokens[self.iterator].cod_token == 'CAD'  or self.boolean_literal() or self.number()  
+             
         
     def var(self):
         if self.tokens[self.iterator].lexema == 'var':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
+            print(self.tokens[self.iterator])
             self.setnext_token()
         else:
             print(self.tokens[self.iterator].linha,
@@ -48,79 +55,63 @@ class Parser:
             self.setnext_token()
             
         if self.tokens[self.iterator].lexema == '{':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
+            print(self.tokens[self.iterator])
             self.setnext_token()
+
         else:
             print(self.tokens[self.iterator].linha,
                   'ERRO SINTÁTICO ESPERAVA:', '{')
             self.setnext_token()
 
-        if self.tokens[self.iterator].lexema == 'int':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
-            self.setnext_token()
-        else:
-            print(self.tokens[self.iterator].linha,
-                  'ERRO SINTÁTICO ESPERAVA:', 'int')
-            self.setnext_token()
 
-        if self.tokens[self.iterator].lexema == 'a':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
+        while self.tokens[self.iterator].lexema in self.tipo:#ANCHOR falta implementar para pegar o identifier de string
+            #ANCHOR printar o tipo 
+            self.setnext_token()
+            self.declara_var()
+
+
+
+        if self.tokens[self.iterator].lexema == '}':
+            print(self.tokens[self.iterator])
             self.setnext_token()
         else:
             print(self.tokens[self.iterator].linha,
-                  'ERRO SINTÁTICO ESPERAVA:', 'a')
+                'ERRO SINTÁTICO ESPERAVA:', '}')
             self.setnext_token()
+    
+    def declara_var(self):
+        if self.tokens[self.iterator].cod_token == 'IDE':
+            print(self.tokens[self.iterator])
+        else:
+            print(self.tokens[self.iterator].linha,
+                  'ERRO SINTÁTICO ESPERAVA:', 'IDE')
+        self.setnext_token()
 
         if self.tokens[self.iterator].lexema == '=':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
-            self.setnext_token()
+            print(self.tokens[self.iterator])
         else:
             print(self.tokens[self.iterator].linha,
                   'ERRO SINTÁTICO ESPERAVA:', '=')
-            self.setnext_token()
+        self.setnext_token()
 
-        if self.tokens[self.iterator].lexema == '2':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
-            self.setnext_token()
+        if self.value() : 
+            print(self.tokens[self.iterator])
         else:
             print(self.tokens[self.iterator].linha,
-                  'ERRO SINTÁTICO ESPERAVA:', '2')
-            self.setnext_token()
+                  'ERRO SINTÁTICO ESPERAVA:', 'Value')
+        self.setnext_token()
 
         if self.tokens[self.iterator].lexema == ';':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
-            self.setnext_token()
+            print(self.tokens[self.iterator])
         else:
             print(self.tokens[self.iterator].linha,
                   'ERRO SINTÁTICO ESPERAVA:', ';')
-            self.setnext_token()
+        self.setnext_token()
 
-        if self.tokens[self.iterator].lexema == '}':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
-            self.setnext_token()
-        else:
-            print(self.tokens[self.iterator].linha,
-                  'ERRO SINTÁTICO ESPERAVA:', '}')
-            self.setnext_token()
+    
     def start(self):
         if self.tokens[self.iterator].lexema == 'start':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
+            print(self.tokens[self.iterator])
             self.setnext_token()
         else:
             print(self.tokens[self.iterator].linha,
@@ -129,9 +120,7 @@ class Parser:
             self.setnext_token()
 
         if self.tokens[self.iterator].lexema == '{':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
+            print(self.tokens[self.iterator])
             self.setnext_token()
         else:
             print(self.tokens[self.iterator].linha,
@@ -140,9 +129,7 @@ class Parser:
         self.program()
 
         if self.tokens[self.iterator].lexema == '}':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
+            print(self.tokens[self.iterator])
             self.setnext_token()
         else:
             print(self.tokens[self.iterator].linha,
@@ -151,9 +138,7 @@ class Parser:
 
     def program(self):
         if self.tokens[self.iterator].lexema == 'Body':
-            print(self.tokens[self.iterator].linha,
-                  self.tokens[self.iterator].cod_lexema,
-                  self.tokens[self.iterator].lexema)
+            print(self.tokens[self.iterator])
             self.setnext_token()
         else:
             print(self.tokens[self.iterator].linha,

@@ -1,3 +1,8 @@
-procedure start{
-  Statement
+var{
+int a = "aswsefdtu";
+real meme m = 5;
+
+}
+start{
+  Body
 }
