@@ -170,10 +170,11 @@ if __name__ == '__main__':
         Token(2, 'IDE', 'a'),
         Token(2, 'REL', '='),
         Token(2, 'NUM', '2'),
+        Token(2, 'NUM', ';'),
         Token(3, 'DEl', '}'),
         Token(4, 'PRE', 'start'),
         Token(4, 'DEL', '{'),
-        Token(5, 'IDE', 'Body'),
+        Token(5, 'IDE', 'Bodiii'),
         Token(6, 'DEL', '}')
         
     ]
