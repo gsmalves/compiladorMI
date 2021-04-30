@@ -19,11 +19,54 @@ class Parser:
             self.token = self.tokens[self.iterator]
         else:
             self.token = EOF
-
+    def error_print(self, tkesperado :str): #vamo ter que lançar bonitinho mas acho que por enquanto serve
+        print(self.token,
+            'ERRO SINTÁTICO ESPERAVA:',tkesperado)
+   
     def getprevious_token(self):
         token = self.tokens[self.iterator - 1]
         return token
 
+    # def program(self): #ANCHOR implementar program
+
+    # def global_decl(self):#ANCHOR implementar globaldecl
+
+    # def const_decl(self)#ANCHOR implementar declaração de constantes        
+
+
+    # def body_procedure(self): # ANCHOR implementar bodyprocedure 
+    #     #gramatica body 
+    #     # <Body Procedure>  ::=  <Body Item Procedure><Body Procedure> 
+    #     #<Body Item Procedure>  ::=  <Var Decl>
+    #             #  | <While Procedure>
+    #             #  | <If Procedure>
+    #             #  | <Read>
+    #             #  | <Print>
+    #             #  | <Assign>         |
+    #             # 
+    # def fp_list_read(self):#Formal Parameter List Read ANCHOR implementar list read e colocar no read
+    
+    # def conditional_expresion(self):#ANCHOR implementar espressões condicionais 
+
+    # def prefix_global_local(self):
+
+        
+    def read_print(self): 
+        if self.tokens[self.iterator].lexema == 'read' or self.tokens[self.iterator] == 'print':
+            print(self.tokens[self.iterator])
+        self.iterator +=1
+        if self.tokens[self.iterator].lexema == '(':
+            print(self.tokens[self.iterator])
+        else:
+            self.error_print('(')    
+        self.fp_list_read()
+        self.iterator +=1
+        if self.tokens[self.iterator].lexema == ')':
+            print(self.tokens[self.iterator])
+        else:
+            self.error_print(')')                
+
+                
     def eof(self):
         if self.iterator < len(self.tokens) - 1:
             return True
@@ -31,7 +74,7 @@ class Parser:
             return False
 
     def init_language(self):     
-        self.var()
+        self.var_decl()
         self.start()
 
     def boolean_literal(self):
@@ -44,7 +87,7 @@ class Parser:
         return self.tokens[self.iterator].cod_token == 'CAD'  or self.boolean_literal() or self.number()  
              
         
-    def var(self):
+    def var_decl(self):
         if self.tokens[self.iterator].lexema == 'var':
             print(self.tokens[self.iterator])
             self.setnext_token()
@@ -126,7 +169,7 @@ class Parser:
             print(self.tokens[self.iterator].linha,
                   'ERRO SINTÁTICO ESPERAVA:', '{')
             self.setnext_token()
-        self.program()
+        #self.program()
 
         if self.tokens[self.iterator].lexema == '}':
             print(self.tokens[self.iterator])
@@ -136,15 +179,15 @@ class Parser:
                   'ERRO SINTÁTICO ESPERAVA:', '}')
             self.setnext_token()
 
-    def program(self):
-        if self.tokens[self.iterator].lexema == 'Body':
-            print(self.tokens[self.iterator])
-            self.setnext_token()
-        else:
-            print(self.tokens[self.iterator].linha,
-                  'ERRO SINTÁTICO ESPERAVA:', 'Body')
-            self.setnext_token()
-        "self.start()"
+    # def program(self):
+    #     if self.tokens[self.iterator].lexema == 'Body':
+    #         print(self.tokens[self.iterator])
+    #         self.setnext_token()
+    #     else:
+    #         print(self.tokens[self.iterator].linha,
+    #               'ERRO SINTÁTICO ESPERAVA:', 'Body')
+    #         self.setnext_token()
+    #     "self.start()"
 
 
 if __name__ == '__main__':
