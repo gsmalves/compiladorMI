@@ -35,10 +35,9 @@ for arquivo in var:
     automato = Lexico(arquivo_fonte, nome_arquivo=arquivo)
     tabelasimbolos = automato.get_tabela_simbolos()
     if tabelasimbolos != None:
-      sintatic = Parser(tabelasimbolos).init_language()
-
-      # num_arquivo = re.findall(r'\d+\.txt$', arquivo)
-      # saida = open("../output/saidalex"+num_arquivo[0],'w' )
-      # for simbolo in tabelasimbolos:
-      #   saida.write("{}\n".format(simbolo))
+      sintatic = Parser(tabelasimbolos).program()
+      num_arquivo = re.findall(r'\d+\.txt$', arquivo)
+      saida = open("../output/saidalex"+num_arquivo[0],'w' )
+      for simbolo in sintatic:
+        saida.write("{}\n".format(simbolo))
     

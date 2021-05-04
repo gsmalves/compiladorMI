@@ -1,0 +1,16 @@
+1 PRE var
+1 DEL {
+2 PRE int
+2 IDE a
+2 REL =
+2 CAD "aswsefdtu"
+2 DEL ;
+3 PRE real
+3 IDE meme
+3 REL =
+3 NRO 5
+3 DEL ;
+5 DEL }
+6 PRE start
+6 DEL {
+7 DEL }

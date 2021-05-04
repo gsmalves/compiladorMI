@@ -13,7 +13,7 @@ class Parser:
         self.tokens = tokens
         self.tabelasimbolos = []
         self.iterator = 0
-        self.token = {}
+        self.token = self.tokens[0]
         self.tipo = {'int', 'real', 'boolean'}
     
     def setnext_token(self):
@@ -26,14 +26,14 @@ class Parser:
         else:
             self.token = EOF
 
+    
     def add_error(self, tkesperado :str): #vamo ter que lançar bonitinho mas acho que por enquanto serve
         '''
         Adiciona um novo erro e sua descrição a tabela de simbolos
         '''
-
         self.tabelasimbolos.append("{} ERRO SINTÁTICO ESPERAVA:{}".format(self.token.linha, tkesperado))
         self.setnext_token()
-   
+
     def add_token(self):
         '''
         Anexa um novo token a tabela de simbolos
@@ -48,7 +48,6 @@ class Parser:
         token = self.tokens[self.iterator - 1]
         return token
 
-    #def program(self): #ANCHOR implementar program 
 
     #def global_decl(self):#ANCHOR implementar globaldecl
 
@@ -74,12 +73,20 @@ class Parser:
             if self.token == '(':
                 self.function_call()
 
-    #def term(self):
-        #<Term> ::= <Expression Value> <Mult Exp>
-    '''
+    def term(self):
+        self.expression_value()
+        self.mult_exp()
 
-    '''
-    #def exp(self): #ANCHOR implementar função exp
+
+    def mult_exp(self):
+        if self.token.lexema == '*':
+            self.term()
+        elif self.token.lexema == '/':
+            self.term()    
+
+ 
+    def exp(self): #ANCHOR implementar função exp
+        pass
         #<Exp> ::= <PrefixGlobalLocal> <Term> <Add Exp> | <Term> <Add Exp>
 
 
@@ -108,10 +115,10 @@ class Parser:
     #             # 
     # def fp_list_read(self):#Formal Parameter List Read ANCHOR implementar list read e colocar no read
     
-    def init_language(self):#Program na linguagem     
+    def program(self):#Program na linguagem     
         self.var_decl()
         self.start()
-
+        return self.tabelasimbolos
 
     # def conditional_expresion(self):#ANCHOR implementar espressões condicionais 
 
@@ -120,22 +127,43 @@ class Parser:
     # def condicional_operator(self):#ANCHOR  implementa  função condicional operator
 
 
-    # def prefix_global_local(self):
+    def prefix_global_local(self):#ANCHOR rever 
+        if self.token.lexema == 'global' or self.token.lexema == 'local':
+            self.add_token()
+            if self.token.lexema == '.':
+                self.add_token()
+                if self.token.cod_token == 'IDE':
+                    self.add_token()
+                else:
+                    self.add_error('IDE')#ANCHOR verificar o que era esperado
+            else:
+                self.add_error('.')
+
+    
+    def exp(self):
+        self.prefix_global_local()
+
+            
+
+
+
+
+
+
+
     #     #ANCHOR acho que precisa fazer uma regex pra pegar 'global' e 'local' ai depois cê olha pra mim  GUSTAVO
-    # def read_print(self): 
-    #     if self.tokens[self.iterator].lexema == 'read' or self.tokens[self.iterator] == 'print':
-    #         print(self.tokens[self.iterator])
-    #     self.iterator +=1
-    #     if self.tokens[self.iterator].lexema == '(':
-    #         print(self.tokens[self.iterator])
-    #     else:
-    #         self.add_error('(')    
-    #     self.fp_list_read()
-    #     self.iterator +=1
-    #     if self.tokens[self.iterator].lexema == ')':
-    #         print(self.tokens[self.iterator])
-    #     else:
-    #         self.add_error(')')                
+    def read_print(self): 
+        if self.tokens[self.iterator].lexema == 'read' or self.tokens[self.iterator] == 'print':
+            self.add_token()
+        if self.tokens[self.iterator].lexema == '(':
+            self.add_token()
+        else:
+            self.add_error('(')    
+        self.fp_list_read()
+        if self.tokens[self.iterator].lexema == ')':
+            self.add_token()
+        else:
+            self.add_error(')')                
 
      
                 
@@ -150,49 +178,70 @@ class Parser:
         return self.token.lexema in {'true', 'false'}
 
     def number(self):       
-        return self.token.lexema == 'NRO'
+        return self.token.cod_token == 'NRO'
     
     def value(self):
         return self.token.cod_token == 'CAD'  or self.boolean_literal() or self.number()  
              
         
     def var_decl(self):
-        if self.tokens[self.iterator].lexema == 'var':
+        if self.token.lexema == 'var':
             self.add_token()
+            if self.token.lexema == '{':
+                self.add_token()
+                self.variable_list()
+                if self.token.lexema == '}':
+                    self.add_token()
+                else:
+                    self.add_error('}')
+            else:
+                self.add_error('{')
         else:
             self.add_error('var')
             
-        if self.tokens[self.iterator].lexema == '{':
-            self.add_token()
-        else:
-            self.add_error('{')
-        while self.tokens[self.iterator].lexema in self.tipo: #ANCHOR falta implementar para pegar o identifier de string
-            self.add_token()
-            self.declara_var()
-        if self.token.lexema == '}':
-            self.add_token()
-        else:
-            self.add_error('}')
+            
 
-    
-    def declara_var(self):
-        if self.tokens[self.iterator].cod_token == 'IDE':
+    def variable_list(self):
+        if self.token.lexema in self.tipo:
             self.add_token()
+            self.variable()
+            self.variable_list()
+        
+ 
+ 
+    def variable(self):
+        if self.token.cod_token == 'IDE':
+            self.add_token()
+            self.aux()
         else:
             self.add_error('IDE')
-        if self.tokens[self.iterator].lexema == '=':
+
+    def aux(self): #ANCHOR função incompleta para teste <Aux> ::= '=' <Value> <Delimiter Var> | <Delimiter Var>|  <Vector><Assignment_vector><Delimiter Var>  | <Matrix><Assignment_matrix><Delimiter Var>                                             
+        if self.token.lexema == '=':
             self.add_token()
+            if self.token.lexema in {',', ';'}:
+                self.deliter_var()
+            elif self.value():
+                self.add_token()
+                if self.token.lexema == ';':#ANCHOR rever
+                    self.add_token()
+                else:
+                    add_error(';')    
+            else:
+                self.add_error('value')    
         else:
             self.add_error('=')
 
-        if self.value() : 
+
+    def deliter_var(self):
+        if self.token.lexema == ',':
             self.add_token()
-        else:
-            self.add_error('value')
-        if self.token.lexema == ';':
+            self.variable()
+        elif self.token.lexema == ';':
             self.add_token()
-        else:
-            self.add_error(';')
+        else: 
+            self.add_error('DEL')#ANCHOR rever      
+
 
     
     def start(self):#ANCHOR verificar se vai pegar a partir do start ou n
@@ -244,4 +293,4 @@ if __name__ == '__main__':
         
     ]
 
-    Parser(tokens).init_language()
+    Parser(tokens).program()
