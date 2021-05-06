@@ -101,17 +101,17 @@ class Parser:
             self.const_list()
         
     def const(self):
+
         if self.token.cod_token == 'IDE':
             self.add_token()
-            self.aux()
             if self.token.lexema == '=':
                 self.add_token()
                 if self.value():
                     self.add_token()
-                    if self.token.lexema == ';' or self.token.lexema == ',' :#ANCHOR FIQUEI NA DUVIDA SE CHAMO OU N ADDTOKEN
+                    if self.token.lexema == ';' or self.token.lexema == ',' :
                         self.delimiter_const()
                     else:
-                        add_error(';')    
+                        self.add_error(';')    
                 else:
                     self.add_error('value')    
             else:
@@ -120,11 +120,9 @@ class Parser:
             self.add_error('IDE')
 
     def delimiter_const(self):
-        if self.token.lexema == ',':
+        if self.token.lexema == ',' or self.token.lexema == ';':
             self.add_token()
-            self.const()
-        elif self.token.lexema == ';':
-            self.add_token()
+            self.const_list()
         else: 
             self.add_error('DEL')#ANCHOR rever      
 
@@ -318,10 +316,15 @@ class Parser:
 
 if __name__ == '__main__':
     tokens =[
-        Token(1,'PRE', 'var'),
+        Token(1,'PRE', 'const'),
         Token(1, 'DEL', '{'),
         Token(2, 'PRE', 'int'),
         Token(2, 'IDE', 'a'),
+        Token(2, 'REL', '='),
+        Token(2, 'NUM', '2'),
+        Token(2, 'NUM', ';'),
+        Token(2, 'PRE', 'int'),
+        Token(2, 'IDE', 'b'),
         Token(2, 'REL', '='),
         Token(2, 'NUM', '2'),
         Token(2, 'NUM', ';'),
