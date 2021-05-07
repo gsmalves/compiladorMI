@@ -142,6 +142,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
 
             'matrix': ['['],
 
+
             'assignmentVector': ['='],
 
             'assignmentVectorAux': ['='],
@@ -157,6 +158,8 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
             'assignmentMatrix': ['='],
 
             'assignmentMatrixAux': ['='],
+
+            'dimensionMatrix' : [ ','],
 
             'valueAssignedMatrix': ['decLiteral',
                                     'octLiteral',
@@ -323,8 +326,8 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
 
             'relational': ['<',
                           '>',
-                          '=<',
-                          '=>',
+                          '<=',
+                          '>=',
                           '==',
                           '!='],
 
@@ -379,88 +382,6 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
             'multExp': ['*',
                         '/'],
                          
-
-
-            'Structs': ['struct',
-                        'typedef'],
-
-            'StructBlock': ['struct',
-                            'typedef'],
-
-            'Extends': ['extends'],
-
-            'ConstBlock': ['const'],
-
-            'VarBlock': ['var'],
-
-            'Type': ['string',
-                     'boolean',
-                     'int',
-                     'struct',
-                     'real'],
-
-            'Typedef': ['typedef'],
-
-            'VarDecls': ['string',
-                         'typedef',
-                         'local',
-                         'boolean',
-                         'int',
-                         'struct',
-                         'real',
-                         'global',
-                         'IDE'],
-
-            'VarDecl': ['string',
-                        'typedef',
-                        'local',
-                        'boolean',
-                        'int',
-                        'struct',
-                        'real',
-                        'global',
-                        'IDE'],
-
-            'Var':  ['IDE'],
-
-            'VarList':  [',', '='],
-
-            'ConstDecls': ['string',
-                           'typedef',
-                           'local',
-                           'boolean',
-                           'int',
-                           'struct',
-                           'real',
-                           'global',
-                           'IDE'],
-
-            'ConstDecl': ['string',
-                          'typedef',
-                          'local',
-                          'boolean',
-                          'int',
-                          'struct',
-                          'real',
-                          'global',
-                          'IDE'],
-
-
-
-
-
-
-
-            'FuncDecl': ['function'],
-
-            'StartBlock': ['procedure'],
-
-            'ProcDecl': ['procedure'],
-
-
-
-
-
         }
 
     def get_first(self, production: str, lexema):
