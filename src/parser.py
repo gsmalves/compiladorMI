@@ -7,32 +7,63 @@
 """
 EOF = {'Token': 'EOF', 'Lexeme': '__eof__'}
 from token_lex import Token
+from follows import Follows
+from firsts import Firsts
 
 class Parser:
-    def __init__(self, tokens: list):
-        self.tokens = tokens
+    def __init__(self, listatokens: list):
+        self.listatokens = listatokens
         self.tabelasimbolos = []
         self.iterator = 0
-        self.token = self.tokens[0]
+        self.token = self.listatokens[0]
         self.tipo = {'int', 'real', 'boolean'}
-    
+    def verify_first(self, production :str):
+        '''
+        Verifica se o token atual é o esperado conforme a sua produção
+        '''
+        return Firsts().get_first(production, self.token.lexema) or Firsts().get_first(production, self.token.cod_token)
+        
+        
     def setnext_token(self):
         '''
         Avança para o proximo token
         '''
-        if self.iterator < len(self.tokens) - 1:
+        if self.iterator < len(self.listatokens) - 1:
             self.iterator += 1
-            self.token = self.tokens[self.iterator]
+            self.token = self.listatokens[self.iterator]
         else:
             self.token = EOF
 
-    
+    def eof(self):#ANCHOR ver se ainda é util
+        if self.iterator < len(self.listatokens) - 1:
+            return True
+        else:
+            return False
+
+
+    def treatment_error(self, tkesperado :str, production :str):
+        '''
+        Adiciona o erro e o que era esperado e procura o proximo ponto seguro para retornar a analise
+        '''
+        self.tabelasimbolos.append("{} ERRO SINTÁTICO ESPERAVA:{}".format(self.token.linha, tkesperado))
+        while self.eof():
+            if Follows().get_follows(production, self.token.lexema) or Follows().get_follows(production, self.token.cod_token):
+                break
+            else:
+                self.setnext_token()
+                if self.eof():
+                    self.tabelasimbolos.append("ERRO SINTATICO NAO ESPERAVA FIM DE ARQUIVO")    
+
+                    
+
+    #ANCHOR remover adderror quando implementar treatment_error
     def add_error(self, tkesperado :str): #vamo ter que lançar bonitinho mas acho que por enquanto serve
         '''
         Adiciona um novo erro e sua descrição a tabela de simbolos
         '''
         self.tabelasimbolos.append("{} ERRO SINTÁTICO ESPERAVA:{}".format(self.token.linha, tkesperado))
         self.setnext_token()
+
 
     def add_token(self):
         '''
@@ -45,8 +76,12 @@ class Parser:
         '''
         Verifica o token anterior
         '''    
-        token = self.tokens[self.iterator - 1]
+        token = self.listatokens[self.iterator - 1]
         return token
+
+    def get_token(self):#ANCHOR verificar utilidade 
+        return self.listatokens[self.iterator-1]
+
 
 
     #def global_decl(self):#ANCHOR implementar globaldecl
@@ -58,16 +93,11 @@ class Parser:
    
     def program(self):#Program na linguagem     
         self.const_decl()
-        self.var_decl()
-        self.start()
+        # self.var_decl()
+        # self.start()
         return self.tabelasimbolos
 
                 
-    def eof(self):#ANCHOR ver se ainda é util
-        if self.iterator < len(self.tokens) - 1:
-            return True
-        else:
-            return False
 
 
     def boolean_literal(self):
@@ -80,7 +110,7 @@ class Parser:
         return self.token.cod_token == 'CAD'  or self.boolean_literal() or self.number()  
              
     def const_decl(self):
-        if self.token.lexema == 'const':
+        if self.verify_first('constDecl'):
             self.add_token()
             if self.token.lexema == '{':
                 self.add_token()
@@ -88,43 +118,47 @@ class Parser:
                 if self.token.lexema == '}':
                     self.add_token()
                 else:
-                    self.add_error('}')
+                    self.treatment_error('}', 'constDecl') 
             else:
-                self.add_error('{')
-        else:
-            self.add_error('const')
+                self.treatment_error('{', 'constDecl')         
 
     def const_list(self):
-        if self.token.lexema in self.tipo:
+        '''
+        Verifica a declaração de novas constantes
+        '''
+        if self.verify_first('type'):
             self.add_token()
             self.const()
             self.const_list()
         
     def const(self):
-
         if self.token.cod_token == 'IDE':
             self.add_token()
             if self.token.lexema == '=':
                 self.add_token()
-                if self.value():
+                if self.verify_first('value'):
                     self.add_token()
-                    if self.token.lexema == ';' or self.token.lexema == ',' :
+                    if self.verify_first('delimiter') :
                         self.delimiter_const()
                     else:
-                        self.add_error(';')    
+                        self.treatment_error(';', 'const')    
                 else:
-                    self.add_error('value')    
+                    self.treatment_error('VALOR', 'const')    
             else:
-                self.add_error('=')
+                self.treatment_error('=', 'const' )
         else:
-            self.add_error('IDE')
+            self.treatment_error('IDE')
+            
 
-    def delimiter_const(self):
-        if self.token.lexema == ',' or self.token.lexema == ';':
+    def delimiter_const(self):#ANCHOR verificar se é util para delimitervar
+        '''
+        Verifica pelo delimitador da constante
+        '''    
+        if self.verify_first('delimiter'):
             self.add_token()
             self.const_list()
         else: 
-            self.add_error('DEL')#ANCHOR rever      
+            self.add_error('DEL', 'delimiterConst')   
 
 
     def var_decl(self):
@@ -193,10 +227,10 @@ class Parser:
         else:
             self.add_error('start')
 
-        if self.tokens[self.iterator].lexema == '{':
+        if self.listatokens[self.iterator].lexema == '{':
             self.add_token()
         else:
-            print(self.tokens[self.iterator].linha,
+            print(self.listatokens[self.iterator].linha,
                   'ERRO SINTÁTICO ESPERAVA:', '{')
             self.setnext_token()
         
@@ -287,14 +321,14 @@ class Parser:
 
     #     #ANCHOR acho que precisa fazer uma regex pra pegar 'global' e 'local' ai depois cê olha pra mim  GUSTAVO
     def read_print(self): 
-        if self.tokens[self.iterator].lexema == 'read' or self.tokens[self.iterator] == 'print':
+        if self.listatokens[self.iterator].lexema == 'read' or self.listatokens[self.iterator] == 'print':
             self.add_token()
-        if self.tokens[self.iterator].lexema == '(':
+        if self.listatokens[self.iterator].lexema == '(':
             self.add_token()
         else:
             self.add_error('(')    
         self.fp_list_read()
-        if self.tokens[self.iterator].lexema == ')':
+        if self.listatokens[self.iterator].lexema == ')':
             self.add_token()
         else:
             self.add_error(')')                
@@ -315,7 +349,7 @@ class Parser:
   
 
 if __name__ == '__main__':
-    tokens =[
+    listatokens =[
         Token(1,'PRE', 'const'),
         Token(1, 'DEL', '{'),
         Token(2, 'PRE', 'int'),
@@ -336,4 +370,4 @@ if __name__ == '__main__':
         
     ]
 
-    Parser(tokens).program()
+    Parser(listatokens).program()

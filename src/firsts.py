@@ -1,18 +1,13 @@
 class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
     def __init__(self):
         self.firsts = {
-           
-           
-            'number': ['decLiteral',
-                        'octLiteral',
-                        'hexLiteral',
-                        'floatLiteral',],
+
                         
             'prefixGlobalLocal':  ['global.',
                                     'local.'],
 
             'program': ['start',
-                        'identifier',
+                        'IDE',
                         'const',
                         'procedure',
                         'function',
@@ -30,13 +25,13 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                       'procedure',
                       'struct',
                       'typedef'
-                      'identifier'],
+                      'IDE'],
 
             'decl': ['function',
                      'procedure',
                      'struct',
                      'typedef'
-                     'identifier'],
+                     'IDE'],
 
             'formalParameterList': ['decLiteral',
                                     'octLiteral',
@@ -45,19 +40,19 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                     'global.',
                                     'local.',
                                     '(',
-                                    'identifier',
-                                    'stringLiteral',
+                                    'IDE',
+                                    'CAD',
                                     'true',
                                     'false',
                                     '-'],
-            'formalParameterListRead': ['identifier'],
+            'formalParameterListRead': ['IDE'],
 
             'functionDeclaration': ['function'],
                                                 
-            'procDecl': ['identifier',
+            'procDecl': ['IDE',
                         'procedure'],
 
-            'params': ['identifier',
+            'params': ['IDE',
                        'const',
                        'struct',
                        'int',
@@ -65,7 +60,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                        'boolean',
                        'string'],
 
-            'param': ['identifier',
+            'param': ['IDE',
                        'const',
                        'struct',
                        'int',
@@ -73,11 +68,11 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                        'boolean',
                        'string'],
             
-            'functionCall': ['identifier'],
+            'functionCall': ['IDE'],
 
             'typedefDecl': ['typedef'],
 
-            'base': ['identifier',
+            'base': ['IDE',
                     'struct',
                     'int',
                     'real',
@@ -90,17 +85,10 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
 
             'constDecl': ['const'],
 
-            'constList': ['identifier',
-                         'struct',
-                         'int',
-                         'real',
-                         'boolean',
-                         'string'],
+            'const': ['IDE'],
 
-            'const': ['identifier'],
-
-            'delimiterConst': [',',
-                              ';'],
+            'delimiter': [',',
+                         ';'],
 
             'type': ['struct',
                     'int',
@@ -113,30 +101,29 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                      'hexLiteral',
                      'floatLiteral',
                      'true',
-                     'false'],
+                     'false',
+                     'NRO'],
 
             'var': ['var'],
 
-            'variablesList': ['identifier',
+            'variablesList': ['IDE',
                               'struct'
                               'int',
                               'real',
                               'boolean',
                               'string'],     
                               
-            'variable': ['identifier'],
+            'variable': ['IDE'],
 
             'aux': [',',
                    ';',
                    '='
                    '['],
-
-            'delimiterVar':[',',
-                            ';'],               
+             
 
             'index': ['decLiteral',
                      'octLiteral',
-                     'identifier'],
+                     'IDE'],
 
             'vector': ['['],
 
@@ -153,7 +140,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                     'floatLiteral',
                                     'true',
                                     'false',
-                                    'stringLiteral'],
+                                    'CAD'],
 
             'assignmentMatrix': ['='],
 
@@ -167,7 +154,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                     'floatLiteral',
                                     'true',
                                     'false',
-                                    'stringLiteral'],
+                                    'CAD'],
             
             'while': ['while'],
 
@@ -185,7 +172,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                     '(',
                                     'global.',
                                     'local.',
-                                    'stringLiteral',
+                                    'CAD',
                                     '!',
                                     '-'],
 
@@ -214,13 +201,13 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                      'global.',
                      'local.',
                      '(',
-                     'identifier',
+                     'IDE',
                      'while',
                      'read',
                      'print',
                      'return',
                      '-',
-                     'stringLiteral',
+                     'CAD',
                      'if'],
 
             'bodyItem': ['decLiteral',
@@ -232,13 +219,13 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                      'global.',
                      'local.',
                      '(',
-                     'identifier',
+                     'IDE',
                      'while',
                      'read',
                      'print',
                      'return',
                      '-',
-                     'stringLiteral',
+                     'CAD',
                      'if'],
 
             'returnStetement': ['return'],
@@ -252,13 +239,13 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                             'global.',
                             'local.',
                             '(',
-                            'identifier',
+                            'IDE',
                             'while',
                             'read',
                             'print',
                             'return',
                             '-',
-                            'stringLiteral',
+                            'CAD',
                             'if'], 
 
             'bodyItemProcedure':['decLiteral',
@@ -270,20 +257,20 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                             'global.',
                             'local.',
                             '(',
-                            'identifier',
+                            'IDE',
                             'while',
                             'read',
                             'print',
                             'return',
                             '-',
-                            'stringLiteral',
+                            'CAD',
                             'if'], 
 
             'conditionalOperator': ['&&',
                                    '||'],
 
         
-            'logicalDaned': ['!'],
+            'logicalDenied': ['!'],
 
             'logical': ['&&',
                        '||'],
@@ -297,8 +284,8 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                       'global.',
                                       'local.',
                                       '-',
-                                      'stringLiteral',
-                                      'identifier'],     
+                                      'CAD',
+                                      'IDE'],     
 
             'logicalExpression':    ['decLiteral',
                                       'octLiteral',
@@ -309,8 +296,8 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                       'global.',
                                       'local.',
                                       '-',
-                                      'stringLiteral',
-                                      'identifier'],  
+                                      'CAD',
+                                      'IDE'],  
 
             'relacionalExpression':  ['decLiteral',
                                       'octLiteral',
@@ -321,8 +308,8 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                       'global.',
                                       'local.',
                                       '-',
-                                      'stringLiteral',
-                                      'identifier'],   
+                                      'CAD',
+                                      'IDE'],   
 
             'relational': ['<',
                           '>',
@@ -362,8 +349,8 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                     'hexLiteral',
                     'floatLiteral',
                     '(',
-                    'identifier',
-                    'stringLiteral',
+                    'IDE',
+                    'CAD',
                     'true',
                     'false',
                     '-'],     
@@ -373,8 +360,8 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                     'hexLiteral',
                     'floatLiteral',
                     '(',
-                    'identifier',
-                    'stringLiteral',
+                    'IDE',
+                    'CAD',
                     'true',
                     'false',
                     '-'],    

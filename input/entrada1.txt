@@ -1,11 +1,4 @@
 const{
-  boolean merrrrr = true;
+  boolean merrrrr = true
   real numb = 66.5;
-}
-var{
-int a = "aswsefdtu";
-real meme  = 5;
-
-}
-start{
 }
