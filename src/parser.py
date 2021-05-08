@@ -21,7 +21,8 @@ class Parser:
         '''
         Verifica se o token atual é o esperado conforme a sua produção
         '''
-        return Firsts().get_first(production, self.token.lexema) or Firsts().get_first(production, self.token.cod_token)
+        if self.eof() :
+            return Firsts().get_first(production, self.token.lexema) or Firsts().get_first(production, self.token.cod_token)
         
         
     def setnext_token(self):
@@ -93,7 +94,7 @@ class Parser:
    
     def program(self):#Program na linguagem     
         self.const_decl()
-        # self.var_decl()
+        self.var_decl()
         # self.start()
         return self.tabelasimbolos
 
@@ -162,7 +163,7 @@ class Parser:
 
 
     def var_decl(self):
-        if self.token.lexema == 'var':
+        if self.verify_first('var'):
             self.add_token()
             if self.token.lexema == '{':
                 self.add_token()
@@ -170,16 +171,15 @@ class Parser:
                 if self.token.lexema == '}':
                     self.add_token()
                 else:
-                    self.add_error('}')
+                    self.treatment_error('}', 'varDecl')
             else:
-                self.add_error('{')
-        else:
-            self.add_error('var')
+                self.treatment_error('{', 'varDecl')
+
             
             
 
     def variable_list(self):
-        if self.token.lexema in self.tipo:
+        if self.verify_first('type'):
             self.add_token()
             self.variable()
             self.variable_list()
@@ -191,23 +191,23 @@ class Parser:
             self.add_token()
             self.aux()
         else:
-            self.add_error('IDE')
-
+            self.treatment_error('IDE', 'variable')
+   
     def aux(self): #ANCHOR função incompleta para teste <Aux> ::= '=' <Value> <Delimiter Var> | <Delimiter Var>|  <Vector><Assignment_vector><Delimiter Var>  | <Matrix><Assignment_matrix><Delimiter Var>                                             
         if self.token.lexema == '=':
             self.add_token()
             if self.token.lexema == ';':
                 self.delimiter_var()
-            elif self.value():
+            elif self.verify_first('type'):
                 self.add_token()
                 if self.token.lexema == ';':#ANCHOR rever
                     self.add_token()
                 else:
-                    add_error(';')    
+                    self.treatment_error(';', 'aux')    
             else:
-                self.add_error('value')    
+                self.treatment_error('value', 'aux')    
         else:
-            self.add_error('=')
+            self.treatment_error('=', 'aux')
 
 
     def delimiter_var(self):
@@ -217,8 +217,7 @@ class Parser:
         elif self.token.lexema == ';':
             self.add_token()
         else: 
-            self.add_error('DEL')#ANCHOR rever      
-
+            self.treatment_error('DEL', 'aux')#ANCHOR o erro busca os tokens do first de aux pq o de delimitador ficaria limitado
 
     
     def start(self):#ANCHOR verificar se vai pegar a partir do start ou n

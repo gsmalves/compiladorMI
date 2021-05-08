@@ -1,0 +1,5 @@
+var{ 
+  real batata = 1.11;
+  boolean meme = false
+  real carambora = 12.0;
+}
