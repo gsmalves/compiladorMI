@@ -52,7 +52,7 @@ class Parser:
                 break
             else:
                 self.setnext_token()
-                if self.eof():
+                if self.eof() != True:
                     self.tabelasimbolos.append("ERRO SINTATICO NAO ESPERAVA FIM DE ARQUIVO")    
 
                     
@@ -198,7 +198,7 @@ class Parser:
             self.add_token()
             if self.token.lexema == ';':
                 self.delimiter_var()
-            elif self.verify_first('type'):
+            elif self.verify_first('value'):
                 self.add_token()
                 if self.token.lexema == ';':#ANCHOR rever
                     self.add_token()

@@ -1,5 +1,5 @@
 var{ 
-  real batata = 1.11;
+  real batata = 1;
   boolean meme = false
   real carambora = 12.0;
 }
