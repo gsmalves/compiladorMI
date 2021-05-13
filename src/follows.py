@@ -176,7 +176,8 @@ class Follows:    #ANCHOR rever a parte de number
                     'procedure',
                     'function',
                     'struct',
-                    'typedef'],               
+                    'typedef',
+                     '}'],               
 
             'index' : [']'],
 

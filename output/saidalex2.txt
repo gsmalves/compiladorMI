@@ -10,4 +10,9 @@
 3 REL =
 3 PRE false
 3 ERRO SINTÁTICO ESPERAVA:;
-3 ERRO SINTÁTICO ESPERAVA:}
+4 PRE real
+4 IDE carambora
+4 REL =
+4 NRO 12.0
+4 DEL ;
+5 DEL }

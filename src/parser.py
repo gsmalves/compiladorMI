@@ -47,7 +47,7 @@ class Parser:
         Adiciona o erro e o que era esperado e procura o proximo ponto seguro para retornar a analise
         '''
         self.tabelasimbolos.append("{} ERRO SINTÁTICO ESPERAVA:{}".format(self.token.linha, tkesperado))
-        while self.eof():
+        while self.eof() != True:
             if Follows().get_follows(production, self.token.lexema) or Follows().get_follows(production, self.token.cod_token):
                 break
             else:
