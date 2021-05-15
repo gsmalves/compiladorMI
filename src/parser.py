@@ -52,9 +52,7 @@ class Parser:
                 if self.eof() != True:
                     self.tabelasimbolos.append("ERRO SINTATICO NAO ESPERAVA FIM DE ARQUIVO")    
 
-                    
-
-   
+                
 
     def add_token(self):
         '''
@@ -64,13 +62,6 @@ class Parser:
         self.setnext_token()
 
 
-
-
-    #def global_decl(self):#ANCHOR implementar globaldecl
-
-      
-
-    #def expression_value_logic(self):#ANCHOR implementar função condicional expressãoi de valor logico 
 
    
     def program(self):#Program na linguagem     
@@ -325,24 +316,6 @@ class Parser:
         #<Exp> ::= <PrefixGlobalLocal> <Term> <Add Exp> | <Term> <Add Exp>
 
 
-    #def formal_parameter_list(self):#ANCHOR implementar depende da funçao exp
-    
-    def function_call(self):
-        '''
-        Recebe passagem quando um identificador é proceguido de um (
-        Funcionamento: aciona o formal parameter list e verifica o fechamento de parenteses
-        '''
-        self.formal_parameter_list()
-        if self.token == ')':
-            print(self.token)
-        else:
-            self.add_error(')')    
-       # def conditional_expresion(self):#ANCHOR implementar espressões condicionais 
-
-    # def logical(self):#ANCHOR  implementar função logical 
-
-    # def condicional_operator(self):#ANCHOR  implementa  função condicional operator
-
 
     def prefix_global_local(self):#ANCHOR rever 
         if self.token.lexema == 'global' or self.token.lexema == 'local':
@@ -363,12 +336,7 @@ class Parser:
             
 
 
-
-
-
-
-
-    #     #ANCHOR acho que precisa fazer uma regex pra pegar 'global' e 'local' ai depois cê olha pra mim  GUSTAVO
+   #ANCHOR acho que precisa fazer uma regex pra pegar 'global' e 'local' ai depois cê olha pra mim  GUSTAVO
     def read_print(self): 
         if self.listatokens[self.iterator].lexema == 'read' or self.listatokens[self.iterator] == 'print':
             self.add_token()
@@ -382,19 +350,6 @@ class Parser:
         else:
             self.add_error(')')                
 
-    
-    #def body_procedure(self): # ANCHOR implementar bodyprocedure 
-    #     #gramatica body 
-    #     # <Body Procedure>  ::=  <Body Item Procedure><Body Procedure> 
-    #     #<Body Item Procedure>  ::=  <Var Decl>
-    #             #  | <While Procedure>
-    #             #  | <If Procedure>
-    #             #  | <Read>
-    #             #  | <Print>
-    #             #  | <Assign>         |
-    #             # 
-    # def fp_list_read(self):#Formal Parameter List Read ANCHOR implementar list read e colocar no read
-    
   
 
 if __name__ == '__main__':
