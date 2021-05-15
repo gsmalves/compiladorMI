@@ -398,6 +398,42 @@ class Parser:
                 self.treatment_error('{', 'base') 
         else:
             self.treatment_error('struct', 'base') 
+
+
+    def struct_decl(self):
+        if self.token.lexema == 'struct':
+            self.add_token()
+            if self.token.cod_token == 'IDE':
+                self.add_token()
+                self.extends()
+                if self.token.lexema == '{':
+                    self.add_token()
+                    self.variable_list
+                    if self.token.lexema == '}':
+                        self.add_token()
+                    else:
+                        self.treatment_error('}', 'structDecl') 
+                else:
+                    self.treatment_error('{', 'structDecl') 
+            else:
+                self.treatment_error('Identificador', 'structDecl') 
+        else:
+            self.treatment_error('struct', 'structDecl') 
+
+
+
+
+
+    def extends(self):
+        if self.token.lexema == 'extends':
+            self.add_token()
+            if self.token.cod_token == 'IDE':
+                self.add_token()
+            else:
+                self.treatment_error('Identificador', 'extends') 
+        else:
+            self.treatment_error('extends', 'extends') 
+
     def params(self):
         '''
         Identifica os parametros da função
