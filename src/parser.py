@@ -233,7 +233,7 @@ class Parser:
 
     def formal_parament_list(self):
 
-        if self.verify_first('formalParameterList'):
+        if self.verify_first('formalParameterList'): #ANCHOR tenho duvida quanto a essa condição
             self.exp()
         if self.verify_first('formalParameterList'):
             self.exp()
@@ -242,8 +242,6 @@ class Parser:
                 self.formal_parament_list()   
             else:
                  self.treatment_error(',', 'formalParameterList') 
-
-
 
 
     def formal_parament_list_read(self):
@@ -363,6 +361,43 @@ class Parser:
             else:
                 self.treatment_error('Tipo', 'functionDeclaration')
 
+    def typedef(self):
+        if self.token.lexema == 'typedef':
+            self.add_token()
+            self.base()
+            if self.token.cod_token == 'IDE':
+                self.add_token()
+                if self.token.lexema == ';':
+                    self.add_token()
+                else:
+                    self.treatment_error(';', 'typedef')
+            else:
+                self.treatment_error('Identificador', 'typedef')
+        else:
+            self.treatment_error('typedef', 'typedef')
+
+
+
+
+    def base(self):
+        if self.verify_first('type'):#ANCHOR ver se aqui coloca erro ou não
+            self.add_token()
+        else:
+            self.treatment_error('Tipo', 'base') 
+        if self.token.lexema == 'struct':
+            self.add_token()
+            self.extends()
+            if self.token.lexema == '{':
+                self.add_token()
+                self.variable_list
+                if self.token.lexema == '}':
+                    self.add_token()
+                else:
+                    self.treatment_error('}', 'base') 
+            else:
+                self.treatment_error('{', 'base') 
+        else:
+            self.treatment_error('struct', 'base') 
     def params(self):
         '''
         Identifica os parametros da função
