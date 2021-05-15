@@ -1,10 +1,6 @@
 # -*- coding: UTF-8 -*-
-#ANCHOR Gustavo man eu sei que esse codigo tá uma bagunça, eu pegeui e comecei a implementar a gramatica, dai fiz assim, fui vendo o que cada função precisava e fui fazendo recursão pra começar sempre do mais simples. tô remando aqui, mas vou deixa a ultima versão do git baixada, caso queira voltar atrás
 
-"""
-<<Program> ::= <Var Decl><Start> 
-<Start> ::= 'start' '()' '{' <Body Procedure> '}'
-"""
+
 EOF = {'Token': 'EOF', 'Lexeme': '__eof__'}
 from token_lex import Token
 from follows import Follows
@@ -20,6 +16,7 @@ class Parser:
     def verify_first(self, production :str):
         '''
         Verifica se o token atual é o esperado conforme a sua produção
+        Recebe a Produção
         '''
         if self.eof() :
             return Firsts().get_first(production, self.token.lexema) or Firsts().get_first(production, self.token.cod_token)
@@ -35,7 +32,7 @@ class Parser:
         else:
             self.token = EOF
 
-    def eof(self):#ANCHOR ver se ainda é util
+    def eof(self):
         if self.iterator < len(self.listatokens) - 1:
             return True
         else:
@@ -57,14 +54,7 @@ class Parser:
 
                     
 
-    #ANCHOR remover adderror quando implementar treatment_error
-    def add_error(self, tkesperado :str): #vamo ter que lançar bonitinho mas acho que por enquanto serve
-        '''
-        Adiciona um novo erro e sua descrição a tabela de simbolos
-        '''
-        self.tabelasimbolos.append("{} ERRO SINTÁTICO ESPERAVA:{}".format(self.token.linha, tkesperado))
-        self.setnext_token()
-
+   
 
     def add_token(self):
         '''
@@ -73,15 +63,6 @@ class Parser:
         self.tabelasimbolos.append(self.token)
         self.setnext_token()
 
-    def getprevious_token(self):#ANCHOR verificar se é util
-        '''
-        Verifica o token anterior
-        '''    
-        token = self.listatokens[self.iterator - 1]
-        return token
-
-    def get_token(self):#ANCHOR verificar utilidade 
-        return self.listatokens[self.iterator-1]
 
 
 
@@ -93,12 +74,21 @@ class Parser:
 
    
     def program(self):#Program na linguagem     
-        self.const_decl()
-        self.var_decl()
-        # self.start()
+        self.global_decl()
+        self.start()
         return self.tabelasimbolos
 
-                
+    def global_decl(self):
+        '''
+        Verifica a existencia de bloco de const e var
+        '''
+        if self.token.lexema == 'const':
+            self.const_decl
+            self.var_decl()        
+        elif self.token.lexema == 'var':    
+            self.var_decl()
+            self.const_decl()
+
 
 
     def boolean_literal(self):
@@ -220,26 +210,86 @@ class Parser:
             self.treatment_error('DEL', 'aux')#ANCHOR o erro busca os tokens do first de aux pq o de delimitador ficaria limitado
 
     
-    def start(self):#ANCHOR verificar se vai pegar a partir do start ou n
+    def start(self):
+        '''
+        Verifica o inicio do programa recebendo o bloco de start
+        '''
         if self.token.lexema == 'start':
             self.add_token()
+            if self.token.lexema == '{':
+                self.add_token()
+                #chamar o "bodi"
+                if self.token.lexema == '}':
+                    self.add_token()
+                else:
+                    self.treatment_error('}', 'varDecl') #ANCHOR rever follow que vai usar
+            else:
+                self.treatment_error('{', 'varDecl') #ANCHOR rever follow que vai usar
         else:
-            self.add_error('start')
+            self.treatment_error('start', 'varDecl') #ANCHOR rever follow que vai usar
 
-        if self.listatokens[self.iterator].lexema == '{':
-            self.add_token()
-        else:
-            print(self.listatokens[self.iterator].linha,
-                  'ERRO SINTÁTICO ESPERAVA:', '{')
-            self.setnext_token()
+    def decls(self):
+        '''
+        Gerencia a chamada das declarações
         
-        #self.program()#ANCHOR ver se vai chamar o program, daqui ou não ver na gramatica
+        '''
+        if self.verify_first('decls'):
+            #chamar as funções
+            if self.verify_first('decls'):
+                self.decls()
 
-        if self.token.lexema == '}':
+    def function_declaration(self):
+        '''
+        Identifica a declaração de uma função
+        '''
+        if self.token.lexema == 'function':
             self.add_token()
-        else:
-            self.add_error('}')
+            if self.verify_first('type'):
+                self.add_token()
+                if self.token.cod_token == 'IDE':
+                    self.add_token()
+                    if self.token.lexema == '(':
+                        self.add_token()
+                        self.params()
+                        if self.token.lexema == ')':
+                            self.add_token()
+                            if self.token.lexema == '{':
+                                self.add_token()
+                                #chamar o "bodi"
+                                if self.token.lexema == '}':
+                                    self.add_token()
+                                else:
+                                    self.treatment_error('}', 'functionDeclaration') #ANCHOR rever follow que vai usar
+                            else:
+                                self.treatment_error('{', 'functionDeclaration') #ANCHOR rever follow que vai usar
+                        else:
+                            self.treatment_error(')', 'functionDeclaration')    
+                    else:
+                        self.treatment_error('(', 'functionDeclaration')    
+                else:
+                    self.treatment_error('Identificador', 'functionDeclaration')    
+            else:
+                self.treatment_error('Tipo', 'functionDeclaration')
 
+    def params(self):
+        '''
+        Identifica os parametros da função
+        '''
+        if self.token.lexema == 'const':
+            self.add_token()
+        if self.verify_first('type'):
+            self.add_token()
+            if self.token.cod_token == 'IDE':
+                  self.add_token()
+                  if self.token.lexema == ',':#rever condição de erro
+                      self.add_token()
+                      self.params()   
+            else:
+                self.treatment_error('Identificador', 'param')
+        else:
+            self.treatment_error('Tipo', 'Param')        
+  
+  
     def expression_value(self):   
         if self.token.lexema == '-':
             self.add_token()
