@@ -235,7 +235,7 @@ class Parser:
 
         if self.verify_first('formalParameterList'):
             print("chegou formalparament")#self.exp()
-        elif self.verify_first('formalParameterList'):
+        if self.verify_first('formalParameterList'):
             #self.exp()
             if self.token.lexema == ',':#rever condição de erro
                 self.add_token()
@@ -243,7 +243,29 @@ class Parser:
             else:
                  self.treatment_error(',', 'formalParameterList') 
 
-        
+
+
+
+    def formal_parament_list_read(self):
+        if self.token.cod_token == 'IDE':
+            self.add_token()
+        else:
+            self.treatment_error('Identificador', 'formalParameterListRead')
+
+        if self.verify_first('formalParameterListRead'): #ANCHOR Hiago olha depois pra mim se é assim a condição, por favor
+            self.formal_parament_list_read()
+            if self.token.lexema == ',':
+                self.add_token()
+                self.formal_parament_list()
+                if self.token.cod_token == 'IDE':
+                    self.add_token() 
+                else:
+                    self.treatment_error('Identificador', 'formalParameterListRead')                    
+            else:
+                 self.treatment_error(',', 'formalParameterList') 
+
+
+                
     def function_declaration(self):
         '''
         Identifica a declaração de uma função
