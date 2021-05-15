@@ -450,11 +450,10 @@ class Parser:
             else:
                 self.treatment_error('Identificador', 'param')
         else:
-            self.treatment_error('Tipo', 'Param')        
+            self.treatment_error('Tipo', 'param')        
     
-    #<While> ::= 'while' '(' <Conditional Expression> ')' '{' <Body> '}'
 
-    def while(self):
+    def my_while(self): 
         if self.token.lexema == 'while':
             self.add_token()
             if self.token.lexema == '(':
@@ -477,6 +476,32 @@ class Parser:
                 self.treatment_error('(', 'while')    
         else:
             self.treatment_error('while', 'while') 
+
+    def while_procedure(self):
+        if self.token.lexema == 'while':
+            self.add_token()
+            if self.token.lexema == '(':
+                self.add_token()
+                self.conditional_expression()
+                if self.token.lexema == ')':
+                    self.add_token()
+                    if self.token.lexema == '{':
+                        self.add_token()
+                        #chamar o bodyProcedure
+                        if self.token.lexema == '}':
+                            self.add_token()
+                        else:
+                            self.treatment_error('}', 'while') 
+                    else:
+                        self.treatment_error('{', 'while') 
+                else:
+                    self.treatment_error(')', 'while')    
+            else:
+                self.treatment_error('(', 'while')    
+        else:
+            self.treatment_error('while', 'while') 
+
+    
 
 
     def expression_value(self):   
