@@ -265,7 +265,56 @@ class Parser:
                  self.treatment_error(',', 'formalParameterList') 
 
 
-                
+    def proc_decl(self):
+        if self.token.lexema == 'procedure':
+            self.add_token() 
+            if self.token.cod_token == 'IDE':
+                self.add_token()            
+                if self.token.lexema == '(':
+                    self.add_token()
+                    self.params()
+                    if self.token.lexema == ')':
+                        self.add_token()
+                        if self.token.lexema == '{':
+                            self.add_token()
+                             #chamar o "bodyProcedure"
+                            if self.token.lexema == '}':
+                                self.add_token()
+                            else:
+                                self.treatment_error('}', 'procDecl') #ANCHOR rever follow que vai usar
+                        else:
+                            self.treatment_error('{', 'procDecl') #ANCHOR rever follow que vai usar
+                    else:
+                        self.treatment_error(')', 'procDecl')    
+                else:
+                    self.treatment_error('(', 'procDecl')    
+            else:
+                self.treatment_error('Identificador', 'procDecl')    
+        else:
+            self.treatment_error('procedure', 'procDecl')
+        if  self.token.cod_token == 'IDE':
+            self.add_token()       
+            if self.token.lexema == '(':
+                self.add_token()
+                self.formal_parament_list()
+                if self.token.lexema == ')':
+                    self.add_token()
+                    if self.token.lexema == '{':
+                        self.add_token()
+                            #chamar o "bodyProcedure"
+                        if self.token.lexema == '}':
+                            self.add_token()
+                        else:
+                            self.treatment_error('}', 'procDecl') #ANCHOR rever follow que vai usar
+                    else:
+                        self.treatment_error('{', 'procDecl') #ANCHOR rever follow que vai usar
+                else:
+                    self.treatment_error(')', 'procDecl')    
+            else:
+                self.treatment_error('(', 'procDecl')    
+        else:
+            self.treatment_error('Identificador', 'procDecl') 
+                         
     def function_declaration(self):
         '''
         Identifica a declaração de uma função
