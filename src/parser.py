@@ -228,7 +228,22 @@ class Parser:
             #chamar as funções
             if self.verify_first('decls'):
                 self.decls()
+    #ANCHOR n tem que fazer tratamento de erro não?
 
+
+    def formal_parament_list(self):
+
+        if self.verify_first('formalParameterList'):
+            print("chegou formalparament")#self.exp()
+        elif self.verify_first('formalParameterList'):
+            #self.exp()
+            if self.token.lexema == ',':#rever condição de erro
+                self.add_token()
+                self.formal_parament_list()   
+            else:
+                 self.treatment_error(',', 'formalParameterList') 
+
+        
     def function_declaration(self):
         '''
         Identifica a declaração de uma função
