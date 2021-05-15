@@ -281,9 +281,9 @@ class Parser:
                             if self.token.lexema == '}':
                                 self.add_token()
                             else:
-                                self.treatment_error('}', 'procDecl') #ANCHOR rever follow que vai usar
+                                self.treatment_error('}', 'procDecl')
                         else:
-                            self.treatment_error('{', 'procDecl') #ANCHOR rever follow que vai usar
+                            self.treatment_error('{', 'procDecl') #
                     else:
                         self.treatment_error(')', 'procDecl')    
                 else:
@@ -305,15 +305,30 @@ class Parser:
                         if self.token.lexema == '}':
                             self.add_token()
                         else:
-                            self.treatment_error('}', 'procDecl') #ANCHOR rever follow que vai usar
+                            self.treatment_error('}', 'procDecl')
                     else:
-                        self.treatment_error('{', 'procDecl') #ANCHOR rever follow que vai usar
+                        self.treatment_error('{', 'procDecl') 
                 else:
                     self.treatment_error(')', 'procDecl')    
             else:
                 self.treatment_error('(', 'procDecl')    
         else:
             self.treatment_error('Identificador', 'procDecl') 
+
+    def function_call(self):
+        if  self.token.cod_token == 'IDE':
+            self.add_token()       
+            if self.token.lexema == '(':
+                self.add_token()
+                self.formal_parament_list()
+                if self.token.lexema == ')':
+                    self.add_token()
+                else:
+                    self.treatment_error(')', 'functionCall')    
+            else:
+                self.treatment_error('(', 'functionCall')    
+        else:
+            self.treatment_error('Identificador', 'functionCall')         
                          
     def function_declaration(self):
         '''
