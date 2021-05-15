@@ -501,7 +501,114 @@ class Parser:
         else:
             self.treatment_error('while', 'while') 
 
+    def my_if(self):
+        if self.token.lexema == 'if':
+            self.add_token()
+            if self.token.lexema == '(':
+                self.add_token()
+                self.conditional_expression()
+                self.then()
+            else:
+                self.treatment_error('(', 'if')    
+        else:
+            self.treatment_error('if', 'if')         
+
+    def then(self):
+        if self.token.lexema == ')':
+            self.add_token()
+            if self.token.lexema == 'then':
+                self.add_token()
+                if self.token.lexema == '{':
+                    self.add_token()
+                    #chamar o body
+                    if self.token.lexema == '}':
+                        self.add_token()
+                        self.my_else()
+                    else:
+                        self.treatment_error('}', 'then') 
+                else:
+                    self.treatment_error('{', 'then') 
+
+            else: 
+                self.treatment_error('then', 'then')    
+
+        else:
+            self.treatment_error(')', 'then')    
+
     
+    def my_else(self):
+        if self.token.lexema == 'else':
+            self.add_token()
+            if self.token.lexema == '{':
+                self.add_token()
+                #chamar o body
+                if self.token.lexema == '}':
+                    self.add_token()
+                    self.my_else()
+                else:
+                    self.treatment_error('}', 'else') 
+            else:
+                self.treatment_error('{', 'else') 
+        else:
+            self.treatment_error('else', 'else') 
+
+
+
+    def if_procedure(self):
+        if self.token.lexema == 'if':
+            self.add_token()
+            if self.token.lexema == '(':
+                self.add_token()
+                self.conditional_expression()
+                self.then_procedure()
+            else:
+                self.treatment_error('(', 'ifProcedure')    
+        else:
+            self.treatment_error('if', 'ifProcedure')         
+
+    def then_procedure(self):
+        if self.token.lexema == ')':
+            self.add_token()
+            if self.token.lexema == 'then':
+                self.add_token()
+                if self.token.lexema == '{':
+                    self.add_token()
+                    #chamar o bodyProcedure
+                    if self.token.lexema == '}':
+                        self.add_token()
+                        self.else_procedure()
+                    else:
+                        self.treatment_error('}', 'thenProcedure') 
+                else:
+                    self.treatment_error('{', 'thenProcedure') 
+
+            else: 
+                self.treatment_error('then', 'thenProcedure')    
+
+        else:
+            self.treatment_error(')', 'thenProcedure')    
+
+    
+    def else_procedure(self):
+        if self.token.lexema == 'else':
+            self.add_token()
+            if self.token.lexema == '{':
+                self.add_token()
+                #chamar o bodyProcedure
+                if self.token.lexema == '}':
+                    self.add_token()
+                else:
+                    self.treatment_error('}', 'elseProcedure') 
+            else:
+                self.treatment_error('{', 'elseProcedure') 
+        else:
+            self.treatment_error('else', 'elseProcedure') 
+
+
+
+
+
+
 
 
     def expression_value(self):   

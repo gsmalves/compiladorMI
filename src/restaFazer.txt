@@ -1,2 +1,4 @@
 vetor no var 
 conferir condições de paramentlist
+conditional Expression
+colocar tratamento de erro no boolean Literal
