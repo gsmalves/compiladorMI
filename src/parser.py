@@ -604,13 +604,46 @@ class Parser:
         else:
             self.treatment_error('else', 'elseProcedure') 
 
+    #<Read>  ::= read'(' <Formal Parameter List Read> ')' ';'
+
+    def read(self):
+        if self.token.lexema == 'read':
+            self.add_token()
+            if self.token.lexema == '(':
+                self.add_token()
+                self.formal_parament_list_read()          
+                if self.token.lexema == ')':
+                    self.add_token()
+                    if self.token.lexema == ';':
+                        self.add_token()
+                    else:
+                        self.treatment_error(';', 'read')
+                else:                   
+                     self.treatment_error(')', 'read')
+            else:                   
+                self.treatment_error('(', 'read')
+        else:                   
+            self.treatment_error('read', 'read')
 
 
-
-
-
-
-
+    def my_print(self):
+        if self.token.lexema == 'read':
+            self.add_token()
+            if self.token.lexema == '(':
+                self.add_token()
+                self.formal_parament_list_read()          
+                if self.token.lexema == ')':
+                    self.add_token()
+                    if self.token.lexema == ';':
+                        self.add_token()
+                    else:
+                        self.treatment_error(';', 'print')
+                else:                   
+                     self.treatment_error(')', 'print')
+            else:                   
+                self.treatment_error('(', 'print')
+        else:                   
+            self.treatment_error('print', 'print')
     def expression_value(self):   
         if self.token.lexema == '-':
             self.add_token()
