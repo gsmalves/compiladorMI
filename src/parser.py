@@ -234,9 +234,9 @@ class Parser:
     def formal_parament_list(self):
 
         if self.verify_first('formalParameterList'):
-            print("chegou formalparament")#self.exp()
+            self.exp()
         if self.verify_first('formalParameterList'):
-            #self.exp()
+            self.exp()
             if self.token.lexema == ',':#rever condição de erro
                 self.add_token()
                 self.formal_parament_list()   
