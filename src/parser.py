@@ -612,9 +612,48 @@ class Parser:
             else:                   
                 self.treatment_error('(', 'print')
        
+    def return_statement(self):
+        if self.token.lexema == 'return':
+            self.add_token()
+            if self.token.lexema == ';':
+                self.add_token()
+            else:
+                self.assign()  
+        else:
+            self.treatment_error('return', 'returnStetement')
 
+    def assing(self):
+        if self.verify_first('prefixGlobalLocal'):#precisa do erro desse?
+            self.prefix_global_local()
+            if self.token.cod_token == 'IDE':
+                self.add_token()
+                if self.token.lexema == '=':
+                    self.add_token()
+                    self.exp()
+                    if self.token.lexema == ';':
+                        self.add_token()
+                    else:
+                        self.treatment_error(';', 'assign')
+                else:
+                    self.treatment_error('=','assign')
+            else:
+                self.treatment_error('Identificador','assign')
+        if self.token.cod_token == 'IDE':
+            self.add_token()
+            if self.token.lexema == '=':
+                self.add_token()
+                self.exp()
+                if self.token.lexema == ';':
+                    self.add_token()
+                else:
+                    self.treatment_error(';', 'assign')
+            else:
+                self.treatment_error('=','assign')
+        else:
+            self.treatment_error('Identificador','assign')
 
-        
+    ##falta ainda a parte do vetor
+
     def expression_value(self):   
         if self.token.lexema == '-':
             self.add_token()
