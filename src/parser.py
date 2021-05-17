@@ -477,13 +477,49 @@ class Parser:
             else:
                 self.treatment_error('(', 'while')    
 
-    
+    def expression_value_logical(self):
+        if self.verify_first('expressionValueLogical'):
+            self.add_token()
+        else:
+            self.function_call()
+            self.relational_expression()
 
     def conditional_expression(self):
         if self.verify_first('conditionalExpression'):
             if self.boolean_literal():
                 self.add_token()
-            #ANCHOR terminar função
+            self.relational_expression()
+            self.logical_expression()
+                        #ANCHOR terminar função
+
+    def logical_expression(self):
+        if self.verify_first('expressionValueLogical'):#ANCHOR ajustar first para identificar value logical
+            self.expression_value_logical()
+            if self.verify_first('logical'):
+                self.logical()
+        elif self:#ANCHOR implementar logical e logical deined        
+            self.logical_deined()
+        else:
+            self.treatment_error('Expressão logica', 'logicalExpression')#ANCHOR Rever o follow
+        #<Logical Expression> ::= <Expression Value Logical> <Logical> | 
+        # <Logical Denied>   
+
+    def logical(self):
+        if self.verify_first('conditionalOperator'):
+            self.add_token()
+            if self.verify_first('expressionValueLogical') or self.verify_first('logicalDeined'): #ANCHOR condição de receber expression value logical ou logical deined
+                self.expression_value_logical()
+                self.logical_deined()
+            else:  
+                self.treatment_error('Expressão de valor', 'logical')
+        else: 
+            self.treatment_error('Operador Condicional', 'logical')                  
+
+    def relational_expression(self):
+        self.exp()
+        if self.verify_first('relational'):
+            self.add_token()
+            self.exp()
         
     def my_if(self):
         if self.token.lexema == 'if':

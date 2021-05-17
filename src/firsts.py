@@ -164,18 +164,10 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
             'boolenaLiteral': ['true',
                               'false'],
 
-            'conditionalExpression':['decLiteral',
-                                    'octLiteral',
-                                    'hexLiteral',
-                                    'floatLiteral',
-                                    'true',
+            'conditionalExpression':['true',
                                     'false',
-                                    '(',
-                                    'global.',
-                                    'local.',
                                     'CAD',
-                                    '!',
-                                    '-'],
+                                    'IDE'],
 
             'if': ['if'],
 
@@ -259,20 +251,15 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                    '||'],
 
         
-            'logicalDenied': ['!'],
 
             'logical': ['&&',
                        '||'],
 
-            'expressionValueLogical':['decLiteral',
-                                      'octLiteral',
-                                      'hexLiteral',
-                                      'floatLiteral',
+            'expressionValueLogical':['NRO',
                                       'true',
                                       'false',
                                       'global.',
                                       'local.',
-                                      '-',
                                       'CAD',
                                       'IDE'],     
 
