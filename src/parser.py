@@ -81,10 +81,14 @@ class Parser:
             self.const_decl()
 
     def body(self):
+        '''
+        Formula a estrutura de recepção de comandos da analise sintatica do corpo do código
+        '''
         if self.verify_first('body'):
             self.var_decl()
             self.my_while()
-            #self.read()
+            self.my_if()
+            self.read()
             self.my_print()
             #Implemente assign
             #return statement
@@ -145,7 +149,7 @@ class Parser:
         '''
         Verifica pelo delimitador da constante
         '''    
-        if self.verify_first('delimiter'):
+        if self.token.lexema == ',':
             self.add_token()
             self.const_list()
         else: 
@@ -242,20 +246,17 @@ class Parser:
 
     def formal_parament_list(self):
 
-        if self.verify_first('formalParameterList'): #ANCHOR tenho duvida quanto a essa condição
-            self.exp()
         if self.verify_first('formalParameterList'):
             self.exp()
             if self.token.lexema == ',':#rever condição de erro
                 self.add_token()
                 self.formal_parament_list()   
-            else:
-                 self.treatment_error(',', 'formalParameterList') 
+            
 
 
     def formal_parament_list_read(self):
         
-        if self.verify_first('formalParameterListRead'): #ANCHOR Hiago olha depois pra mim se é assim a condição, por favor
+        if self.verify_first('formalParameterListRead'):
             self.add_token()
             if self.token.lexema == ',':
                 self.add_token()
@@ -464,11 +465,11 @@ class Parser:
                     self.add_token()
                     if self.token.lexema == '{':
                         self.add_token()
-                        #chamar o body
+                        self.body()
                         if self.token.lexema == '}':
                             self.add_token()
                         else:
-                            self.treatment_error('}', 'while') 
+                            self.treatment_error('}', 'while') #ANCHOR verificar se condição de body seria o ideal
                     else:
                         self.treatment_error('{', 'while') 
                 else:
@@ -476,63 +477,42 @@ class Parser:
             else:
                 self.treatment_error('(', 'while')    
 
-    def while_procedure(self):
-        if self.token.lexema == 'while':
-            self.add_token()
-            if self.token.lexema == '(':
+    
+
+    def conditional_expression(self):
+        if self.verify_first('conditionalExpression'):
+            if self.boolean_literal():
                 self.add_token()
-                self.conditional_expression()
-                if self.token.lexema == ')':
-                    self.add_token()
-                    if self.token.lexema == '{':
-                        self.add_token()
-                        #chamar o bodyProcedure
-                        if self.token.lexema == '}':
-                            self.add_token()
-                        else:
-                            self.treatment_error('}', 'while') 
-                    else:
-                        self.treatment_error('{', 'while') 
-                else:
-                    self.treatment_error(')', 'while')    
-            else:
-                self.treatment_error('(', 'while')    
-        else:
-            self.treatment_error('while', 'while') 
-
+            #ANCHOR terminar função
+        
     def my_if(self):
         if self.token.lexema == 'if':
             self.add_token()
             if self.token.lexema == '(':
                 self.add_token()
                 self.conditional_expression()
-                self.then()
-            else:
-                self.treatment_error('(', 'if')    
-        else:
-            self.treatment_error('if', 'if')         
-
-    def then(self):
-        if self.token.lexema == ')':
-            self.add_token()
-            if self.token.lexema == 'then':
-                self.add_token()
+                if self.token.lexema == ')':
+                    self.add_token()
+                    self.then()
                 if self.token.lexema == '{':
                     self.add_token()
-                    #chamar o body
+                    self.body()
                     if self.token.lexema == '}':
                         self.add_token()
                         self.my_else()
                     else:
-                        self.treatment_error('}', 'then') 
+                        self.treatment_error('}', 'if') 
                 else:
-                    self.treatment_error('{', 'then') 
+                    self.treatment_error('{', 'if')  
+            else:
+                self.treatment_error('(', 'if')    
+     
 
-            else: 
-                self.treatment_error('then', 'then')    
-
-        else:
-            self.treatment_error(')', 'then')    
+    def then(self):
+        if self.token.lexema == 'then':
+            self.add_token()
+            self.conditional_expression()
+   
 
     
     def my_else(self):
@@ -540,7 +520,7 @@ class Parser:
             self.add_token()
             if self.token.lexema == '{':
                 self.add_token()
-                #chamar o body
+                self.body()
                 if self.token.lexema == '}':
                     self.add_token()
                     self.my_else()
@@ -548,61 +528,11 @@ class Parser:
                     self.treatment_error('}', 'else') 
             else:
                 self.treatment_error('{', 'else') 
-        else:
-            self.treatment_error('else', 'else') 
 
 
 
-    def if_procedure(self):
-        if self.token.lexema == 'if':
-            self.add_token()
-            if self.token.lexema == '(':
-                self.add_token()
-                self.conditional_expression()
-                self.then_procedure()
-            else:
-                self.treatment_error('(', 'ifProcedure')    
-        else:
-            self.treatment_error('if', 'ifProcedure')         
-
-    def then_procedure(self):
-        if self.token.lexema == ')':
-            self.add_token()
-            if self.token.lexema == 'then':
-                self.add_token()
-                if self.token.lexema == '{':
-                    self.add_token()
-                    #chamar o bodyProcedure
-                    if self.token.lexema == '}':
-                        self.add_token()
-                        self.else_procedure()
-                    else:
-                        self.treatment_error('}', 'thenProcedure') 
-                else:
-                    self.treatment_error('{', 'thenProcedure') 
-
-            else: 
-                self.treatment_error('then', 'thenProcedure')    
-
-        else:
-            self.treatment_error(')', 'thenProcedure')    
 
     
-    def else_procedure(self):
-        if self.token.lexema == 'else':
-            self.add_token()
-            if self.token.lexema == '{':
-                self.add_token()
-                #chamar o bodyProcedure
-                if self.token.lexema == '}':
-                    self.add_token()
-                else:
-                    self.treatment_error('}', 'elseProcedure') 
-            else:
-                self.treatment_error('{', 'elseProcedure') 
-        else:
-            self.treatment_error('else', 'elseProcedure') 
-
 
     def read(self):
         '''
@@ -623,8 +553,7 @@ class Parser:
                      self.treatment_error(')', 'read')
             else:                   
                 self.treatment_error('(', 'read')
-        else:                   
-            self.treatment_error('read', 'read')
+        
 
 
     def my_print(self):
@@ -680,9 +609,14 @@ class Parser:
             self.term()    
 
  
-    def exp(self): #ANCHOR implementar função exp
-        pass
-        #<Exp> ::= <PrefixGlobalLocal> <Term> <Add Exp> | <Term> <Add Exp>
+    def exp(self):
+        if self.token.lexema == 'global' or self.token.lexema == 'local':
+            self.prefix_global_local()
+        self.term()
+        if self.token.lexema == '+' or self.token.lexema == '-':
+            self.add_token()
+            self.exp()
+        
 
 
 
@@ -694,13 +628,12 @@ class Parser:
                 if self.token.cod_token == 'IDE':
                     self.add_token()
                 else:
-                    self.add_error('IDE')#ANCHOR verificar o que era esperado
+                    self.treatment_error('IDE', 'body')#ANCHOR verificar o que era esperado
             else:
-                self.add_error('.')
+                self.add_error('.', 'prefixGlobalLocal')
 
     
-    def exp(self):
-        self.prefix_global_local()
+
 
             
 

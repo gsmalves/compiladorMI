@@ -4,4 +4,7 @@ var{
 }
 start{
   print("batata");
+  if(true){
+    print("Batatinha");
+  }
 }
