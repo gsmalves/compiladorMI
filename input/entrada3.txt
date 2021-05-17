@@ -1,1 +1,7 @@
-gfgd
+var{
+  int meme = 3;
+  boolean love = false;
+}
+start{
+  print("batata");
+}

@@ -80,7 +80,16 @@ class Parser:
             self.var_decl()
             self.const_decl()
 
-
+    def body(self):
+        if self.verify_first('body'):
+            self.var_decl()
+            self.my_while()
+            #self.read()
+            self.my_print()
+            #Implemente assign
+            #return statement
+            if self.verify_first('body'):
+                self.body()
 
     def boolean_literal(self):
         return self.token.lexema in {'true', 'false'}
@@ -209,7 +218,7 @@ class Parser:
             self.add_token()
             if self.token.lexema == '{':
                 self.add_token()
-                #chamar o "bodi"
+                self.body()
                 if self.token.lexema == '}':
                     self.add_token()
                 else:
@@ -245,22 +254,14 @@ class Parser:
 
 
     def formal_parament_list_read(self):
-        if self.token.cod_token == 'IDE':
-            self.add_token()
-        else:
-            self.treatment_error('Identificador', 'formalParameterListRead')
-
+        
         if self.verify_first('formalParameterListRead'): #ANCHOR Hiago olha depois pra mim se é assim a condição, por favor
-            self.formal_parament_list_read()
+            self.add_token()
             if self.token.lexema == ',':
                 self.add_token()
                 self.formal_parament_list()
-                if self.token.cod_token == 'IDE':
-                    self.add_token() 
-                else:
-                    self.treatment_error('Identificador', 'formalParameterListRead')                    
-            else:
-                 self.treatment_error(',', 'formalParameterList') 
+                            
+             
 
 
     def proc_decl(self):
@@ -474,8 +475,6 @@ class Parser:
                     self.treatment_error(')', 'while')    
             else:
                 self.treatment_error('(', 'while')    
-        else:
-            self.treatment_error('while', 'while') 
 
     def while_procedure(self):
         if self.token.lexema == 'while':
@@ -604,9 +603,11 @@ class Parser:
         else:
             self.treatment_error('else', 'elseProcedure') 
 
-    #<Read>  ::= read'(' <Formal Parameter List Read> ')' ';'
 
     def read(self):
+        '''
+        Identifica a validade sintatica da estrutura de read
+        '''
         if self.token.lexema == 'read':
             self.add_token()
             if self.token.lexema == '(':
@@ -627,7 +628,10 @@ class Parser:
 
 
     def my_print(self):
-        if self.token.lexema == 'read':
+        '''
+        Recebe e verifica a integridade sintatica da função print
+        '''
+        if self.token.lexema == 'print':
             self.add_token()
             if self.token.lexema == '(':
                 self.add_token()
@@ -642,8 +646,7 @@ class Parser:
                      self.treatment_error(')', 'print')
             else:                   
                 self.treatment_error('(', 'print')
-        else:                   
-            self.treatment_error('print', 'print')
+       
 
 
         

@@ -1,4 +1,0 @@
-const{
-  boolean merrrrr = true
-  real numb = 66.5;
-}

@@ -45,7 +45,8 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                     'true',
                                     'false',
                                     '-'],
-            'formalParameterListRead': ['IDE'],
+            'formalParameterListRead': ['IDE',
+                                        'CAD'],
 
             'functionDeclaration': ['function'],
                                                 
@@ -192,23 +193,11 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
 
             'print': ['print'],
 
-            'body': ['decLiteral',
-                     'octLiteral',
-                     'hexLiteral',
-                     'floatLiteral',
-                     'true',
-                     'false',
-                     'global.',
-                     'local.',
-                     '(',
-                     'IDE',
+            'body': ['var',
+                     'if',
                      'while',
-                     'read',
                      'print',
-                     'return',
-                     '-',
-                     'CAD',
-                     'if'],
+                     'read'],
 
             'bodyItem': ['decLiteral',
                      'octLiteral',
