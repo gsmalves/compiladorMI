@@ -238,6 +238,8 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
             'expressionValueLogical':['NRO',
                                       'true',
                                       'false',
+                                      '&&',
+                                      '||',
                                       'global.',
                                       'local.',
                                       'CAD',

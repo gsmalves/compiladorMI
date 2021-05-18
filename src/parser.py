@@ -546,7 +546,7 @@ class Parser:
                         #ANCHOR terminar função
 
     def logical_expression(self):
-        if self.verify_first('expressionValueLogical'):#ANCHOR ajustar first para identificar value logical
+        if self.verify_first('logical'):#ANCHOR ajustar first para identificar value logical
             self.expression_value_logical()
             if self.verify_first('logical'):
                 self.logical()
@@ -828,9 +828,12 @@ class Parser:
         else:
             self.treatment_error('Valor','valueAssignedMatrix')
            
-
-    def assing(self):
+# <Assign> ::= <PrefixGlobalLocal> Identifier '=' <Exp> ';' 
+#            | Identifier '=' <Exp> ';'
+#            | Identifier <Vector><Assignment_vector> ';' | Identifier <Matrix><Assignment_matrix> ';' | <Exp> ';' 
+    def assing(self):#ANCHOR rever
         if self.verify_first('prefixGlobalLocal'):
+            self.prefix_global_local()
             if self.token.cod_token == 'IDE':
                 self.add_token()
                 if self.token.lexema == '=':
@@ -847,28 +850,38 @@ class Parser:
         if self.token.cod_token == 'IDE':
             self.add_token()
             if self.token.lexema == '=':
-                self.add_token()
+                self.add_token()    
                 self.exp()
-            elif self.verify_first('vector'):
-                self.vector()
-                self.assignment_vector()
-            elif self.verify_first('matrix'):
-                self.matrix()
-                self.assignment_matrix()        
                 if self.token.lexema == ';':
                     self.add_token()
                 else:
                     self.treatment_error(';', 'assign')
             else:
-                self.treatment_error('= ou [','assign')
-        if self.verify_first('exp') or self.verify_first('expressionValue'):
-            self.exp()
+                self.treatment_error('=', 'assign')        
+        elif self.verify_first('vector'):
+            self.vector()
+            self.assignment_vector()
             if self.token.lexema == ';':
                 self.add_token()
             else:
                 self.treatment_error(';', 'assign')
-        else :
-            self.treatment_error('Identificador ou Prefixo global ou local ou Expressão de valor','assign')
+        elif self.verify_first('matrix'):
+            self.matrix()
+            self.assignment_matrix()        
+            if self.token.lexema == ';':
+                self.add_token()
+            else:
+                self.treatment_error(';', 'assign')
+        else:
+            self.treatment_error('= ou [','assign')
+        # if self.verify_first('exp') or self.verify_first('expressionValue'):
+        #     self.exp()
+        #     if self.token.lexema == ';':
+        #         self.add_token()
+        #     else:
+        #         self.treatment_error(';', 'assign')
+        # else :
+        #     self.treatment_error('Identificador ou Prefixo global ou local ou Expressão de valor','assign')
     
     def expression_value(self):   
         if self.token.lexema == '-':
@@ -926,7 +939,7 @@ class Parser:
                 else:
                     self.treatment_error('IDE', 'body')#ANCHOR verificar o que era esperado
             else:
-                self.add_error('.', 'prefixGlobalLocal')
+                self.treatment_error('.', 'prefixGlobalLocal')
 
     
 
