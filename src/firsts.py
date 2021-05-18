@@ -93,6 +93,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
             'type': ['struct',
                     'int',
                     'real',
+                    'IDE',
                     'boolean',
                     'string'],
 
@@ -155,8 +156,11 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
 
             'conditionalExpression':['true',
                                     'false',
+                                    'NRO',
                                     'CAD',
-                                    'IDE'],
+                                    'IDE', 
+                                    'global'
+                                    'local'],
 
             'if': ['if'],
 
@@ -238,8 +242,6 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
             'expressionValueLogical':['NRO',
                                       'true',
                                       'false',
-                                      '&&',
-                                      '||',
                                       'global.',
                                       'local.',
                                       'CAD',

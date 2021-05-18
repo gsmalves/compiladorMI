@@ -2,6 +2,7 @@
 
 
 EOF = {'Token': 'EOF', 'Lexeme': '__eof__'}
+from typing import Iterator
 from token_lex import Token
 from follows import Follows
 from firsts import Firsts
@@ -11,6 +12,7 @@ class Parser:
         self.listatokens = listatokens
         self.tabelasimbolos = []
         self.iterator = 0
+        self.error = 0
         self.token = self.listatokens[0]
         self.tipo = {'int', 'real', 'boolean'}
     def verify_first(self, production :str):
@@ -21,7 +23,10 @@ class Parser:
         if self.eof() :
             return Firsts().get_first(production, self.token.lexema) or Firsts().get_first(production, self.token.cod_token)
         
-        
+    def setprev_token(self):
+        self.iterator -=1
+        self.token = self.listatokens[self.iterator]   
+
     def setnext_token(self):
         '''
         Avança para o proximo token
@@ -44,6 +49,7 @@ class Parser:
         Adiciona o erro e o que era esperado e procura o proximo ponto seguro para retornar a analise
         '''
         self.tabelasimbolos.append("{} ERRO SINTÁTICO ESPERAVA:{}".format(self.token.linha, tkesperado))
+        self.error +=1
         while self.eof() != True:
             if Follows().get_follows(production, self.token.lexema) or Follows().get_follows(production, self.token.cod_token):
                 break
@@ -65,10 +71,15 @@ class Parser:
 
 
    
-    def program(self):#Program na linguagem     
+    def program(self):    
         self.global_decl()
         self.decls()
         self.start()
+        if self.error != 0:
+            print('Analise sintatica concluida com falhas')
+            print('O Arquivo possui {} erros'.format(self.error))
+        else:
+            print('Arquivo analisado com sucesso')
         return self.tabelasimbolos
 
     def global_decl(self):
@@ -147,7 +158,7 @@ class Parser:
             self.treatment_error('IDE')
             
 
-    def delimiter_const(self):#ANCHOR verificar se é util para delimitervar
+    def delimiter_const(self):
         '''
         Verifica pelo delimitador da constante
         '''    
@@ -191,12 +202,12 @@ class Parser:
         else:
             self.treatment_error('IDE', 'variable')
    
-    def aux(self): # <Aux> ::= '=' <Value> <Delimiter Var> | <Delimiter Var>|  <Vector><Assignment_vector><Delimiter Var>  | <Matrix><Assignment_matrix><Delimiter Var>                                             
+    def aux(self): 
         if self.token.lexema == '=':
             self.add_token()
             if self.verify_first('value'):
                 self.add_token()
-                if self.token.lexema == ';' or ',':#ANCHOR rever
+                if self.token.lexema == ';' or ',':
                     self.delimiter_var() 
             else:
                 self.treatment_error('Valor', 'aux')  
@@ -231,11 +242,11 @@ class Parser:
                 if self.token.lexema == '}':
                     self.add_token()
                 else:
-                    self.treatment_error('}', 'varDecl') #ANCHOR rever follow que vai usar
+                    self.treatment_error('}', 'varDecl') 
             else:
-                self.treatment_error('{', 'varDecl') #ANCHOR rever follow que vai usar
+                self.treatment_error('{', 'varDecl') 
         else:
-            self.treatment_error('start', 'varDecl') #ANCHOR rever follow que vai usar
+            self.treatment_error('start', 'varDecl') 
 
     def decls(self):
         '''
@@ -244,20 +255,19 @@ class Parser:
         '''
         if self.verify_first('decls'):
             self.struct_decl()
-            self.function_call()
+            self.function_declaration()
             self.proc_decl()
             self.typedef()
             if self.verify_first('decls'):
                 self.decls()
 
-    #ANCHOR n tem que fazer tratamento de erro não?
 
 
     def formal_parament_list(self):
 
-        if self.verify_first('formalParameterList'):#ANCHOR rever
+        if self.verify_first('formalParameterList'):
             self.exp()
-            if self.token.lexema == ',':#rever condição de erro
+            if self.token.lexema == ',':
                 self.add_token()
                 self.formal_parament_list()   
             
@@ -301,7 +311,7 @@ class Parser:
                             else:
                                 self.treatment_error('}', 'procDecl')
                         else:
-                            self.treatment_error('{', 'procDecl') #
+                            self.treatment_error('{', 'procDecl') 
                     else:
                         self.treatment_error(')', 'procDecl')    
                 else:
@@ -317,7 +327,7 @@ class Parser:
                     self.add_token()
                     if self.token.lexema == '{':
                         self.add_token()
-                            #chamar o "bodyProcedure"
+                        self.body_proc()
                         if self.token.lexema == '}':
                             self.add_token()
                         else:
@@ -338,7 +348,12 @@ class Parser:
                 self.formal_parament_list()
                 if self.token.lexema == ')':
                     self.add_token()
+                    if self.token.lexema == ';':
+                        self.add_token()
+                    else:
+                        self.treatment_error(';', 'functionCall')    
                 else:
+                    
                     self.treatment_error(')', 'functionCall')    
             else:
                 self.treatment_error('(', 'functionCall')    
@@ -372,13 +387,13 @@ class Parser:
                             self.add_token()
                             if self.token.lexema == '{':
                                 self.add_token()
-                                #chamar o "bodi"
+                                self.body()
                                 if self.token.lexema == '}':
                                     self.add_token()
                                 else:
-                                    self.treatment_error('}', 'functionDeclaration') #ANCHOR rever follow que vai usar
+                                    self.treatment_error('}', 'functionDeclaration')
                             else:
-                                self.treatment_error('{', 'functionDeclaration') #ANCHOR rever follow que vai usar
+                                self.treatment_error('{', 'functionDeclaration') 
                         else:
                             self.treatment_error(')', 'functionDeclaration')    
                     else:
@@ -407,14 +422,14 @@ class Parser:
             if self.token.cod_token == 'IDE':
                 self.add_token()
             else:
-                self.treatment_error('type')  #ANCHOR verificar 
+                self.treatment_error('type')  
         else:
             self.add_token()        
 
 
 
     def base(self):
-        if self.verify_first('type'):#ANCHOR ver se aqui coloca erro ou não
+        if self.verify_first('type'):
             self.add_token()
         else:
             self.treatment_error('Tipo', 'base') 
@@ -476,7 +491,7 @@ class Parser:
             self.add_token()
             if self.token.cod_token == 'IDE':
                   self.add_token()
-                  if self.token.lexema == ',':#rever condição de erro
+                  if self.token.lexema == ',':
                       self.add_token()
                       self.params()   
             else:
@@ -499,7 +514,7 @@ class Parser:
                         if self.token.lexema == '}':
                             self.add_token()
                         else:
-                            self.treatment_error('}', 'while') #ANCHOR verificar se condição de body seria o ideal
+                            self.treatment_error('}', 'while') 
                     else:
                         self.treatment_error('{', 'while') 
                 else:
@@ -521,7 +536,7 @@ class Parser:
                         if self.token.lexema == '}':
                             self.add_token()
                         else:
-                            self.treatment_error('}', 'while') #ANCHOR verificar se condição de body seria o ideal
+                            self.treatment_error('}', 'while') 
                     else:
                         self.treatment_error('{', 'while') 
                 else:
@@ -532,39 +547,55 @@ class Parser:
     def expression_value_logical(self):
         if self.verify_first('expressionValueLogical'):
             self.add_token()
-        else:
-            self.function_call()
+        elif self.token.lexema == 'IDE':
+            self.setnext_token()
+            if self.token.lexema == '(':
+                self.setprev_token()    
+                self.function_call()
+            else:
+                self.add_token()
             self.relational_expression()
 
     def conditional_expression(self):
+
         if self.verify_first('conditionalExpression'):
-            if self.boolean_literal():
-                self.add_token()
-            else:    
-                self.relational_expression()
-                self.logical_expression()
-                        #ANCHOR terminar função
+            if self.verify_first('prefixGlobalLocal'):
+                self.prefix_global_local()
+            else:
+                self.setnext_token()
+                if self.token.lexema == {'+', '-', '/', '*'}:
+                    self.setprev_token()
+                    self.add_token()
+                    self.exp()
+                    self.relational_expression()
+                elif self.verify_first('relational'): 
+                    self.setprev_token()
+                    self.add_token()
+                    self.relational_expression()
+                else:
+                    self.setprev_token()
+                    self.add_token()
+                    self.logical_expression()
+
 
     def logical_expression(self):
-        if self.verify_first('logical'):#ANCHOR ajustar first para identificar value logical
+        if self.verify_first('logical'):
+            self.add_token()
             self.expression_value_logical()
-            if self.verify_first('logical'):
-                self.logical()
-        elif self.token.lexema == '!':#ANCHOR implementar logical e logical deined        
-            self.logical_denied()
-        else:
-            self.treatment_error('Expressão logica', 'logicalExpression')#ANCHOR Rever o follow
-        #<Logical Expression> ::= <Expression Value Logical> <Logical> | 
-        # <Logical Denied>   
 
+       
     def logical(self):
         if self.verify_first('conditionalOperator'):
             self.add_token()
             if self.verify_first('expressionValueLogical') or self.token.lexema == '!':
                 self.expression_value_logical()
                 self.logical_denied()
+                if self.verify_first('relational'):
+                    self.relational_expression()
+                    if self.token.lexema != ')':
+                        pass
             else:  
-                self.treatment_error('Expressão de valor', 'logical')
+                self.treatment_error('Expressão de valor ', 'logical')
         else: 
             self.treatment_error('Operador Condicional', 'logical')                  
 
@@ -575,15 +606,17 @@ class Parser:
                 self.add_token()
             elif self.verify_first('exp') or self.verify_first('relational'):
                 self.relational_expression() 
-                    # <Logical Denied> ::= '!' Identifier 
-        #           | '!' <Boolean Literal>
-        #           | '!' <Logical Expression>
-                #   | '!' <Relational Expression>
+        
     def relational_expression(self):
-        self.exp()
         if self.verify_first('relational'):
             self.add_token()
             self.exp()
+            if self.verify_first('logical'):
+                self.logical()
+ 
+
+
+
         
     def my_if(self):
         if self.token.lexema == 'if':
@@ -616,16 +649,18 @@ class Parser:
                 if self.token.lexema == ')':
                     self.add_token()
                     self.then()
-                if self.token.lexema == '{':
-                    self.add_token()
-                    self.body_proc()
-                    if self.token.lexema == '}':
+                    if self.token.lexema == '{':
                         self.add_token()
-                        self.my_else()
+                        self.body_proc()
+                        if self.token.lexema == '}':
+                            self.add_token()
+                            self.else_proc()
+                        else:
+                            self.treatment_error('}', 'if') 
                     else:
-                        self.treatment_error('}', 'if') 
+                        self.treatment_error('{', 'if')  
                 else:
-                    self.treatment_error('{', 'if')  
+                    self.treatment_error(')', 'if')    
             else:
                 self.treatment_error('(', 'if')    
     
@@ -645,7 +680,7 @@ class Parser:
                 self.body_proc()
                 if self.token.lexema == '}':
                     self.add_token()
-                    self.my_else()
+                    self.else_proc()
                 else:
                     self.treatment_error('}', 'else') 
             else:
@@ -781,7 +816,7 @@ class Parser:
     
     def assignment_matrix(self):
         
-        self.assignment_vector()#ANCHOR VERIFICAR SE PRECISA DE OUTRO IGUAL AQUI
+        self.assignment_vector()
         if self.token.lexema == '{':
             self.add_token()
             if self.token.lexema == '{':
@@ -828,61 +863,62 @@ class Parser:
         else:
             self.treatment_error('Valor','valueAssignedMatrix')
            
-# <Assign> ::= <PrefixGlobalLocal> Identifier '=' <Exp> ';' 
-#            | Identifier '=' <Exp> ';'
-#            | Identifier <Vector><Assignment_vector> ';' | Identifier <Matrix><Assignment_matrix> ';' | <Exp> ';' 
-    def assing(self):#ANCHOR rever
+
+    def assing(self):
         if self.verify_first('prefixGlobalLocal'):
             self.prefix_global_local()
-            if self.token.cod_token == 'IDE':
-                self.add_token()
-                if self.token.lexema == '=':
-                    self.add_token()
-                    self.exp()
-                    if self.token.lexema == ';':
-                        self.add_token()
-                    else:
-                        self.treatment_error(';', 'assign')
-                else:
-                    self.treatment_error('=','assign')
-            else:
-                self.treatment_error('Identificador','assign')
-        if self.token.cod_token == 'IDE':
-            self.add_token()
             if self.token.lexema == '=':
-                self.add_token()    
+                self.add_token()
                 self.exp()
                 if self.token.lexema == ';':
                     self.add_token()
+                    self.assing()
                 else:
                     self.treatment_error(';', 'assign')
             else:
-                self.treatment_error('=', 'assign')        
-        elif self.verify_first('vector'):
-            self.vector()
-            self.assignment_vector()
+                self.treatment_error('=','assign')
+        if self.token.cod_token == 'IDE':
+            self.setnext_token() 
+            if self.token.lexema == '(':
+                self.setprev_token()
+                self.function_call()
+            else:
+                self.setprev_token()    
+                self.add_token()
+                if self.token.lexema == '.':
+                    self.add_token()
+                    if self.token.cod_token == 'IDE':
+                        self.add_token()
+                    else:
+                        self.treatment_error('IDE', 'assign')    
+                if self.token.lexema == '=':
+                    self.add_token()    
+                    self.exp()
+                    if self.token.lexema == ';':
+                        self.add_token()     
+                    elif self.verify_first('vector'):
+                        self.vector()
+                        self.assignment_vector()
+                        if self.token.lexema == ';':
+                            self.add_token()
+                        else:
+                            self.treatment_error(';', 'assign')
+                    elif self.verify_first('matrix'):
+                        self.matrix()
+                        self.assignment_matrix()        
+                        if self.token.lexema == ';':
+                            self.add_token()
+                        else:
+                            self.treatment_error(';', 'assign')
+                    else:
+                        self.treatment_error('= ou [','assign')
+        elif self.verify_first('exp') or self.verify_first('expressionValue'):
+            self.exp()
             if self.token.lexema == ';':
                 self.add_token()
             else:
                 self.treatment_error(';', 'assign')
-        elif self.verify_first('matrix'):
-            self.matrix()
-            self.assignment_matrix()        
-            if self.token.lexema == ';':
-                self.add_token()
-            else:
-                self.treatment_error(';', 'assign')
-        else:
-            self.treatment_error('= ou [','assign')
-        # if self.verify_first('exp') or self.verify_first('expressionValue'):
-        #     self.exp()
-        #     if self.token.lexema == ';':
-        #         self.add_token()
-        #     else:
-        #         self.treatment_error(';', 'assign')
-        # else :
-        #     self.treatment_error('Identificador ou Prefixo global ou local ou Expressão de valor','assign')
-    
+  
     def expression_value(self):   
         if self.token.lexema == '-':
             self.add_token()
@@ -916,20 +952,18 @@ class Parser:
         elif self.token.lexema == '/':
             self.term()    
     
- 
-    def exp(self):#ANCHOR revisar e adicionar tratamento de erro
+    def exp(self):
         if self.verify_first('prefixGlobalLocal'):
             self.prefix_global_local()
         self.term()
         if self.token.lexema == '+' or self.token.lexema == '-':
             self.add_token()
             self.exp()
-        # <Exp> ::= <PrefixGlobalLocal> <Term> <Add Exp> | <Term> <Add Exp>
 
 
 
 
-    def prefix_global_local(self):#ANCHOR rever 
+    def prefix_global_local(self): 
         if self.token.lexema == 'global' or self.token.lexema == 'local':
             self.add_token()
             if self.token.lexema == '.':
@@ -937,38 +971,5 @@ class Parser:
                 if self.token.cod_token == 'IDE':
                     self.add_token()
                 else:
-                    self.treatment_error('IDE', 'body')#ANCHOR verificar o que era esperado
-            else:
-                self.treatment_error('.', 'prefixGlobalLocal')
-
-    
-
-
-            
-           
-
-  
-
-if __name__ == '__main__':
-    listatokens =[
-        Token(1,'PRE', 'const'),
-        Token(1, 'DEL', '{'),
-        Token(2, 'PRE', 'int'),
-        Token(2, 'IDE', 'a'),
-        Token(2, 'REL', '='),
-        Token(2, 'NUM', '2'),
-        Token(2, 'NUM', ';'),
-        Token(2, 'PRE', 'int'),
-        Token(2, 'IDE', 'b'),
-        Token(2, 'REL', '='),
-        Token(2, 'NUM', '2'),
-        Token(2, 'NUM', ';'),
-        Token(3, 'DEl', '}'),
-        Token(4, 'PRE', 'start'),
-        Token(4, 'DEL', '{'),
-        Token(5, 'IDE', 'Bodiii'),
-        Token(6, 'DEL', '}')
-        
-    ]
-
-    Parser(listatokens).program()
+                    self.treatment_error('IDE', 'body')
+                    self.treatment_error('.', 'prefixGlobalLocal')

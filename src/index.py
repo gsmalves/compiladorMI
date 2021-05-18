@@ -37,7 +37,7 @@ for arquivo in var:
     if tabelasimbolos != None:
       sintatic = Parser(tabelasimbolos).program()
       num_arquivo = re.findall(r'\d+\.txt$', arquivo)
-      saida = open("../output/saidalex"+num_arquivo[0],'w' )
+      saida = open("../output/saida"+num_arquivo[0],'w' )
       for simbolo in sintatic:
         saida.write("{}\n".format(simbolo))
     

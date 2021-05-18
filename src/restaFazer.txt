@@ -1,5 +1,0 @@
-vetor no var 
-conferir condições de paramentlist
-
-colocar tratamento de erro no boolean Literal e value
-corrigir const

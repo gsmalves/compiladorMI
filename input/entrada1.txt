@@ -36,12 +36,12 @@ procedure acelerar(real velocidade){
         }else{
             ligado(c, 5+2, "bom dia", true);
         }
-    }
+    
 }
 
 
 start{
-  print("batata");
+  print("batata")
   if(true){
     print("Batatinha");
   }
