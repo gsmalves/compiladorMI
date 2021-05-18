@@ -187,22 +187,27 @@ class Parser:
         else:
             self.treatment_error('IDE', 'variable')
    
-    def aux(self): #ANCHOR função incompleta para teste <Aux> ::= '=' <Value> <Delimiter Var> | <Delimiter Var>|  <Vector><Assignment_vector><Delimiter Var>  | <Matrix><Assignment_matrix><Delimiter Var>                                             
+    def aux(self): # <Aux> ::= '=' <Value> <Delimiter Var> | <Delimiter Var>|  <Vector><Assignment_vector><Delimiter Var>  | <Matrix><Assignment_matrix><Delimiter Var>                                             
         if self.token.lexema == '=':
             self.add_token()
-            if self.token.lexema == ';':
-                self.delimiter_var()
-            elif self.verify_first('value'):
+            if self.verify_first('value'):
                 self.add_token()
-                if self.token.lexema == ';':#ANCHOR rever
-                    self.add_token()
-                else:
-                    self.treatment_error(';', 'aux')    
+                if self.token.lexema == ';' or ',':#ANCHOR rever
+                    self.delimiter_var() 
             else:
-                self.treatment_error('value', 'aux')    
+                self.treatment_error('Valor', 'aux')  
+        elif self.verify_first('delimiter'):
+            self.delimiter_var()
+        elif self.verify_first('vector'):
+            self.vector()
+            self.assignment_vector()
+            self.delimiter_var()
+        elif self.verify_first('matrix'):
+            self.matrix()
+            self.assignment_matrix()
+            self.delimiter_var()
         else:
             self.treatment_error('=', 'aux')
-
 
     def delimiter_var(self):
         if self.token.lexema == ',':
@@ -213,7 +218,7 @@ class Parser:
         else: 
             self.treatment_error('DEL', 'aux')#ANCHOR o erro busca os tokens do first de aux pq o de delimitador ficaria limitado
 
-    
+
     def start(self):
         '''
         Verifica o inicio do programa recebendo o bloco de start
@@ -635,10 +640,6 @@ class Parser:
                 self.assign()  
 
 
-# <Assign> ::= <PrefixGlobalLocal> Identifier '=' <Exp> ';' 
-#            | Identifier '=' <Exp> ';'
-#            | Identifier <Vector><Assignment_vector> ';' | Identifier <Matrix><Assignment_matrix> ';' | <Exp> ';' 
-
     def index (self):
         if self.verify_first('index'):
             self.add_token()
@@ -694,7 +695,8 @@ class Parser:
                 self.value_assigned_vector()
             else:
                 pass
-
+        else:
+            self.treatment_error('Valor','valueAssignedVector')
     
     def assignment_matrix(self):
         
@@ -741,11 +743,13 @@ class Parser:
                 self.add_token()
                 self.value_assigned_matrix()
             else:
-                pass
+               pass
+        else:
+            self.treatment_error('Valor','valueAssignedMatrix')
+           
 
     def assing(self):
-        if self.verify_first('prefixGlobalLocal'):#precisa do erro desse?
-            self.prefix_global_local()
+        if self.verify_first('prefixGlobalLocal'):
             if self.token.cod_token == 'IDE':
                 self.add_token()
                 if self.token.lexema == '=':
@@ -782,9 +786,8 @@ class Parser:
                 self.add_token()
             else:
                 self.treatment_error(';', 'assign')
-
-
-    ##falta ainda a parte do vetor
+        else :
+            self.treatment_error('Identificador ou Prefixo global ou local ou Expressão de valor','assign')
 
     def expression_value(self):   
         if self.token.lexema == '-':
