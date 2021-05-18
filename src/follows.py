@@ -22,10 +22,7 @@ class Follows:    #ANCHOR rever a parte de number
                        '┤'],
 
                        
-            'prefixGlobalLocal':['decLiteral',
-                                'octLiteral',
-                                'hexLiteral',
-                                'floatLiteral',
+            'prefixGlobalLocal':['NRO',
                                 '(',
                                 'IDE',
                                 'CAD',
@@ -137,10 +134,7 @@ class Follows:    #ANCHOR rever a parte de number
                       ',',
                       ';'],
 
-            'varDecl' : ['decLiteral',
-                        'octLiteral',
-                        'hexLiteral',
-                        'floatLiteral',
+            'varDecl' : ['NRO',
                         'global.',
                         'local.',
                         'start',
@@ -208,10 +202,7 @@ class Follows:    #ANCHOR rever a parte de number
 
             'valueAssignedMatrix': ['}'],
             
-            'while': ['decLiteral',
-                      'octLiteral',
-                      'hexLiteral',
-                      'floatLiteral',
+            'while': ['NRO',
                       'global.',
                       'local.',
                       '(',
@@ -228,10 +219,7 @@ class Follows:    #ANCHOR rever a parte de number
                       'return',
                       '-'],
 
-            'whileProcedure' : ['decLiteral',
-                                'octLiteral',
-                                'hexLiteral',
-                                'floatLiteral',
+            'whileProcedure' : ['NRO',
                                 'global.',
                                 'local.',
                                 '(',
@@ -267,10 +255,7 @@ class Follows:    #ANCHOR rever a parte de number
 
             'conditionalExpression':[')'],
 
-            'if': ['decLiteral',
-                    'octLiteral',
-                    'hexLiteral',
-                    'floatLiteral',
+            'if': ['NRO',
                     'global.',
                     'local.',
                     '(',
@@ -287,10 +272,7 @@ class Follows:    #ANCHOR rever a parte de number
                     'return',
                     '-'],
 
-            'then': ['decLiteral',
-                      'octLiteral',
-                      'hexLiteral',
-                      'floatLiteral',
+            'then': ['NRO',
                       'global.',
                       'local.',
                       '(',
@@ -307,10 +289,7 @@ class Follows:    #ANCHOR rever a parte de number
                       'return',
                       '-'],
 
-            'else': ['decLiteral',
-                      'octLiteral',
-                      'hexLiteral',
-                      'floatLiteral',
+            'else': ['NRO',
                       'global.',
                       'local.',
                       '(',
@@ -327,10 +306,7 @@ class Follows:    #ANCHOR rever a parte de number
                       'return',
                       '-'],
 
-            'ifProcedure': ['decLiteral',
-                            'octLiteral',
-                            'hexLiteral',
-                            'floatLiteral',
+            'ifProcedure': ['NRO',
                             'global.',
                             'local.',
                             '(',
@@ -346,10 +322,7 @@ class Follows:    #ANCHOR rever a parte de number
                             'print',
                             '-'],
 
-            'thenProcedure': ['decLiteral',
-                            'octLiteral',
-                            'hexLiteral',
-                            'floatLiteral',
+            'thenProcedure': ['NRO',
                             'global.',
                             'local.',
                             '(',
@@ -365,10 +338,7 @@ class Follows:    #ANCHOR rever a parte de number
                             'print',
                             '-'],
 
-            'elseProcedure': ['decLiteral',
-                            'octLiteral',
-                            'hexLiteral',
-                            'floatLiteral',
+            'elseProcedure': ['NRO',
                             'global.',
                             'local.',
                             '(',
@@ -384,10 +354,7 @@ class Follows:    #ANCHOR rever a parte de number
                             'print',
                             '-'],
 
-            'read': ['decLiteral',
-                      'octLiteral',
-                      'hexLiteral',
-                      'floatLiteral',
+            'read': ['NRO',
                       'global.',
                       'local.',
                       '(',
@@ -404,10 +371,7 @@ class Follows:    #ANCHOR rever a parte de number
                       'return',
                       '-'],
 
-            'print': ['decLiteral',
-                      'octLiteral',
-                      'hexLiteral',
-                      'floatLiteral',
+            'print': ['NRO',
                       'global.',
                       'local.',
                       '(',
@@ -426,10 +390,7 @@ class Follows:    #ANCHOR rever a parte de number
 
             'body': ['}'],
 
-            'bodyItem': ['decLiteral',
-                        'octLiteral',
-                        'hexLiteral',
-                        'floatLiteral',
+            'bodyItem': ['NRO',
                         'global.',
                         'local.',
                         '(',
@@ -446,10 +407,7 @@ class Follows:    #ANCHOR rever a parte de number
                         'return',
                         '-'],
 
-            'returnStetement':['decLiteral',
-                                'octLiteral',
-                                'hexLiteral',
-                                'floatLiteral',
+            'returnStetement':['NRO',
                                 'global.',
                                 'local.',
                                 '(',
@@ -468,10 +426,7 @@ class Follows:    #ANCHOR rever a parte de number
 
             'bodyProcedure':['}'], 
 
-            'bodyItemProcedure':['decLiteral',
-                                'octLiteral',
-                                'hexLiteral',
-                                'floatLiteral',
+            'bodyItemProcedure':['NRO',
                                 'global.',
                                 'local.',
                                 '(',
@@ -487,10 +442,7 @@ class Follows:    #ANCHOR rever a parte de number
                                 'print',
                                 '-'], 
 
-            'conditionalOperator': ['decLiteral',
-                                    'octLiteral',
-                                    'hexLiteral',
-                                    'floatLiteral',
+            'conditionalOperator': ['NRO',
                                     'global.',
                                     'local.',
                                     '(',
@@ -521,10 +473,7 @@ class Follows:    #ANCHOR rever a parte de number
                            '||'],     
 
 
-            'assign':['decLiteral',
-                    'octLiteral',
-                    'hexLiteral',
-                    'floatLiteral',
+            'assign':['NRO',
                     'global.',
                     'local.',
                     '(',

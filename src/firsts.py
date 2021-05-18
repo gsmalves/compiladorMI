@@ -35,10 +35,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                      'typedef'
                      'IDE'],
 
-            'formalParameterList': ['decLiteral',
-                                    'octLiteral',
-                                    'hexLiteral',
-                                    'floatLiteral',
+            'formalParameterList': ['NRO',
                                     'global.',
                                     'local.',
                                     '(',
@@ -99,10 +96,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                     'boolean',
                     'string'],
 
-            'value': ['decLiteral',
-                     'octLiteral',
-                     'hexLiteral',
-                     'floatLiteral',
+            'value': ['NRO',
                      'true',
                      'false',
                      'NRO'],
@@ -124,8 +118,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                    '['],
              
 
-            'index': ['decLiteral',
-                     'octLiteral',
+            'index': ['NRO',
                      'IDE'],
 
             'vector': ['['],
@@ -137,10 +130,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
 
             'assignmentVectorAux': ['='],
 
-            'valueAssignedVector': ['decLiteral',
-                                    'octLiteral',
-                                    'hexLiteral',
-                                    'floatLiteral',
+            'valueAssignedVector': ['NRO',
                                     'true',
                                     'false',
                                     'CAD'],
@@ -151,10 +141,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
 
             'dimensionMatrix' : [ ','],
 
-            'valueAssignedMatrix': ['decLiteral',
-                                    'octLiteral',
-                                    'hexLiteral',
-                                    'floatLiteral',
+            'valueAssignedMatrix': ['NRO',
                                     'true',
                                     'false',
                                     'CAD'],
@@ -193,10 +180,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                      'print',
                      'read'],
 
-            'bodyItem': ['decLiteral',
-                     'octLiteral',
-                     'hexLiteral',
-                     'floatLiteral',
+            'bodyItem': ['NRO',
                      'true',
                      'false',
                      'global.',
@@ -213,10 +197,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
 
             'returnStetement': ['return'],
 
-            'bodyProcedure':['decLiteral',
-                            'octLiteral',
-                            'hexLiteral',
-                            'floatLiteral',
+            'bodyProcedure':['NRO',
                             'true',
                             'false',
                             'global.',
@@ -231,10 +212,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                             'CAD',
                             'if'], 
 
-            'bodyItemProcedure':['decLiteral',
-                            'octLiteral',
-                            'hexLiteral',
-                            'floatLiteral',
+            'bodyItemProcedure':['NRO',
                             'true',
                             'false',
                             'global.',
@@ -265,10 +243,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                       'CAD',
                                       'IDE'],     
 
-            'logicalExpression':    ['decLiteral',
-                                      'octLiteral',
-                                      'hexLiteral',
-                                      'floatLiteral',
+            'logicalExpression':    ['NRO',
                                       'true',
                                       'false',
                                       'global.',
@@ -277,10 +252,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                                       'CAD',
                                       'IDE'],  
 
-            'relacionalExpression':  ['decLiteral',
-                                      'octLiteral',
-                                      'hexLiteral',
-                                      'floatLiteral',
+            'relacionalExpression':  ['NRO',
                                       'true',
                                       'false',
                                       'global.',
@@ -296,10 +268,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                           '==',
                           '!='],
 
-            'assign':['decLiteral',
-                    'octLiteral',
-                    'hexLiteral',
-                    'floatLiteral',
+            'assign':['NRO',
                     'true',
                     'false',
                     '('
@@ -307,10 +276,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                     'local.',
                     '-'],                                                
 
-            'exp':['decLiteral',
-                    'octLiteral',
-                    'hexLiteral',
-                    'floatLiteral',
+            'exp':['NRO',
                     'true',
                     '('
                     'false',
@@ -322,10 +288,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                       '-'],
         
             
-            'term':['decLiteral',
-                    'octLiteral',
-                    'hexLiteral',
-                    'floatLiteral',
+            'term':['NRO',
                     '(',
                     'IDE',
                     'CAD',
@@ -333,10 +296,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                     'false',
                     '-'],     
 
-            'expressionValue':['decLiteral',
-                    'octLiteral',
-                    'hexLiteral',
-                    'floatLiteral',
+            'expressionValue':['NRO',
                     '(',
                     'IDE',
                     'CAD',
