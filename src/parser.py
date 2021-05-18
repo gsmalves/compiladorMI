@@ -622,10 +622,6 @@ class Parser:
                 self.assign()  
 
 
-# <Assign> ::= <PrefixGlobalLocal> Identifier '=' <Exp> ';' 
-#            | Identifier '=' <Exp> ';'
-#            | Identifier <Vector><Assignment_vector> ';' | Identifier <Matrix><Assignment_matrix> ';' | <Exp> ';' 
-
     def index (self):
         if self.verify_first('index'):
             self.add_token()
@@ -682,12 +678,6 @@ class Parser:
             else:
                 pass
 
-
-# <Assignment_matrix> ::= <Assignment_matrix_aux1> | <Assignment_matrix_aux2> |
-# <Assignment_matrix_aux1> ::=  <Assignment_vector_aux1>      
-# <assignment_matrix_aux2> ::=  '=' '{' '{' <Value_assigned_matrix> '}' <Dimensao_matrix2>
-# <Dimensao_matrix2> ::= ',' '{'<Value_assigned_matrix> '}' '}'
-# <Value_assigned_matrix> ::= <Value> ',' <Value_assigned_matrix> | <Value> 
     
     def assignment_matrix(self):
         
@@ -735,6 +725,10 @@ class Parser:
                 self.value_assigned_matrix()
             else:
                 pass
+
+    # <Assign> ::= <PrefixGlobalLocal> Identifier '=' <Exp> ';' 
+#            | Identifier '=' <Exp> ';'
+#            | Identifier <Vector><Assignment_vector> ';' | Identifier <Matrix><Assignment_matrix> ';' | <Exp> ';' 
 
     def assing(self):
         if self.verify_first('prefixGlobalLocal'):#precisa do erro desse?
