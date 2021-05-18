@@ -476,6 +476,8 @@ class Parser:
                     self.treatment_error(')', 'while')    
             else:
                 self.treatment_error('(', 'while')    
+    
+
 
     def expression_value_logical(self):
         if self.verify_first('expressionValueLogical'):
@@ -497,8 +499,8 @@ class Parser:
             self.expression_value_logical()
             if self.verify_first('logical'):
                 self.logical()
-        elif self:#ANCHOR implementar logical e logical deined        
-            self.logical_deined()
+        elif self.token.lexema == '!':#ANCHOR implementar logical e logical deined        
+            self.logical_denied()
         else:
             self.treatment_error('Expressão logica', 'logicalExpression')#ANCHOR Rever o follow
         #<Logical Expression> ::= <Expression Value Logical> <Logical> | 
@@ -507,14 +509,25 @@ class Parser:
     def logical(self):
         if self.verify_first('conditionalOperator'):
             self.add_token()
-            if self.verify_first('expressionValueLogical') or self.verify_first('logicalDeined'): #ANCHOR condição de receber expression value logical ou logical deined
+            if self.verify_first('expressionValueLogical') or self.token.lexema == '!':
                 self.expression_value_logical()
-                self.logical_deined()
+                self.logical_denied()
             else:  
                 self.treatment_error('Expressão de valor', 'logical')
         else: 
             self.treatment_error('Operador Condicional', 'logical')                  
 
+    def logical_denied(self):
+        if self.token.lexema == '!':
+            self.add_token()
+            if self.boolean_literal or self.identifier():
+                self.add_token()
+            elif self.verify_first('exp') or self.verify_first('relational'):
+                self.relational_expression() 
+                    # <Logical Denied> ::= '!' Identifier 
+        #           | '!' <Boolean Literal>
+        #           | '!' <Logical Expression>
+                #   | '!' <Relational Expression>
     def relational_expression(self):
         self.exp()
         if self.verify_first('relational'):
@@ -801,7 +814,7 @@ class Parser:
             self.term()
         elif self.token.lexema == '/':
             self.term()    
-
+    
  
     def exp(self):#ANCHOR revisar e adicionar tratamento de erro
         if self.token.lexema == 'global' or self.token.lexema == 'local':
