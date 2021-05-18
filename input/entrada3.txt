@@ -1,7 +1,45 @@
-var{
-  int meme = 3;
-  boolean love = false;
+const{
+    real a = 2, b = 4, c = 3;
+    boolean teste = false;
+    int x = 4;
 }
+var {
+    real a, b, c = 3;
+    real vetor[5];
+    real matriz[3][3];
+    boolean teste = false;
+    int x;
+}
+
+struct Carro{
+    string placa;
+    string modelo;
+    int qtd_portas, qtd_valvulas;
+    real velocidade_max = 125.0;
+}
+
+procedure acelerar(real velocidade){
+    var{
+        real a, b, c = 3;
+        boolean teste = false;
+        int  x;
+        struct Carro carro;
+    }
+   
+    b = 18;
+    j = "hello";
+    if(b > c && c > a || a > b)then{
+        carro.velocidade = 200;
+        if(carro.placa == "jjj")then{
+            carro.modelo = "xesquedele";
+        }else{
+            ligado(c, 5+2, "bom dia", true);
+        }
+    }
+    acelerar(x);
+}
+
+
 start{
   print("batata");
   if(true){

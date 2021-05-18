@@ -3,8 +3,8 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
         self.firsts = {
 
                         
-            'prefixGlobalLocal':  ['global.',
-                                    'local.'],
+            'prefixGlobalLocal':  ['global',
+                                    'local'],
 
             'program': ['start',
                         'IDE',
@@ -20,7 +20,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
 
             'boolean': ['true',
                         'false'],
-                        
+
             'start': ['start'],
 
             'decls': ['function',
@@ -96,7 +96,7 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                     'boolean',
                     'string'],
 
-            'value': ['NRO',
+            'value': ['CAD',
                      'true',
                      'false',
                      'NRO'],
@@ -207,9 +207,9 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                             'while',
                             'read',
                             'print',
-                            'return',
                             '-',
                             'CAD',
+                            'var',
                             'if'], 
 
             'bodyItemProcedure':['NRO',

@@ -171,6 +171,10 @@ class Follows:    #ANCHOR rever a parte de number
                     'function',
                     'struct',
                     'typedef',
+                     'CAD',
+                     'true',
+                     'false',
+                     'NRO'
                      '}'],               
 
             'index' : [']'],
