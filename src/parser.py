@@ -682,12 +682,6 @@ class Parser:
             else:
                 pass
 
-
-# <Assignment_matrix> ::= <Assignment_matrix_aux1> | <Assignment_matrix_aux2> |
-# <Assignment_matrix_aux1> ::=  <Assignment_vector_aux1>      
-# <assignment_matrix_aux2> ::=  '=' '{' '{' <Value_assigned_matrix> '}' <Dimensao_matrix2>
-# <Dimensao_matrix2> ::= ',' '{'<Value_assigned_matrix> '}' '}'
-# <Value_assigned_matrix> ::= <Value> ',' <Value_assigned_matrix> | <Value> 
     
     def assignment_matrix(self):
         
@@ -757,13 +751,25 @@ class Parser:
             if self.token.lexema == '=':
                 self.add_token()
                 self.exp()
+            elif self.verify_first('vector'):
+                self.vector()
+                self.assignment_vector()
+            elif self.verify_first('matrix'):
+                self.matrix()
+                self.assignment_matrix()        
                 if self.token.lexema == ';':
                     self.add_token()
                 else:
                     self.treatment_error(';', 'assign')
             else:
-                self.treatment_error('=','assign')
-       
+                self.treatment_error('= ou [','assign')
+        if self.verify_first('exp') or self.verify_first('expressionValue'):
+            self.exp()
+            if self.token.lexema == ';':
+                self.add_token()
+            else:
+                self.treatment_error(';', 'assign')
+
 
     ##falta ainda a parte do vetor
 
@@ -797,7 +803,7 @@ class Parser:
             self.term()    
 
  
-    def exp(self):
+    def exp(self):#ANCHOR revisar e adicionar tratamento de erro
         if self.token.lexema == 'global' or self.token.lexema == 'local':
             self.prefix_global_local()
         self.term()
