@@ -615,12 +615,126 @@ class Parser:
     def return_statement(self):
         if self.token.lexema == 'return':
             self.add_token()
+
             if self.token.lexema == ';':
                 self.add_token()
             else:
                 self.assign()  
+
+
+# <Assign> ::= <PrefixGlobalLocal> Identifier '=' <Exp> ';' 
+#            | Identifier '=' <Exp> ';'
+#            | Identifier <Vector><Assignment_vector> ';' | Identifier <Matrix><Assignment_matrix> ';' | <Exp> ';' 
+
+    def index (self):
+        if self.verify_first('index'):
+            self.add_token()
         else:
-            self.treatment_error('return', 'returnStetement')
+            self.treatment_error('Número ou identificador', 'index') 
+    
+    def vector(self):
+        if self.token.lexema == '[':
+            self.add_token()
+            self.index()
+            if self.token.lexema == ']':
+                self.add_token()
+            else:
+                self.treatment_error(']','vector')
+        else:
+            self.treatment_error('[','vector')
+
+    def matrix(self):
+        if self.token.lexema == '[':
+            self.add_token()
+            self.index()
+            if self.token.lexema == ']':
+                self.add_token()
+                self.vector()
+            else:
+                self.treatment_error(']','vector')
+        else:
+            self.treatment_error('[','vector')
+
+    def assignment_vector(self):
+        if self.token.lexema == '=':
+            self.add_token()
+            if self.verify_first('value'):
+                self.add_token()
+            elif self.token.lexema == '{':
+                self.add_token()
+                self.value_assigned_vector()
+                if self.token.lexema == '}':
+                    self.add_token()
+                else:
+                    self.treatment_error('}','assignmentVector')
+            else:
+                self.treatment_error('Valor ou {','assignmentVector')     
+
+
+
+
+    def value_assigned_vector(self):
+        if self.verify_first('value'):
+            self.add_token()
+            if self.toke.lexema == ',':
+                self.add_token()
+                self.value_assigned_vector()
+            else:
+                pass
+
+
+# <Assignment_matrix> ::= <Assignment_matrix_aux1> | <Assignment_matrix_aux2> |
+# <Assignment_matrix_aux1> ::=  <Assignment_vector_aux1>      
+# <assignment_matrix_aux2> ::=  '=' '{' '{' <Value_assigned_matrix> '}' <Dimensao_matrix2>
+# <Dimensao_matrix2> ::= ',' '{'<Value_assigned_matrix> '}' '}'
+# <Value_assigned_matrix> ::= <Value> ',' <Value_assigned_matrix> | <Value> 
+    
+    def assignment_matrix(self):
+        
+        self.assignment_vector()#ANCHOR VERIFICAR SE PRECISA DE OUTRO IGUAL AQUI
+        if self.token.lexema == '{':
+            self.add_token()
+            if self.token.lexema == '{':
+                self.add_token()
+                self.value_assigned_matrix()
+                if self.token.lexema == '}':
+                    self.add_token()
+                    self.dimensao_matrix()
+                else:
+                    self.treatment_error('}','assignmentMatrix')
+            else:
+                self.treatment_error('Valor ou {','assignmentMatrix')     
+        else:
+            self.treatment_error('Valor ou {','assignmentMatrix')  
+
+    def dimensao_matrix(self):
+        if self.token.lexema == ',':
+            self.add_token()
+            if self.token.lexema == '{':
+                self.add_token()
+                self.value_assigned_matrix()
+                if self.token.lexema == '}':
+                    self.add_token()
+                    if self.token.lexema == '}':
+                      self.add_token()
+                    else:
+                        self.treatment_error('}','dimensionMatrix')
+                else:
+                    self.treatment_error('}','dimensionMatrix')
+            else:
+                self.treatment_error('{','dimensionMatrix')
+        else:
+            self.treatment_error(',','dimensionMatrix')
+    
+    
+    def value_assigned_matrix(self):
+        if self.verify_first('value'):
+            self.add_token()
+            if self.toke.lexema == ',':
+                self.add_token()
+                self.value_assigned_matrix()
+            else:
+                pass
 
     def assing(self):
         if self.verify_first('prefixGlobalLocal'):#precisa do erro desse?
@@ -649,8 +763,7 @@ class Parser:
                     self.treatment_error(';', 'assign')
             else:
                 self.treatment_error('=','assign')
-        else:
-            self.treatment_error('Identificador','assign')
+       
 
     ##falta ainda a parte do vetor
 
