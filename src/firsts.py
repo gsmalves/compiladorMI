@@ -18,7 +18,9 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
             'globalDecl': ['const'
                             'var',],
 
-            
+            'boolean': ['true',
+                        'false'],
+                        
             'start': ['start'],
 
             'decls': ['function',

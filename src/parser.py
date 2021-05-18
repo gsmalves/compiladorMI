@@ -751,13 +751,25 @@ class Parser:
             if self.token.lexema == '=':
                 self.add_token()
                 self.exp()
+            elif self.verify_first('vector'):
+                self.vector()
+                self.assignment_vector()
+            elif self.verify_first('matrix'):
+                self.matrix()
+                self.assignment_matrix()        
                 if self.token.lexema == ';':
                     self.add_token()
                 else:
                     self.treatment_error(';', 'assign')
             else:
-                self.treatment_error('=','assign')
-       
+                self.treatment_error('= ou [','assign')
+        if self.verify_first('exp') or self.verify_first('expressionValue'):
+            self.exp()
+            if self.token.lexema == ';':
+                self.add_token()
+            else:
+                self.treatment_error(';', 'assign')
+
 
     ##falta ainda a parte do vetor
 
@@ -791,7 +803,7 @@ class Parser:
             self.term()    
 
  
-    def exp(self):
+    def exp(self):#ANCHOR revisar e adicionar tratamento de erro
         if self.token.lexema == 'global' or self.token.lexema == 'local':
             self.prefix_global_local()
         self.term()
