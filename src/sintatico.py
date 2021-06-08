@@ -230,7 +230,7 @@ class Parser:
             self.treatment_error('DEL', 'aux')
 
 
-       def start(self):
+    def start(self):
         '''
         Verifica o inicio do programa recebendo o bloco de start
         '''
@@ -255,6 +255,7 @@ class Parser:
                 self.treatment_error("(", "varDecl")       
         else:
             self.treatment_error('start', 'varDecl') 
+
     def decls(self):
         '''
         Gerencia a chamada das declarações
