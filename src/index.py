@@ -13,7 +13,7 @@ import os
 from os import listdir
 from os import walk
 from token_lex import Token
-from parser import Parser
+from sintatico import Parser
 import re
 
 #local imports 

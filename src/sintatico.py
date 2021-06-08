@@ -230,24 +230,31 @@ class Parser:
             self.treatment_error('DEL', 'aux')
 
 
-    def start(self):
+       def start(self):
         '''
         Verifica o inicio do programa recebendo o bloco de start
         '''
         if self.token.lexema == 'start':
             self.add_token()
-            if self.token.lexema == '{':
+            if self.token.lexema == "(":         
                 self.add_token()
-                self.body()
-                if self.token.lexema == '}':
+                if self.token.lexema == ")":
                     self.add_token()
+                    if self.token.lexema == '{':
+                        self.add_token()
+                        self.body()
+                        if self.token.lexema == '}':
+                            self.add_token()
+                        else:
+                            self.treatment_error('}', 'varDecl') 
+                    else:
+                        self.treatment_error('{', 'varDecl')
                 else:
-                    self.treatment_error('}', 'varDecl') 
+                    self.treatment_error(")", "varDecl")         
             else:
-                self.treatment_error('{', 'varDecl') 
+                self.treatment_error("(", "varDecl")       
         else:
             self.treatment_error('start', 'varDecl') 
-
     def decls(self):
         '''
         Gerencia a chamada das declarações
