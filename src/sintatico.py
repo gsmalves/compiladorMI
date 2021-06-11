@@ -7,6 +7,45 @@ from token_lex import Token
 from follows import Follows
 from firsts import Firsts
 
+symbol = []
+isGlobal = False
+isUsed = False
+
+def set_isGlobal(value):
+    global isGlobal
+    isGlobal = value
+
+def get_isGlobal():
+    return isGlobal
+
+def add_symbol(line, token, lexeme, type, category, scope, used, globals):
+    if not exists_symbol(line, token, lexeme):
+        escopo(globals, line, lexeme, type, category)
+        symbol.append({'Line': line,
+                        'Token': token,
+                        'Lexeme': lexeme,
+                        'Type': type,
+                        'Category': category,
+                        'Scope': scope,
+                        'Used': used,
+                        'Global': globals
+                        })
+
+def escopo(globals, line, lexeme, type, category):
+    for element in symbol:
+        if element['Global'] == str(globals) and element['Lexeme'] == lexeme:
+            print('ERRO', globals, line, lexeme, type, category)
+
+def exists_symbol(line, token, lexeme):
+    for element in symbol:
+        if element['Lexeme'] == lexeme:
+            print(line, 'ERRO SEMÂNTICO:', lexeme)
+            return True
+    return False
+
+
+
+
 class Parser:
     def __init__(self, listatokens: list):
         self.listatokens = listatokens
@@ -80,6 +119,13 @@ class Parser:
             print('O Arquivo possui {} erros'.format(self.error))
         else:
             print('Arquivo analisado com sucesso')
+            print('{:^15}'.format('Linha'), '{:^15}'.format('Token'), '{:^15}'.format('Lexema'), '{:^15}'.format('Tipo'),
+                '{:^15}'.format('Categoria'), '{:^15}'.format('Escopo'), '{:^15}'.format('Usado'),
+                '{:^15}'.format('Global'), )
+            for element in symbol:
+                print('{:^15}'.format(element['Line']), '{:^15}'.format(element['Token']), '{:^15}'.format(element['Lexeme']),
+                    '{:^15}'.format(element['Type']), '{:^15}'.format(element['Category']), '{:^15}'.format(element['Scope']),
+                    '{:^15}'.format(str(element['Used'])), '{:^15}'.format(str(element['Global'])))    
         return self.tabelasimbolos
 
     def global_decl(self):
@@ -189,7 +235,12 @@ class Parser:
 
     def variable_list(self):
         if self.verify_first('type'):
+            self.tipo = self.token.lexema;
             self.type()
+            "----------------------------------------------------------------------------------------------------------"
+            add_symbol(line=self.token.linha, token=self.token.cod_token, lexeme=self.token.lexema, type=self.tipo,
+                       category='var', scope='varDecl', used=False, globals=get_isGlobal())
+            "----------------------------------------------------------------------------------------------------------"
             self.variable()
             self.variable_list()
         
@@ -430,7 +481,7 @@ class Parser:
             if self.token.cod_token == 'IDE':
                 self.add_token()
             else:
-                self.treatment_error('type')  
+                self.treatment_error('IDE','type')  
         else:
             self.add_token()        
 
@@ -968,7 +1019,7 @@ class Parser:
             self.add_token()
             self.exp()
 
-
+    
 
 
     def prefix_global_local(self): 
