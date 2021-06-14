@@ -11,6 +11,59 @@ symbol = []
 isGlobal = False
 isUsed = False
 
+isUsed = False
+Scope = 'Global'
+TypeFunc = ''
+TypeVar = ''
+TypeConst = ''
+
+
+def set_TypeConst(value):
+    global TypeConst
+    TypeConst = value
+
+
+def get_TypeConst():
+    return TypeConst
+
+
+def set_TypeVar(value):
+    global TypeVar
+    TypeVar = value
+
+
+def get_TypeVar():
+    return TypeVar
+
+
+def set_TypeFunc(value):
+    global TypeFunc
+    TypeFunc = value
+
+
+def get_TypeFunc():
+    return TypeFunc
+
+
+def set_Scope(value):
+    global Scope
+    Scope = value
+
+
+def get_Scope():
+    return Scope
+
+
+def set_isUsed(value):
+    global isUsed
+    isUsed = value
+
+
+def get_isUsed():
+    return isUsed
+
+
+
 def set_isGlobal(value):
     global isGlobal
     isGlobal = value
@@ -18,30 +71,42 @@ def set_isGlobal(value):
 def get_isGlobal():
     return isGlobal
 
-def add_symbol(line, token, lexeme, type, category, scope, used, globals):
-    if not exists_symbol(line, token, lexeme):
-        escopo(globals, line, lexeme, type, category)
-        symbol.append({'Line': line,
-                        'Token': token,
-                        'Lexeme': lexeme,
-                        'Type': type,
-                        'Category': category,
-                        'Scope': scope,
-                        'Used': used,
-                        'Global': globals
-                        })
+def add_symbol(type_simb, category, scope, used):
+    status = 'OK'
+    if exists_symbol(lexeme, scope):
+        status = 'ERROR'
 
-def escopo(globals, line, lexeme, type, category):
-    for element in symbol:
-        if element['Global'] == str(globals) and element['Lexeme'] == lexeme:
-            print('ERRO', globals, line, lexeme, type, category)
+def add_symbol(line, token, lexeme, type, category, scope, used):
+    status = 'OK'
+    if exists_symbol(lexeme, scope):
+        status = 'ERROR'
 
-def exists_symbol(line, token, lexeme):
+    symbol.append({'Line': line,
+                   'Token': token,
+                   'Lexeme': lexeme,
+                   'Type': type,
+                   'Category': category,
+                   'Scope': scope,
+                   'Used': used,
+                   'Status': status,
+                   })
+
+
+
+def escopo(line, lexeme, type, category):
     for element in symbol:
         if element['Lexeme'] == lexeme:
-            print(line, 'ERRO SEMÂNTICO:', lexeme)
+            print('ERRO', line, lexeme, type, category)
+
+
+def exists_symbol(lexeme, scope):
+    for element in symbol:
+        if element['Lexeme'] == lexeme and element['Scope'] == scope:
+            "print(line, 'ERRO SEMÂNTICO:', lexeme)"
             return True
     return False
+
+
 
 
 
@@ -119,13 +184,19 @@ class Parser:
             print('O Arquivo possui {} erros'.format(self.error))
         else:
             print('Arquivo analisado com sucesso')
+            
+            print(
+                "________________________________________________________________________________________________________________")
             print('{:^15}'.format('Linha'), '{:^15}'.format('Token'), '{:^15}'.format('Lexema'), '{:^15}'.format('Tipo'),
-                '{:^15}'.format('Categoria'), '{:^15}'.format('Escopo'), '{:^15}'.format('Usado'),
-                '{:^15}'.format('Global'), )
+                '{:^15}'.format('Categoria'), '{:^15}'.format('Escopo'), '{:^15}'.format('Usado'), '{:^15}'.format('Status'),)
+            print(
+                "________________________________________________________________________________________________________________")
             for element in symbol:
-                print('{:^15}'.format(element['Line']), '{:^15}'.format(element['Token']), '{:^15}'.format(element['Lexeme']),
-                    '{:^15}'.format(element['Type']), '{:^15}'.format(element['Category']), '{:^15}'.format(element['Scope']),
-                    '{:^15}'.format(str(element['Used'])), '{:^15}'.format(str(element['Global'])))    
+                print('{:^15}'.format(element['Line']), '{:^15}'.format(element['Token']),
+                    '{:^15}'.format(element['Lexeme']),
+                    '{:^15}'.format(element['Type']), '{:^15}'.format(element['Category']),
+                    '{:^15}'.format(element['Scope']),
+                    '{:^15}'.format(str(element['Used'])), '{:^15}'.format(str(element['Status'])),)
         return self.tabelasimbolos
 
     def global_decl(self):
@@ -181,7 +252,11 @@ class Parser:
         Verifica a declaração de novas constantes
         '''
         if self.verify_first('type'):
+            set_TypeConst(self.token.lexema)
             self.type()
+            add_symbol(line=self.token.linha, token=self.token.cod_token, lexeme=self.token.lexema, type=get_TypeVar(),
+                                category='var', scope=get_Scope(), used=False)
+
             self.const()
             self.const_list()
         
@@ -235,12 +310,10 @@ class Parser:
 
     def variable_list(self):
         if self.verify_first('type'):
-            self.tipo = self.token.lexema;
+            set_TypeVar(self.token.lexema)
             self.type()
-            "----------------------------------------------------------------------------------------------------------"
-            add_symbol(line=self.token.linha, token=self.token.cod_token, lexeme=self.token.lexema, type=self.tipo,
-                       category='var', scope='varDecl', used=False, globals=get_isGlobal())
-            "----------------------------------------------------------------------------------------------------------"
+            add_symbol(line=self.token.linha, token=self.token.cod_token, lexeme=self.token.lexema, type=get_TypeVar(),
+                       category='var', scope=get_Scope(), used=False)
             self.variable()
             self.variable_list()
         
@@ -356,7 +429,8 @@ class Parser:
         if self.token.lexema == 'procedure':
             self.add_token() 
             if self.token.cod_token == 'IDE':
-                self.add_token()            
+                set_Scope(self.token.lexema)           
+                self.add_token() 
                 if self.token.lexema == '(':
                     self.add_token()
                     self.params()
@@ -438,6 +512,7 @@ class Parser:
             if self.verify_first('type'):
                 self.type()
                 if self.token.cod_token == 'IDE':
+                    set_Scope(self.token.lexema)           
                     self.add_token()
                     if self.token.lexema == '(':
                         self.add_token()
