@@ -8,6 +8,7 @@ from follows import Follows
 from firsts import Firsts
 
 symbol = []
+symbolFunction = []
 isGlobal = False
 isUsed = False
 
@@ -16,7 +17,7 @@ Scope = 'Global'
 TypeFunc = ''
 TypeVar = ''
 TypeConst = ''
-
+Param = ''
 
 def set_TypeConst(value):
     global TypeConst
@@ -45,6 +46,13 @@ def get_TypeFunc():
     return TypeFunc
 
 
+def get_param():
+    return Param
+
+def set_param(value):
+    global Param
+    Param = value
+
 def set_Scope(value):
     global Scope
     Scope = value
@@ -71,10 +79,22 @@ def set_isGlobal(value):
 def get_isGlobal():
     return isGlobal
 
-def add_symbol(type_simb, category, scope, used):
-    status = 'OK'
-    if exists_symbol(lexeme, scope):
-        status = 'ERROR'
+# def add_symbol_function(line,token ,lexeme,type,param1,scope,used ):
+#     status = 'OK'
+#     if exists_symbol(lexeme, scope):
+#         status = 'ERROR'
+
+#     symbol.append({'Line': line,
+#                    'Token': token,
+#                    'Lexeme': lexeme,
+#                    'Type': type,
+#                    'Param1': param1,
+                  
+#                    'Scope': scope,
+#                    'Status': status,
+#                    })
+
+
 
 def add_symbol(line, token, lexeme, type, category, scope, used):
     status = 'OK'
@@ -90,7 +110,6 @@ def add_symbol(line, token, lexeme, type, category, scope, used):
                    'Used': used,
                    'Status': status,
                    })
-
 
 
 def escopo(line, lexeme, type, category):
@@ -185,18 +204,31 @@ class Parser:
         else:
             print('Arquivo analisado com sucesso')
             
-            print(
-                "________________________________________________________________________________________________________________")
-            print('{:^15}'.format('Linha'), '{:^15}'.format('Token'), '{:^15}'.format('Lexema'), '{:^15}'.format('Tipo'),
-                '{:^15}'.format('Categoria'), '{:^15}'.format('Escopo'), '{:^15}'.format('Usado'), '{:^15}'.format('Status'),)
-            print(
-                "________________________________________________________________________________________________________________")
-            for element in symbol:
-                print('{:^15}'.format(element['Line']), '{:^15}'.format(element['Token']),
-                    '{:^15}'.format(element['Lexeme']),
-                    '{:^15}'.format(element['Type']), '{:^15}'.format(element['Category']),
-                    '{:^15}'.format(element['Scope']),
-                    '{:^15}'.format(str(element['Used'])), '{:^15}'.format(str(element['Status'])),)
+        print(
+            "________________________________________________________________________________________________________________")
+        print('{:^15}'.format('Linha'), '{:^15}'.format('Token'), '{:^15}'.format('Lexema'), '{:^15}'.format('Tipo'),
+              '{:^15}'.format('Categoria'), '{:^15}'.format('Escopo'), '{:^15}'.format('Usado'), '{:^15}'.format('Status'),)
+        print(
+            "________________________________________________________________________________________________________________")
+        for element in symbol:
+            print('{:^15}'.format(element['Line']), '{:^15}'.format(element['Token']),
+                  '{:^15}'.format(element['Lexeme']),
+                  '{:^15}'.format(element['Type']), '{:^15}'.format(element['Category']),
+                  '{:^15}'.format(element['Scope']),
+                  '{:^15}'.format(str(element['Used'])), '{:^15}'.format(str(element['Status'])),)
+
+
+            #print(
+            #     "________________________________________________________________________________________________________________")
+            # print('{:^15}'.format('Line'), '{:^15}'.format('Tokeni'), '{:^15}'.format('Lexemai'), '{:^15}'.format('Retorno'),
+            #       '{:^15}'.format('Parametro1'), '{:^15}'.format('Escopo'), '{:^15}'.format('Status'),)
+            # print(
+            #     "________________________________________________________________________________________________________________")
+            # for element in symbolFunction:
+            #     print('{:^15}'.format(element['Line']), '{:^15}'.format(element['Token']),
+            #           '{:^15}'.format(element['Lexeme']),'{:^15}'.format(element['Type']),
+            #           '{:^15}'.format(element['Param1']),
+            #           '{:^15}'.format(str(element['Scope'])), '{:^15}'.format(str(element['Status'])),)
         return self.tabelasimbolos
 
     def global_decl(self):
@@ -220,7 +252,7 @@ class Parser:
             self.my_if()
             self.read()
             self.my_print()
-            self.assing()
+            self.assign()
             self.return_statement()
             if self.verify_first('body'):
                 self.body()
@@ -254,8 +286,8 @@ class Parser:
         if self.verify_first('type'):
             set_TypeConst(self.token.lexema)
             self.type()
-            add_symbol(line=self.token.linha, token=self.token.cod_token, lexeme=self.token.lexema, type=get_TypeVar(),
-                                category='var', scope=get_Scope(), used=False)
+            add_symbol(line=self.token.linha, token=self.token.cod_token, lexeme=self.token.lexema, type=get_TypeConst(),
+                                category='const', scope=get_Scope(), used=False)
 
             self.const()
             self.const_list()
@@ -418,7 +450,7 @@ class Parser:
             self.var_decl()
             self.if_proc()       
             self.while_proc()
-            self.assing()
+            self.assign()
             self.my_print()
             self.read()
             if self.verify_first('bodyProcedure'):
@@ -510,13 +542,17 @@ class Parser:
         if self.token.lexema == 'function':
             self.add_token()
             if self.verify_first('type'):
+                set_TypeFunc(self.token.lexema)
                 self.type()
                 if self.token.cod_token == 'IDE':
                     set_Scope(self.token.lexema)           
                     self.add_token()
                     if self.token.lexema == '(':
                         self.add_token()
+                        set_param(self.token.lexema)
                         self.params()
+                        # add_symbol_function(line=self.token.linha, token=self.token.cod_token, lexeme=self.token.lexema, type=get_TypeFunc(),
+                        #             param1=get_param(), scope=get_Scope(), used=False)
                         if self.token.lexema == ')':
                             self.add_token()
                             if self.token.lexema == '{':
@@ -554,6 +590,7 @@ class Parser:
         if self.token.lexema == 'struct':
             self.add_token()
             if self.token.cod_token == 'IDE':
+                set_TypeVar(self.token.lexema)
                 self.add_token()
             else:
                 self.treatment_error('IDE','type')  
@@ -587,6 +624,7 @@ class Parser:
         if self.token.lexema == 'struct':
             self.add_token()
             if self.token.cod_token == 'IDE':
+                set_Scope(self.token.lexema)
                 self.add_token()
                 self.extends()
                 if self.token.lexema == '{':
@@ -884,7 +922,6 @@ class Parser:
     def return_statement(self):
         if self.token.lexema == 'return':
             self.add_token()
-
             if self.token.lexema == ';':
                 self.add_token()
             else:
@@ -998,7 +1035,7 @@ class Parser:
             self.treatment_error('Valor','valueAssignedMatrix')
            
 
-    def assing(self):
+    def assign(self):
         if self.verify_first('prefixGlobalLocal'):
             self.prefix_global_local()
             if self.token.lexema == '=':
@@ -1006,7 +1043,7 @@ class Parser:
                 self.exp()
                 if self.token.lexema == ';':
                     self.add_token()
-                    self.assing()
+                    self.assign()
                 else:
                     self.treatment_error(';', 'assign')
             else:
@@ -1046,7 +1083,7 @@ class Parser:
                             self.treatment_error(';', 'assign')
                     else:
                         self.treatment_error('= ou [','assign')
-        elif self.verify_first('exp') or self.verify_first('expressionValue'):
+        elif self.verify_first('exp') or self.verify_first('expressionValue') or self.token.cod_token == 'IDE':
             self.exp()
             if self.token.lexema == ';':
                 self.add_token()

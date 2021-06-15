@@ -301,12 +301,12 @@ class Firsts: #ANCHOR verificar vazio nas produções, se precisa ou não!
                     '-'],     
 
             'expressionValue':['NRO',
-                    '(',
-                    'IDE',
-                    'CAD',
-                    'true',
-                    'false',
-                    '-'],    
+                                '(',
+                                'IDE',
+                                'CAD',
+                                'true',
+                                'false',
+                                '-'],    
 
             'multExp': ['*',
                         '/'],
