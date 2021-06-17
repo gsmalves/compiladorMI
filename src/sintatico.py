@@ -211,7 +211,7 @@ class Parser:
         '''
         Adiciona o erro e o que era esperado e procura o proximo ponto seguro para retornar a analise
         '''
-        self.tabelasimbolos.append("{} ERRO SINTÁTICO ESPERAVA:{}".format(self.token.linha, tkesperado))
+        self.tabelasimbolos.append("{} ERRO, ESPERAVA:{}".format(self.token.linha, tkesperado))
         self.error +=1
         while self.eof() != True:
             if Follows().get_follows(production, self.token.lexema) or Follows().get_follows(production, self.token.cod_token):
@@ -333,9 +333,9 @@ class Parser:
                     else:
                         self.treatment_error(';', 'const')    
                 else:
-                    self.treatment_error('VALOR', 'const')    
+                    self.treatment_error('Valor atribuido', 'const')  
             else:
-                self.treatment_error('=', 'const' )
+                self.treatment_error('Valor atribuido', 'const' )
         else:
             self.treatment_error('IDE')
             
