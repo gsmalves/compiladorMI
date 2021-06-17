@@ -1,0 +1,6 @@
+colocar arquivo de saida 
+
+linha token lexema erro semantico tal
+
+tentar terminar funções
+ou chamadas de funções

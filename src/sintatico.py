@@ -4,6 +4,7 @@ from token_lex import Token
 from follows import Follows
 from firsts import Firsts
 
+
 symbol = []
 params = []
 
@@ -15,6 +16,7 @@ TypeConst = ''
 ParamsBlock = ''
 random_aux = 0
 CategoryFunc = ''
+teste = []
 
 def set_CategoryFunc(value):
     global CategoryFunc
@@ -76,18 +78,19 @@ def add_symbol(line, token, lexeme, type, category, scope, used):
     status = 'OK'
     aux = scope.split('.')[0]
 
-    if aux == 'struct' or aux == 'function' or aux == 'procedure':
+    if aux == 'function' or aux == 'procedure':
         if exists_params(lexeme, scope):
-            status = 'ERROR'
+            status = 'ERROR PARAMS'
 
-        params.append({
+        """params.append({
             'Token': token,
             'Lexeme': lexeme,
             'Type': type,
             'Scope': scope,
             'Used': used,
             'Status': status,
-        })
+        })"""
+        symbol[len(symbol) - 1]['Params'].append({'Lexeme': lexeme, 'Type': type})
 
     else:
         if exists_symbol(lexeme, scope):
@@ -101,15 +104,53 @@ def add_symbol(line, token, lexeme, type, category, scope, used):
                        'Scope': scope,
                        'Used': used,
                        'Status': status,
+                       'Params': []
                        })
 
+
+def solves_func_sem(category):
+    aux = []
+    temp = None
+    status = None
+    line = None
+    for x in range(len(symbol)):
+        if symbol[x]['Category'] == category:
+            aux = (symbol[x]['Params'])
+            temp = [(symbol[x]['Params'])]
+            status = symbol[x]['Status']
+            line = symbol[x]['Line']
+
+    """print(temp)
+    print(teste)
+    print(status)
+    print(equals_params(temp, teste))"""
+    if status == 'ERROR' and not equals_params(temp, teste):
+        set_function_status(line, category)
+
+    teste.append(aux)
+
+
+def set_function_status(line, category):
+    for x in symbol:
+        if x['Line'] == line and x['Category'] == category:
+            x['Status'] = 'OK'
+
+
+def equals_params(param, allparams):
+    aux = False
+    for i in param:
+        aux = (i in allparams)
+
+    if aux:
+        return True
+    else:
+        return False
 
 
 def escopo(line, lexeme, type, category):
     for element in symbol:
         if element['Lexeme'] == lexeme:
             print('ERRO', line, lexeme, type, category)
-
 
 def exists_symbol(lexeme, scope):
     for element in symbol:
@@ -204,31 +245,19 @@ class Parser:
             print('Arquivo analisado com sucesso')
             
         print(
-            "________________________________________________________________________________________________________________")
+            "______________________________________________________________________________________________________________________________________________")
         print('{:^15}'.format('Linha'), '{:^15}'.format('Token'), '{:^15}'.format('Lexema'), '{:^15}'.format('Tipo'),
-              '{:^15}'.format('Categoria'), '{:^15}'.format('Escopo'), '{:^15}'.format('Usado'), '{:^15}'.format('Status'),)
+              '{:^15}'.format('Categoria'), '{:^15}'.format('Escopo'), '{:^15}'.format('Usado'), '{:^15}'.format('Params'),
+              '{:^15}'.format('Status'),)
         print(
-            "________________________________________________________________________________________________________________")
+            "______________________________________________________________________________________________________________________________________________")
         for element in symbol:
             print('{:^15}'.format(element['Line']), '{:^15}'.format(element['Token']),
                   '{:^15}'.format(element['Lexeme']),
                   '{:^15}'.format(element['Type']), '{:^15}'.format(element['Category']),
                   '{:^15}'.format(element['Scope']),
-                  '{:^15}'.format(str(element['Used'])), '{:^15}'.format(str(element['Status'])),)
-        for x in params:
-            print(x)
-
-            #print(
-            #     "________________________________________________________________________________________________________________")
-            # print('{:^15}'.format('Line'), '{:^15}'.format('Tokeni'), '{:^15}'.format('Lexemai'), '{:^15}'.format('Retorno'),
-            #       '{:^15}'.format('Parametro1'), '{:^15}'.format('Escopo'), '{:^15}'.format('Status'),)
-            # print(
-            #     "________________________________________________________________________________________________________________")
-            # for element in symbolFunction:
-            #     print('{:^15}'.format(element['Line']), '{:^15}'.format(element['Token']),
-            #           '{:^15}'.format(element['Lexeme']),'{:^15}'.format(element['Type']),
-            #           '{:^15}'.format(element['Param1']),
-            #           '{:^15}'.format(str(element['Scope'])), '{:^15}'.format(str(element['Status'])),)
+                  '{:^15}'.format(str(element['Used'])), '{:^15}'.format(str(element['Params'])),
+                  '{:^15}'.format(str(element['Status'])),)
         return self.tabelasimbolos
 
     def global_decl(self):
@@ -473,6 +502,7 @@ class Parser:
                 if self.token.lexema == '(':
                     self.add_token()
                     self.params()
+                    solves_func_sem('procedure')
                     if self.token.lexema == ')':
                         self.add_token()
                         if self.token.lexema == '{':
@@ -573,6 +603,7 @@ class Parser:
                         self.add_token()
 
                         self.params()
+                        solves_func_sem('function')
                         if self.token.lexema == ')':
                             self.add_token()
                             if self.token.lexema == '{':
