@@ -972,12 +972,18 @@ class Parser:
                 self.treatment_error('(', 'print')
        
     def return_statement(self):
-        if self.token.lexema == 'return':
-            self.add_token()
-            if self.token.lexema == ';':
+            if self.token.lexema == 'return':
                 self.add_token()
-            else:
-                self.assign()  
+                if self.token.lexema == ';':
+                    self.add_token()
+                elif self.token.lexema == "IDE":
+                    self.add_token()
+                    if self.token.lexema == ";":
+                        self.add_token()
+                    else:
+                        self.treatment_error(';', "functionDeclaration")    
+                else:
+                    self.assign()  
 
 
     def index (self):
